@@ -1,0 +1,3 @@
+jupyterlab==2.2.8
+pandas==1.1.4
+streamlit==0.71.0
