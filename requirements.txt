@@ -1,3 +1,5 @@
 jupyterlab==2.2.8
+matplotlib==3.3.3
 pandas==1.1.4
-streamlit==0.71.0
+seaborn==0.11.0
+wordcloud==1.8.1
