@@ -1,7 +1,9 @@
 jupyterlab==2.2.8
 matplotlib==3.3.3
+nltk==3.5
 pandas==1.1.4
 scikit-multilearn==0.2.0
 seaborn==0.11.0
 sklearn==0.0
+torch==1.6.0
 wordcloud==1.8.1
