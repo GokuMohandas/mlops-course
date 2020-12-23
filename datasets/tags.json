@@ -1,0 +1,2169 @@
+{
+  "3d": {
+    "aliases": [
+      "three-dimensional",
+      "3-dimensional"
+    ],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "action-localization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "action-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "active-learning": {
+    "aliases": [],
+    "parents": [
+      "semi-supervised-learning"
+    ]
+  },
+  "activity-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "adversarial-attacks": {
+    "aliases": [],
+    "parents": [
+      "adversarial-learning"
+    ]
+  },
+  "adversarial-defense": {
+    "aliases": [],
+    "parents": [
+      "adversarial-learning"
+    ]
+  },
+  "adversarial-image-detection": {
+    "aliases": [],
+    "parents": [
+      "adversarial-learning",
+      "computer-vision"
+    ]
+  },
+  "adversarial-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "adversarial-text": {
+    "aliases": [],
+    "parents": [
+      "adversarial-learning"
+    ]
+  },
+  "angular": {
+    "aliases": [],
+    "parents": []
+  },
+  "animations": {
+    "aliases": [
+      "cartoons"
+    ],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "annotation": {
+    "aliases": [
+      "data-annotation",
+      "labeling",
+      "data-labeling"
+    ],
+    "parents": []
+  },
+  "anomaly-detection": {
+    "aliases": [],
+    "parents": []
+  },
+  "arima": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "artificial-general-intelligence": {
+    "aliases": [
+      "agi"
+    ],
+    "parents": []
+  },
+  "attention": {
+    "aliases": [],
+    "parents": []
+  },
+  "audio-classification": {
+    "aliases": [],
+    "parents": []
+  },
+  "audio-generation": {
+    "aliases": [],
+    "parents": []
+  },
+  "audio-tagging": {
+    "aliases": [],
+    "parents": []
+  },
+  "autoencoders": {
+    "aliases": [
+      "ae"
+    ],
+    "parents": []
+  },
+  "automl": {
+    "aliases": [],
+    "parents": []
+  },
+  "autonomous-vehicles": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "aws": {
+    "aliases": [
+      "amazon-web-services"
+    ],
+    "parents": []
+  },
+  "azure": {
+    "aliases": [],
+    "parents": []
+  },
+  "backend": {
+    "aliases": [],
+    "parents": []
+  },
+  "bayesian-deep-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "bayesian-inference": {
+    "aliases": [],
+    "parents": []
+  },
+  "bidaf": {
+    "aliases": [],
+    "parents": []
+  },
+  "boundary-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "c": {
+    "aliases": [],
+    "parents": []
+  },
+  "c#": {
+    "aliases": [],
+    "parents": []
+  },
+  "c++": {
+    "aliases": [
+      "cpp"
+    ],
+    "parents": []
+  },
+  "caffe": {
+    "aliases": [],
+    "parents": []
+  },
+  "calibration": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "camera-localization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "captioning": {
+    "aliases": [],
+    "parents": []
+  },
+  "causal-inference": {
+    "aliases": [],
+    "parents": []
+  },
+  "chainer": {
+    "aliases": [],
+    "parents": []
+  },
+  "character-embeddings": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "natural-language-processing"
+    ]
+  },
+  "chunking": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "ci-cd": {
+    "aliases": [
+      "cicd",
+      "continuous-integration",
+      "continuous-deployment"
+    ],
+    "parents": []
+  },
+  "classification": {
+    "aliases": [],
+    "parents": []
+  },
+  "clustering": {
+    "aliases": [],
+    "parents": []
+  },
+  "code-generation": {
+    "aliases": [],
+    "parents": []
+  },
+  "code-summarization": {
+    "aliases": [],
+    "parents": []
+  },
+  "collaborative-filtering": {
+    "aliases": [],
+    "parents": [
+      "recommendation-systems"
+    ]
+  },
+  "collaborative-ranking": {
+    "aliases": [],
+    "parents": []
+  },
+  "colorization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "common-sense-reasoning": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "computer-vision": {
+    "aliases": [
+      "cv",
+      "vision"
+    ],
+    "parents": []
+  },
+  "conditional-random-fields": {
+    "aliases": [
+      "crf"
+    ],
+    "parents": []
+  },
+  "conditional-variational-autoencoders": {
+    "aliases": [],
+    "parents": [
+      "autoencoders"
+    ]
+  },
+  "constituency-parsing": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "contextualized-embeddings": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "natural-language-processing"
+    ]
+  },
+  "contour-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "contrastive-loss": {
+    "aliases": [],
+    "parents": []
+  },
+  "conversational-ai": {
+    "aliases": [
+      "chatbot"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "convolutional-neural-networks": {
+    "aliases": [
+      "cnn"
+    ],
+    "parents": []
+  },
+  "coreference-resolution": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "coreml": {
+    "aliases": [],
+    "parents": []
+  },
+  "counterfactuals": {
+    "aliases": [],
+    "parents": []
+  },
+  "cropping": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "cross-lingual": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "crowd-counting": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "css": {
+    "aliases": [],
+    "parents": []
+  },
+  "d3": {
+    "aliases": [],
+    "parents": []
+  },
+  "data-augmentation": {
+    "aliases": [],
+    "parents": []
+  },
+  "data-mining": {
+    "aliases": [],
+    "parents": []
+  },
+  "data-science": {
+    "aliases": [],
+    "parents": []
+  },
+  "data-summarization": {
+    "aliases": [],
+    "parents": []
+  },
+  "databases": {
+    "aliases": [
+      "db"
+    ],
+    "parents": []
+  },
+  "deblurring": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "decision-making": {
+    "aliases": [],
+    "parents": []
+  },
+  "decision-trees": {
+    "aliases": [],
+    "parents": []
+  },
+  "deconvolution": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "deep-learning": {
+    "aliases": [
+      "dl"
+    ],
+    "parents": []
+  },
+  "deep-q-networks": {
+    "aliases": [
+      "dqn"
+    ],
+    "parents": []
+  },
+  "denoising": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "density-estimation": {
+    "aliases": [],
+    "parents": []
+  },
+  "dependency-parsing": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "depth-completion": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "depth-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "devops": {
+    "aliases": [],
+    "parents": []
+  },
+  "dialogue": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "dictionary-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "dimensionality-reduction": {
+    "aliases": [],
+    "parents": []
+  },
+  "disease-prediction": {
+    "aliases": [],
+    "parents": []
+  },
+  "disparity-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "distributed-training": {
+    "aliases": [],
+    "parents": []
+  },
+  "django": {
+    "aliases": [],
+    "parents": []
+  },
+  "dl4j": {
+    "aliases": [],
+    "parents": []
+  },
+  "dlib": {
+    "aliases": [],
+    "parents": []
+  },
+  "docker": {
+    "aliases": [],
+    "parents": []
+  },
+  "document-classification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "document-embeddings": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "natural-language-processing"
+    ]
+  },
+  "document-ranking": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "domain-adaptation": {
+    "aliases": [],
+    "parents": []
+  },
+  "drug-discovery": {
+    "aliases": [],
+    "parents": []
+  },
+  "dynet": {
+    "aliases": [],
+    "parents": []
+  },
+  "edge-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "embeddings": {
+    "aliases": [],
+    "parents": []
+  },
+  "emotion-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "enhancement": {
+    "aliases": [],
+    "parents": []
+  },
+  "entity-alignment": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "entity-disambiguation": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "entity-extraction": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "entity-linking": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "entity-resolution": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "entity-typing": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "expectation-maximization": {
+    "aliases": [
+      "em"
+    ],
+    "parents": []
+  },
+  "experiment-tracking": {
+    "aliases": [],
+    "parents": []
+  },
+  "exploratory-data-analysis": {
+    "aliases": [
+      "eda"
+    ],
+    "parents": []
+  },
+  "face-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "face-generation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "face-reconstruction": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "fake-news-detection": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "fastai": {
+    "aliases": [],
+    "parents": []
+  },
+  "fastapi": {
+    "aliases": [],
+    "parents": []
+  },
+  "fasttext": {
+    "aliases": [],
+    "parents": []
+  },
+  "feature-engineering": {
+    "aliases": [],
+    "parents": []
+  },
+  "feature-importance": {
+    "aliases": [],
+    "parents": []
+  },
+  "feature-selection": {
+    "aliases": [],
+    "parents": []
+  },
+  "few-shot-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "fine-tuning": {
+    "aliases": [
+      "finetuning",
+      "finetune"
+    ],
+    "parents": []
+  },
+  "flask": {
+    "aliases": [],
+    "parents": []
+  },
+  "forecasting": {
+    "aliases": [],
+    "parents": []
+  },
+  "fraud-detection": {
+    "aliases": [],
+    "parents": [
+      "anomaly-detection"
+    ]
+  },
+  "frontend": {
+    "aliases": [],
+    "parents": []
+  },
+  "gated-recurrent-units": {
+    "aliases": [
+      "gru"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "gaussian-processes": {
+    "aliases": [
+      "gp"
+    ],
+    "parents": []
+  },
+  "gaze-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "generation": {
+    "aliases": [],
+    "parents": []
+  },
+  "generative-adversarial-networks": {
+    "aliases": [
+      "gan"
+    ],
+    "parents": []
+  },
+  "geometric-deep-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "gesture-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "git": {
+    "aliases": [],
+    "parents": []
+  },
+  "gluon": {
+    "aliases": [],
+    "parents": []
+  },
+  "go": {
+    "aliases": [],
+    "parents": []
+  },
+  "gpt": {
+    "aliases": [],
+    "parents": [
+      "transformers",
+      "natural-language-processing"
+    ]
+  },
+  "gradient-boosting": {
+    "aliases": [],
+    "parents": []
+  },
+  "graph-classification": {
+    "aliases": [],
+    "parents": [
+      "graphs"
+    ]
+  },
+  "graph-clustering": {
+    "aliases": [],
+    "parents": [
+      "graphs"
+    ]
+  },
+  "graph-construction": {
+    "aliases": [],
+    "parents": [
+      "graphs"
+    ]
+  },
+  "graph-convolutional-networks": {
+    "aliases": [
+      "gcn"
+    ],
+    "parents": [
+      "graph-neural-networks"
+    ]
+  },
+  "graph-embedding": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "graphs"
+    ]
+  },
+  "graph-neural-networks": {
+    "aliases": [
+      "gnn"
+    ],
+    "parents": []
+  },
+  "graph-representation-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "graph-similarity": {
+    "aliases": [],
+    "parents": [
+      "graphs"
+    ]
+  },
+  "graphql": {
+    "aliases": [],
+    "parents": []
+  },
+  "graphs": {
+    "aliases": [],
+    "parents": []
+  },
+  "grasping": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "h2o": {
+    "aliases": [],
+    "parents": []
+  },
+  "hand-pose-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "haskell": {
+    "aliases": [],
+    "parents": []
+  },
+  "hidden-markov-models": {
+    "aliases": [],
+    "parents": []
+  },
+  "hierarchical-reinforcement-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "highway-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "html": {
+    "aliases": [],
+    "parents": []
+  },
+  "huggingface": {
+    "aliases": [],
+    "parents": []
+  },
+  "human-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "hyperparameter-optimization": {
+    "aliases": [
+      "hp",
+      "hyperparameter-tuning"
+    ],
+    "parents": []
+  },
+  "image-captioning": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-categorization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-classification": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-clustering": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-compression": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-enhancement": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-generation": {
+    "aliases": [
+      "image-synthesis"
+    ],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-imputation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-reconstruction": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-restoration": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-similarity-search": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "image-to-image-translation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "imitation-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "imputation": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "inference": {
+    "aliases": [
+      "prediction"
+    ],
+    "parents": []
+  },
+  "information-extraction": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "information-retrieval": {
+    "aliases": [
+      "ir"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "instance-segmentation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision",
+      "segmentation"
+    ]
+  },
+  "integration-tests": {
+    "aliases": [],
+    "parents": [
+      "testing"
+    ]
+  },
+  "intent-classification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "intent-detection": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "interpretability": {
+    "aliases": [],
+    "parents": []
+  },
+  "java": {
+    "aliases": [],
+    "parents": []
+  },
+  "javascript": {
+    "aliases": [
+      "js"
+    ],
+    "parents": []
+  },
+  "jax": {
+    "aliases": [],
+    "parents": []
+  },
+  "julia": {
+    "aliases": [],
+    "parents": []
+  },
+  "k-nearest-neighbors": {
+    "aliases": [
+      "knn"
+    ],
+    "parents": []
+  },
+  "keras": {
+    "aliases": [],
+    "parents": []
+  },
+  "keyword-extraction": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "keyword-spotting": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "knowledge-base": {
+    "aliases": [
+      "kb"
+    ],
+    "parents": []
+  },
+  "knowledge-base-question-answering": {
+    "aliases": [],
+    "parents": [
+      "qa",
+      "natural-language-processing"
+    ]
+  },
+  "knowledge-distillation": {
+    "aliases": [],
+    "parents": [
+      "model-compression"
+    ]
+  },
+  "knowledge-graphs": {
+    "aliases": [],
+    "parents": []
+  },
+  "kuberflow": {
+    "aliases": [],
+    "parents": []
+  },
+  "kubernetes": {
+    "aliases": [
+      "k8s"
+    ],
+    "parents": []
+  },
+  "language-identification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "language-modeling": {
+    "aliases": [
+      "lm"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "latent-dirichlet-allocation": {
+    "aliases": [
+      "lda"
+    ],
+    "parents": []
+  },
+  "learning-rates": {
+    "aliases": [
+      "lr"
+    ],
+    "parents": []
+  },
+  "lemmatization": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "lexical-simplification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "linear-discriminant-analysis": {
+    "aliases": [],
+    "parents": []
+  },
+  "linear-regression": {
+    "aliases": [],
+    "parents": [
+      "regression"
+    ]
+  },
+  "linguistic-acceptability": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "logistic-regression": {
+    "aliases": [],
+    "parents": [
+      "regression"
+    ]
+  },
+  "lstm": {
+    "aliases": [
+      "long-short-term-memory"
+    ],
+    "parents": []
+  },
+  "machine-learning": {
+    "aliases": [
+      "ml"
+    ],
+    "parents": []
+  },
+  "machine-translation": {
+    "aliases": [
+      "mt"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "matplotlib": {
+    "aliases": [],
+    "parents": []
+  },
+  "medical-imaging": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "meta-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "metrics": {
+    "aliases": [],
+    "parents": []
+  },
+  "mlops": {
+    "aliases": [],
+    "parents": []
+  },
+  "model-compression": {
+    "aliases": [
+      "compression"
+    ],
+    "parents": []
+  },
+  "model-management": {
+    "aliases": [],
+    "parents": []
+  },
+  "model-selection": {
+    "aliases": [],
+    "parents": []
+  },
+  "morphological-analysis": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "morphological-inflection": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "morphological-tagging": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "mortality-prediction": {
+    "aliases": [],
+    "parents": [
+      "health"
+    ]
+  },
+  "motion-capture": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "motion-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "motion-planning": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "motion-segmentation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision",
+      "segmentation"
+    ]
+  },
+  "multi-agent-reinforcement-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "multi-armed-bandits": {
+    "aliases": [],
+    "parents": []
+  },
+  "multi-modal": {
+    "aliases": [],
+    "parents": []
+  },
+  "multi-task-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "multilayer-perceptrons": {
+    "aliases": [
+      "perceptron",
+      "mlp"
+    ],
+    "parents": []
+  },
+  "multilingual": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "multinomial-regression": {
+    "aliases": [],
+    "parents": [
+      "regression"
+    ]
+  },
+  "music-generation": {
+    "aliases": [],
+    "parents": [
+      "audio"
+    ]
+  },
+  "mxnet": {
+    "aliases": [],
+    "parents": []
+  },
+  "naive-bayes": {
+    "aliases": [],
+    "parents": []
+  },
+  "named-entity-recognition": {
+    "aliases": [
+      "ner"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "natural-language-inference": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "natural-language-processing": {
+    "aliases": [
+      "nlp",
+      "nlproc"
+    ],
+    "parents": []
+  },
+  "natural-language-understanding": {
+    "aliases": [
+      "nlu"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "navigation": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "neural-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "node-classification": {
+    "aliases": [],
+    "parents": [
+      "graphs"
+    ]
+  },
+  "node-js": {
+    "aliases": [
+      "node"
+    ],
+    "parents": []
+  },
+  "object-classification": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-counting": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-detection": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-localization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-recognition": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-reconstruction": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "object-tracking": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "one-shot-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "onnx": {
+    "aliases": [],
+    "parents": []
+  },
+  "open-refine": {
+    "aliases": [],
+    "parents": []
+  },
+  "optical-character-recognition": {
+    "aliases": [
+      "ocr"
+    ],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "optical-flow-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "optimizer": {
+    "aliases": [],
+    "parents": []
+  },
+  "outlier-detection": {
+    "aliases": [
+      "outliers"
+    ],
+    "parents": [
+      "anomaly-detection"
+    ]
+  },
+  "paddlepaddle": {
+    "aliases": [],
+    "parents": []
+  },
+  "paraphrase-identification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "part-of-speech-tagging": {
+    "aliases": [
+      "pos",
+      "pos-tagging"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "passage-re-ranking": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "phenotyping": {
+    "aliases": [],
+    "parents": []
+  },
+  "php": {
+    "aliases": [],
+    "parents": []
+  },
+  "phrase-grounding": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "point-cloud-generation": {
+    "aliases": [],
+    "parents": []
+  },
+  "policy-gradient-methods": {
+    "aliases": [],
+    "parents": [
+      "reinforcement-learning"
+    ]
+  },
+  "pose-estimation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "pose-tracking": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "preprocessing": {
+    "aliases": [],
+    "parents": []
+  },
+  "pretraining": {
+    "aliases": [
+      "pre-training"
+    ],
+    "parents": []
+  },
+  "principal-component-analysis": {
+    "aliases": [
+      "pca"
+    ],
+    "parents": [
+      "dimensionality-reduction"
+    ]
+  },
+  "privacy": {
+    "aliases": [],
+    "parents": []
+  },
+  "production": {
+    "aliases": [],
+    "parents": []
+  },
+  "pruning": {
+    "aliases": [],
+    "parents": [
+      "model-compression"
+    ]
+  },
+  "python": {
+    "aliases": [],
+    "parents": []
+  },
+  "pytorch": {
+    "aliases": [],
+    "parents": []
+  },
+  "q-learning": {
+    "aliases": [],
+    "parents": [
+      "reinforcement-learning"
+    ]
+  },
+  "quantization": {
+    "aliases": [],
+    "parents": [
+      "model-compression"
+    ]
+  },
+  "quantum-machine-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "quasi-recurrent-neural-networks": {
+    "aliases": [
+      "qrnn"
+    ],
+    "parents": []
+  },
+  "question-answering": {
+    "aliases": [
+      "qa"
+    ],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "question-generation": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "question-similarity": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "r": {
+    "aliases": [],
+    "parents": []
+  },
+  "random-forests": {
+    "aliases": [],
+    "parents": [
+      "decision-tree"
+    ]
+  },
+  "react": {
+    "aliases": [],
+    "parents": []
+  },
+  "reading-comprehension": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "recommendation-systems": {
+    "aliases": [
+      "recsys"
+    ],
+    "parents": []
+  },
+  "recurrent-neural-networks": {
+    "aliases": [
+      "rnn"
+    ],
+    "parents": []
+  },
+  "recursive-neural-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "regression": {
+    "aliases": [],
+    "parents": []
+  },
+  "reinforcement-learning": {
+    "aliases": [
+      "rl"
+    ],
+    "parents": []
+  },
+  "relation-classification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "relation-extraction": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "relational-reasoning": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "representation-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "residual-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "robotics": {
+    "aliases": [],
+    "parents": []
+  },
+  "ruby": {
+    "aliases": [],
+    "parents": []
+  },
+  "saas": {
+    "aliases": [],
+    "parents": []
+  },
+  "safe-exploration": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "sarcasm-detection": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "scala": {
+    "aliases": [],
+    "parents": []
+  },
+  "scene-classification": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "scene-generation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "scikit-learn": {
+    "aliases": [
+      "sklearn"
+    ],
+    "parents": []
+  },
+  "search": {
+    "aliases": [],
+    "parents": []
+  },
+  "segmentation": {
+    "aliases": [
+      "image-segmentation"
+    ],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "self-attention": {
+    "aliases": [],
+    "parents": [
+      "attention"
+    ]
+  },
+  "self-supervised-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "semantic-composition": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "semantic-parsing": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "semantic-role-labeling": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "semantic-segmentation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision",
+      "segmentation"
+    ]
+  },
+  "semi-supervised-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "sentence-embeddings": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "natural-language-processing"
+    ]
+  },
+  "sentiment-analysis": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "sequence-to-sequence": {
+    "aliases": [],
+    "parents": []
+  },
+  "siamese-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "similarity-search": {
+    "aliases": [],
+    "parents": []
+  },
+  "slot-filling": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "sonnet": {
+    "aliases": [],
+    "parents": []
+  },
+  "spacy": {
+    "aliases": [],
+    "parents": []
+  },
+  "spark": {
+    "aliases": [],
+    "parents": []
+  },
+  "spatial-temporal-cnn": {
+    "aliases": [
+      "stcnn"
+    ],
+    "parents": []
+  },
+  "speaker-diarization": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speaker-identification": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speaker-separation": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speaker-verification": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speech": {
+    "aliases": [],
+    "parents": []
+  },
+  "speech-enhancement": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speech-recognition": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speech-separation": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "speech-synthesis": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "spoken-dialogue-systems": {
+    "aliases": [],
+    "parents": [
+      "speech"
+    ]
+  },
+  "sql": {
+    "aliases": [],
+    "parents": []
+  },
+  "stance-detection": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "stata": {
+    "aliases": [],
+    "parents": []
+  },
+  "stereo-matching": {
+    "aliases": [],
+    "parents": [
+      "audio"
+    ]
+  },
+  "stochastic-optimization": {
+    "aliases": [],
+    "parents": []
+  },
+  "streaming-data": {
+    "aliases": [
+      "data-streams",
+      "data-streaming",
+      "real-time-data"
+    ],
+    "parents": []
+  },
+  "streamlit": {
+    "aliases": [],
+    "parents": []
+  },
+  "style-transfer": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "subjectivity-analysis": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "super-resolution": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "support-vector-machines": {
+    "aliases": [
+      "svm"
+    ],
+    "parents": []
+  },
+  "surveillance": {
+    "aliases": [],
+    "parents": []
+  },
+  "survival-analysis": {
+    "aliases": [],
+    "parents": []
+  },
+  "swift": {
+    "aliases": [],
+    "parents": []
+  },
+  "systems-design": {
+    "aliases": [],
+    "parents": []
+  },
+  "tabular": {
+    "aliases": [
+      "table",
+      "tabular-data"
+    ],
+    "parents": []
+  },
+  "temporal-cnn": {
+    "aliases": [
+      "tcnn"
+    ],
+    "parents": []
+  },
+  "tensor-networks": {
+    "aliases": [],
+    "parents": []
+  },
+  "tensorflow": {
+    "aliases": [
+      "tf"
+    ],
+    "parents": []
+  },
+  "tensorflow-js": {
+    "aliases": [
+      "tf-js"
+    ],
+    "parents": [
+      "tensorflow"
+    ]
+  },
+  "tensorflow-lite": {
+    "aliases": [
+      "tflite"
+    ],
+    "parents": [
+      "tensorflow"
+    ]
+  },
+  "text-attribute-transfer": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-classification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-generation": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-matching": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-similarity": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-simplification": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-summarization": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "text-to-speech-synthesis": {
+    "aliases": [],
+    "parents": [
+      "speech",
+      "natural-language-processing"
+    ]
+  },
+  "theano": {
+    "aliases": [],
+    "parents": []
+  },
+  "time-series": {
+    "aliases": [
+      "time-series-analysis"
+    ],
+    "parents": []
+  },
+  "time-series-classification": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "time-series-clustering": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "time-series-forecasting": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "time-series-prediction": {
+    "aliases": [],
+    "parents": [
+      "time-series"
+    ]
+  },
+  "tokenization": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "topic-modeling": {
+    "aliases": [],
+    "parents": []
+  },
+  "torch": {
+    "aliases": [],
+    "parents": []
+  },
+  "transfer-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "transformers": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "unit-tests": {
+    "aliases": [],
+    "parents": [
+      "testing"
+    ]
+  },
+  "unsupervised-learning": {
+    "aliases": [],
+    "parents": []
+  },
+  "variational-autoencoders": {
+    "aliases": [
+      "vae"
+    ],
+    "parents": [
+      "autoencoders"
+    ]
+  },
+  "video-captioning": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "video-classification": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "video-question-answering": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "video-semantic-segmentation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision",
+      "segmentation"
+    ]
+  },
+  "video-summarization": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "visual-navigation": {
+    "aliases": [],
+    "parents": [
+      "computer-vision",
+      "robotics"
+    ]
+  },
+  "visual-odometry": {
+    "aliases": [],
+    "parents": [
+      "robotics"
+    ]
+  },
+  "visual-question-answering": {
+    "aliases": [
+      "vqa"
+    ],
+    "parents": []
+  },
+  "visual-reasoning": {
+    "aliases": [],
+    "parents": []
+  },
+  "visual-tracking": {
+    "aliases": [],
+    "parents": [
+      "computer-vision"
+    ]
+  },
+  "visualization": {
+    "aliases": [
+      "data-visualization"
+    ],
+    "parents": []
+  },
+  "wandb": {
+    "aliases": [
+      "weights and biases"
+    ],
+    "parents": []
+  },
+  "word-alignment": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "word-embeddings": {
+    "aliases": [],
+    "parents": [
+      "embeddings",
+      "natural-language-processing"
+    ]
+  },
+  "word-sense-disambiguation": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "word-sense-induction": {
+    "aliases": [],
+    "parents": [
+      "natural-language-processing"
+    ]
+  },
+  "xgboost": {
+    "aliases": [],
+    "parents": []
+  },
+  "xlnet": {
+    "aliases": [],
+    "parents": []
+  },
+  "zero-shot-learning": {
+    "aliases": [],
+    "parents": []
+  }
+}
