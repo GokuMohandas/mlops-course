@@ -34,12 +34,12 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/solution/">Solution</a></td>
         <td><a href="https://madewithml.com/courses/applied-ml/exploratory-data-analysis/">Exploratory data analysis</a></td>
-        <td>Experiment tracking</td>
+        <td><a href="https://madewithml.com/courses/applied-ml/experiment-tracking/">Experiment tracking</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/evaluation/">Evaluation</a></td>
         <td><a href="https://madewithml.com/courses/applied-ml/splitting/">Splitting</a></td>
-        <td>Optimization</td>
+        <td><a href="https://madewithml.com/courses/applied-ml/optimization/">Optimization</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/iteration/">Iteration</a></td>
