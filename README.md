@@ -60,19 +60,24 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td>Git</td>
     </tr>
     <tr>
-        <td>Formatting</td>
+        <td>Logging</td>
         <td>Testing (data)</td>
         <td>Precommit</td>
     </tr>
     <tr>
-        <td>Packaging</td>
+        <td>Styling</td>
         <td>Testing (model)</td>
-        <td>Makefile</td>
+        <td>Versioning</td>
     </tr>
     <tr>
-        <td>Logging</td>
+        <td>Packaging</td>
         <td></td>
-        <td>Versioning</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Makefile</td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 
@@ -85,22 +90,22 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td>RESTful API</td>
         <td>Dashboard</td>
-        <td>Monitoring</td>
+        <td>Serving</td>
     </tr>
     <tr>
         <td>Databases</td>
         <td>Docker</td>
-        <td>Active learning</td>
-    </tr>
-    <tr>
-        <td>Authentication</td>
-        <td>Serving</td>
         <td>Feature stores</td>
     </tr>
     <tr>
-        <td>Documentation</td>
+        <td>Authentication</td>
         <td>CI/CD</td>
-        <td>Scaling</td>
+        <td>Workflow management</td>
+    </tr>
+    <tr>
+        <td>Documentation</td>
+        <td>Monitoring</td>
+        <td>Active learning</td>
     </tr>
 </table>
 
@@ -111,9 +116,10 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 ## Set up
 ```bash
-virtualenv -p python3.8 venv
+python3 -m venv venv
 source venv/bin/activate
-pip install -r requirements.txt
+python -m pip install --upgrade pip
+make install-dev
 ```
 
 ## Start Jupyterlab
@@ -123,7 +129,34 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install @jupyterlab/toc
 jupyter lab
 ```
-> You can also run all notebooks on [Google Colab](https://colab.research.google.com/).
+> You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/tagifai.ipynb).
+
+## Actions
+```
+python tagifai/main.py --help
+```
+
+## MLFlow
+```
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri assets/experiments/
+```
+
+## Mkdocs
+```
+python -m mkdocs serve
+```
+
+## Directory structure
+```
+tagifai/
+├── config.py                         - configuration
+├── data.py                           - data processing
+├── main.py                           - main operations (CLI)
+├── models.py                         - model architectures
+├── predict.py                        - inference script
+├── train.py                          - training script
+└── utils.py                          - utilities
+```
 
 ## FAQ
 
