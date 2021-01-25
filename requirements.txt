@@ -6,6 +6,7 @@ numpy==1.19.5
 numpyencoder==0.3.0
 optuna==2.3.0
 pandas==1.1.4
+pretty-errors==1.2.19
 rich==6.2.0
 scikit-multilearn==0.2.0
 seaborn==0.11.0
@@ -13,4 +14,3 @@ sklearn==0.0
 torch==1.7.1
 typer==0.3.2
 uvicorn==0.13.3
-wordcloud==1.8.1

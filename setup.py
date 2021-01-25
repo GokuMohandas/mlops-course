@@ -15,7 +15,6 @@ test_packages = [
     "black==20.8b1",
     "flake8==3.8.3",
     "isort==5.5.3",
-    "pretty-errors==1.2.19",
     "pytest==6.0.2",
     "pytest-cov==2.10.1",
 ]
