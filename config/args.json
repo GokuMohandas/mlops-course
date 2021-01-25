@@ -9,13 +9,15 @@
   "train_size": 0.7,
   "char_level": true,
   "max_filter_size": 10,
-  "batch_size": 64,
-  "embedding_dim": 230,
-  "num_filters": 238,
-  "hidden_dim": 216,
-  "dropout_p": 0.7382628825813314,
-  "lr": 0.0004998249007788683,
+  "batch_size": 108,
+  "embedding_dim": 219,
+  "num_filters": 323,
+  "hidden_dim": 258,
+  "dropout_p": 0.7260450751601542,
+  "lr": 0.00035139411956407017,
+  "lr_factor": 0.04568234107529491,
+  "lr_patience": 6,
   "num_epochs": 200,
-  "patience": 10,
-  "threshold": 0.22192028164863586
+  "patience": 18,
+  "threshold": 0.256205677986145
 }

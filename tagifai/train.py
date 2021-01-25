@@ -2,9 +2,11 @@
 # Training operations.
 
 from argparse import Namespace
+import json
 from typing import Dict, List, Tuple
 
 import numpy as np
+from numpyencoder import NumpyEncoder
 import optuna
 import torch
 import torch.nn as nn
@@ -123,6 +125,7 @@ class Trainer(object):
             if self.trial:
                 self.trial.report(val_loss, epoch)
                 if self.trial.should_prune():
+                    logger.info("Unpromising trial pruned!")
                     raise optuna.TrialPruned()
 
             # Early stopping
@@ -258,7 +261,7 @@ def train(
     # Define optimizer & scheduler
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="min", factor=0.05, patience=int(args.patience / 3)
+        optimizer, mode="min", factor=args.lr_factor, patience=args.lr_patience
     )
 
     # Trainer module
@@ -315,7 +318,7 @@ def evaluate(
     return performance
 
 
-def run(args: Namespace) -> Dict:
+def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     """Operations for training.
     1. Set seed
     2. Set device
@@ -332,6 +335,7 @@ def run(args: Namespace) -> Dict:
 
     Args:
         args (Namespace): Input arguments for operations.
+        trial (optuna.trial._trial.Trail, optional): Optuna optimization trial. Defaults to None.
 
     Returns:
         Artifacts to save and load for later.
@@ -390,6 +394,9 @@ def run(args: Namespace) -> Dict:
         device=device,
     )
     # 11. Train model
+    logger.info(
+        f"Arguments: {json.dumps(args.__dict__, indent=2, cls=NumpyEncoder)}"
+    )
     args, model, loss = train(
         args=args,
         train_dataloader=train_dataloader,
@@ -397,6 +404,7 @@ def run(args: Namespace) -> Dict:
         model=model,
         device=device,
         class_weights=class_weights,
+        trial=trial,
     )
     # 12. Evaluate model
     device = torch.device("cpu")
@@ -421,14 +429,19 @@ def run(args: Namespace) -> Dict:
 def objective(args, trial):
     """Objective function for optimization trials."""
     # Paramters (to tune)
-    args.embedding_dim = trial.suggest_int("embedding_dim", 100, 300)
-    args.num_filters = trial.suggest_int("num_filters", 100, 300)
-    args.hidden_dim = trial.suggest_int("hidden_dim", 128, 256)
-    args.dropout_p = trial.suggest_uniform("dropout_p", 0.0, 0.8)
-    args.lr = trial.suggest_loguniform("lr", 5e-5, 5e-4)
+    args.batch_size = trial.suggest_int("batch_size", 64, 128)
+    args.embedding_dim = trial.suggest_int("embedding_dim", 200, 300)
+    args.num_filters = trial.suggest_int("num_filters", 256, 512)
+    args.hidden_dim = trial.suggest_int("hidden_dim", 256, 512)
+    args.dropout_p = trial.suggest_uniform("dropout_p", 0.3, 0.8)
+    args.lr = trial.suggest_loguniform("lr", 7e-5, 7e-4)
+    args.lr_factor = trial.suggest_loguniform("lr_factor", 0.01, 0.05)
+    args.lr_patience = trial.suggest_int("lr_patience", 1, 5)
 
     # Train (can move some of these outside for efficiency)
-    artifacts = run(args=args)
+    logger.info(f"\nTrial {trial.number}:")
+    logger.info(json.dumps(trial.params, indent=2))
+    artifacts = run(args=args, trial=trial)
 
     # Set additional attributes
     args = artifacts["args"]
