@@ -52,30 +52,25 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td align="center"><b>📝&nbsp; Scripting</b></td>
         <td align="center"><b>✅&nbsp; Testing</b></td>
-        <td align="center"><b>⏰&nbsp; Version control</b></td>
+        <td align="center"><b>📦&nbsp; Application</b></td>
     </tr>
     <tr>
-        <td>OOPs</td>
-        <td>Testing (code)</td>
-        <td>Git</td>
+        <td><a href="https://madewithml.com/courses/applied-ml/organization/">Organization</a></td>
+        <td>Testing <small>(code)</small></td>
+        <td>RESTful API</td>
+    </tr>
+    <tr>
+        <td>Documentation</td>
+        <td>Testing <small>(data)</small></td>
+        <td>Databases</td>
     </tr>
     <tr>
         <td>Logging</td>
-        <td>Testing (data)</td>
-        <td>Precommit</td>
+        <td>Testing <small>(model)</small></td>
+        <td>Authentication</td>
     </tr>
     <tr>
         <td>Styling</td>
-        <td>Testing (model)</td>
-        <td>Versioning</td>
-    </tr>
-    <tr>
-        <td>Packaging</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td>Makefile</td>
         <td></td>
         <td></td>
     </tr>
@@ -83,27 +78,27 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 <table>
     <tr>
-        <td align="center"><b>🛠&nbsp; API</b></td>
+        <td align="center"><b>⏰&nbsp; Version control</b></td>
         <td align="center"><b>🚀&nbsp; Production</b></td>
         <td align="center"><b>(cont.)</b></td>
     </tr>
     <tr>
-        <td>RESTful API</td>
+        <td>Git</td>
         <td>Dashboard</td>
         <td>Serving</td>
     </tr>
     <tr>
-        <td>Databases</td>
+        <td>Precommit</td>
         <td>Docker</td>
         <td>Feature stores</td>
     </tr>
     <tr>
-        <td>Authentication</td>
+        <td>Versioning</td>
         <td>CI/CD</td>
         <td>Workflow management</td>
     </tr>
     <tr>
-        <td>Documentation</td>
+        <td></td>
         <td>Monitoring</td>
         <td>Active learning</td>
     </tr>
@@ -118,7 +113,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip setuptools wheel
 make install-dev
 ```
 
@@ -133,7 +128,19 @@ jupyter lab
 
 ## Actions
 ```
-python tagifai/main.py --help
+tagifai --help
+```
+
+## Directory structure
+```
+tagifai/
+├── config.py     - configuration setup
+├── data.py       - data processing utilities
+├── main.py       - main operations (CLI)
+├── models.py     - model architectures
+├── predict.py    - inference utilities
+├── train.py      - training utilities
+└── utils.py      - supplementary utilities
 ```
 
 ## MLFlow
@@ -144,18 +151,6 @@ mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri assets/experiments/
 ## Mkdocs
 ```
 python -m mkdocs serve
-```
-
-## Directory structure
-```
-tagifai/
-├── config.py                         - configuration
-├── data.py                           - data processing
-├── main.py                           - main operations (CLI)
-├── models.py                         - model architectures
-├── predict.py                        - inference script
-├── train.py                          - training script
-└── utils.py                          - utilities
 ```
 
 ## FAQ
