@@ -233,7 +233,7 @@ def train(
     train_dataloader: torch.utils.data.DataLoader,
     val_dataloader: torch.utils.data.DataLoader,
     model: nn.Module,
-    device: bool,
+    device: torch.device,
     class_weights: Dict,
     trial: optuna.trial._trial.Trial = None,
 ) -> Tuple:
@@ -286,9 +286,9 @@ def train(
 def evaluate(
     dataloader: torch.utils.data.DataLoader,
     model: nn.Module,
+    device: torch.device,
     threshold: float,
     classes: List,
-    device: torch.device = torch.device("cpu"),
 ) -> Dict:
     """Evaluate performance on data.
 
@@ -303,7 +303,7 @@ def evaluate(
         Performance metrics.
     """
     # Determine predictions using threshold
-    trainer = Trainer(model=model)
+    trainer = Trainer(model=model, device=device)
     y_true, y_prob = trainer.predict_step(dataloader=dataloader)
     y_pred = np.array([np.where(prob >= threshold, 1, 0) for prob in y_prob])
 
@@ -399,9 +399,11 @@ def run(args: Namespace) -> Dict:
         class_weights=class_weights,
     )
     # 12. Evaluate model
+    device = torch.device("cpu")
     performance = evaluate(
         dataloader=test_dataloader,
-        model=model,
+        model=model.to(device),
+        device=device,
         threshold=args.threshold,
         classes=label_encoder.classes,
     )

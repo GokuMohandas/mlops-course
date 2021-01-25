@@ -27,6 +27,7 @@ def predict(texts: List, run_id: str) -> Dict:
     # Load artifacts from run
     client = mlflow.tracking.MlflowClient()
     run = mlflow.get_run(run_id=run_id)
+    device = torch.device("cpu")
     with tempfile.TemporaryDirectory() as fp:
         client.download_artifacts(run_id=run_id, path="", dst_path=fp)
         args = Namespace(
@@ -36,9 +37,7 @@ def predict(texts: List, run_id: str) -> Dict:
             fp=Path(fp, "label_encoder.json")
         )
         tokenizer = data.Tokenizer.load(fp=Path(fp, "tokenizer.json"))
-        model_state = torch.load(
-            Path(fp, "model.pt"), map_location=torch.device("cpu")
-        )
+        model_state = torch.load(Path(fp, "model.pt"), map_location=device)
         # performance = utils.load_dict(filepath=Path(fp, "performance.json"))
 
     # Load model
@@ -60,7 +59,7 @@ def predict(texts: List, run_id: str) -> Dict:
     dataloader = dataset.create_dataloader(batch_size=int(args.batch_size))
 
     # Get predictions
-    trainer = train.Trainer(model=model)
+    trainer = train.Trainer(model=model, device=device)
     _, y_prob = trainer.predict_step(dataloader)
     y_pred = np.array(
         [np.where(prob >= float(args.threshold), 1, 0) for prob in y_prob]
