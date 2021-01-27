@@ -29,8 +29,10 @@ app = typer.Typer()
 @app.command()
 def download_data():
     """Download data from online to local drive.
-    We could've just copied files from `datasets/` but
-    we'll use this later on with other data sources.
+
+    Note:
+        We could've just copied files from `datasets` but
+        we'll use this later on with other data sources.
     """
     # Download data
     projects_url = "https://raw.githubusercontent.com/GokuMohandas/applied-ml/main/datasets/projects.json"
@@ -51,7 +53,8 @@ def train_model(args_fp: Path = Path(config.CONFIG_DIR, "args.json")) -> None:
     """Train a model using the specified parameters.
 
     Args:
-        args_fp (Path, optional): Location of arguments to use for training. Defaults to Path(config.CONFIG_DIR, "args.json").
+        args_fp (Path, optional): Location of arguments to use for training.
+                                  Defaults to `config/args.json`.
     """
     # Set experiment and start run
     args = Namespace(**utils.load_dict(filepath=args_fp))
@@ -92,11 +95,16 @@ def predict_tags(
     text: str = "Transfer learning with BERT for self-supervised learning",
     run_id: str = "",
 ) -> Dict:
-    """Predict tags for a give input text using a trained model. Make sure that you have a trained model first!
+    """Predict tags for a give input text using a trained model.
+
+    Warning:
+        Make sure that you have a trained model first!
 
     Args:
-        text (str, optional): Input text to predict tags for. Defaults to "Transfer learning with BERT for self-supervised learning".
-        run_id (str, optional): ID of the run to load model artifacts from. Defaults to model with lowest `best_val_loss` from the `best` experiment.
+        text (str, optional): Input text to predict tags for.
+                              Defaults to "Transfer learning with BERT for self-supervised learning".
+        run_id (str, optional): ID of the run to load model artifacts from.
+                                Defaults to model with lowest `best_val_loss` from the `best` experiment.
 
     Returns:
         Predicted tags for input text.
@@ -121,6 +129,8 @@ def predict_tags(
 def optimize(num_trials: int = 100) -> None:
     """Optimize a subset of hyperparameters towards an objective.
 
+    This saves the best trial's arguments into `config/args.json`.
+
     Args:
         num_trials (int, optional): Number of trials to run. Defaults to 100.
     """
@@ -131,10 +141,10 @@ def optimize(num_trials: int = 100) -> None:
     # Optimize
     pruner = optuna.pruners.MedianPruner(n_startup_trials=5, n_warmup_steps=5)
     study = optuna.create_study(
-        study_name="optimization", direction="minimize", pruner=pruner
+        study_name="optimization", direction="maximize", pruner=pruner
     )
     mlflow_callback = MLflowCallback(
-        tracking_uri=mlflow.get_tracking_uri(), metric_name="best_val_loss"
+        tracking_uri=mlflow.get_tracking_uri(), metric_name="f1"
     )
     study.optimize(
         lambda trial: train.objective(args, trial),
@@ -145,14 +155,14 @@ def optimize(num_trials: int = 100) -> None:
     # All trials
     trials_df = study.trials_dataframe()
     trials_df = trials_df.sort_values(
-        ["value"], ascending=True
+        ["value"], ascending=False
     )  # sort by metric
     trials_df.to_csv(
         Path(config.EXPERIMENTS_DIR, "trials.csv"), index=False
     )  # save
 
     # Best trial
-    logger.info(f"Best value (`best_val_loss`): {study.best_trial.value}")
+    logger.info(f"Best value (f1): {study.best_trial.value}")
     params = {**args.__dict__, **study.best_trial.params}
     params["threshold"] = study.best_trial.user_attrs["threshold"]
     with open(Path(config.CONFIG_DIR, "args.json"), "w") as fp:
@@ -164,6 +174,9 @@ def optimize(num_trials: int = 100) -> None:
 def set_artifact_metadata():
     """Set the artifact URI for all experiments and runs.
     Used when transferring experiments from other locations (ex. Colab).
+
+    Note:
+        check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb){:target="_blank"} notebook for how to train on Google Colab and transfer to local.
     """
 
     def set_artifact_location(var, fp):

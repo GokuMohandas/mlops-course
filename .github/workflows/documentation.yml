@@ -1,0 +1,37 @@
+name: Documentation
+on:
+  push:
+    branches:
+    - master
+    - main
+  pull_request:
+    branches:
+    - master
+    - main
+
+jobs:
+  documentation:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.6.9
+
+      - name: Install dependencies
+        run: |
+          pip install .
+          pip install \
+            mkdocs==1.1.2 \
+            mkdocs-macros-plugin==0.5.0 \
+            mkdocs-material==6.2.4 \
+            mkdocs-redirects==1.0.1 \
+            mkdocstrings==0.14.0
+
+      - name: Deploy documentation
+        run: mkdocs gh-deploy --force

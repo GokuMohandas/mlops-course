@@ -41,7 +41,12 @@ class Trainer(object):
         self.trial = trial
 
     def train_step(self, dataloader):
-        """Train step."""
+        """Train step.
+
+        Args:
+            dataloader (torch.utils.data.DataLoader): Torch dataloader to load batches from.
+
+        """
         # Set model to train mode
         self.model.train()
         loss = 0.0
@@ -64,7 +69,12 @@ class Trainer(object):
         return loss
 
     def eval_step(self, dataloader):
-        """Evaluation (val / test) step."""
+        """Evaluation (val / test) step.
+
+        Args:
+            dataloader (torch.utils.data.DataLoader): Torch dataloader to load batches from.
+
+        """
         # Set model to eval mode
         self.model.eval()
         loss = 0.0
@@ -90,8 +100,16 @@ class Trainer(object):
 
         return loss, np.vstack(y_trues), np.vstack(y_probs)
 
-    def predict_step(self, dataloader):
-        """Prediction (inference) step."""
+    def predict_step(self, dataloader: torch.utils.data.DataLoader):
+        """Prediction (inference) step.
+
+        Note:
+            Loss is not calculated for this loop.
+
+        Args:
+            dataloader (torch.utils.data.DataLoader): Torch dataloader to load batches from.
+
+        """
         # Set model to eval mode
         self.model.eval()
         y_trues, y_probs = [], []
@@ -101,17 +119,39 @@ class Trainer(object):
             for i, batch in enumerate(dataloader):
 
                 # Forward pass w/ inputs
+                batch = [item.to(self.device) for item in batch]  # Set device
                 inputs, y_true = batch[:-1], batch[-1]
-                y_prob = self.model(inputs)
+                z = self.model(inputs)
 
                 # Store outputs
+                y_prob = torch.sigmoid(z).cpu().numpy()
                 y_probs.extend(y_prob)
                 y_trues.extend(y_true.cpu().numpy())
 
         return np.vstack(y_trues), np.vstack(y_probs)
 
-    def train(self, num_epochs, patience, train_dataloader, val_dataloader):
-        """Training loop."""
+    def train(
+        self,
+        num_epochs: int,
+        patience: int,
+        train_dataloader: torch.utils.data.DataLoader,
+        val_dataloader: torch.utils.data.DataLoader,
+    ) -> Tuple:
+        """Training loop.
+
+        Args:
+            num_epochs (int): Maximum number of epochs to train for (can stop earlier based on performance).
+            patience (int): Number of acceptable epochs for continuous degrading performance.
+            train_dataloader (torch.utils.data.DataLoader): Dataloader object with training data split.
+            val_dataloader (torch.utils.data.DataLoader): Dataloader object with validation data split.
+
+        Raises:
+            optuna.TrialPruned: Early stopping of the optimization trial if poor performance.
+
+        Returns:
+            The best validation loss and the trained model from that point.
+        """
+
         best_val_loss = np.inf
         best_model = None
         _patience = patience
@@ -147,11 +187,19 @@ class Trainer(object):
                 f"lr: {self.optimizer.param_groups[0]['lr']:.2E}, "
                 f"_patience: {_patience}"
             )
-        return best_model, best_val_loss
+        return best_val_loss, best_model
 
 
 def find_best_threshold(y_true: np.ndarray, y_prob: np.ndarray) -> float:
     """Determine the best threshold for maximum f1 score.
+
+    Usage:
+
+    ```python
+    # Find best threshold
+    _, y_true, y_prob = trainer.eval_step(dataloader=train_dataloader)
+    args.threshold = find_best_threshold(y_true=y_true, y_prob=y_prob)
+    ```
 
     Args:
         y_true (np.ndarray): True labels.
@@ -217,7 +265,7 @@ def initialize_model(
         device (torch.device): Device to run model on. Defaults to CPU.
     """
     # Initialize model
-    filter_sizes = list(range(2, int(args.max_filter_size) + 1))
+    filter_sizes = list(range(1, int(args.max_filter_size) + 1))
     model = models.CNN(
         embedding_dim=int(args.embedding_dim),
         vocab_size=int(vocab_size),
@@ -240,7 +288,7 @@ def train(
     class_weights: Dict,
     trial: optuna.trial._trial.Trial = None,
 ) -> Tuple:
-    """Train and evaluate a model.
+    """Train a model.
 
     Args:
         args (Namespace): Parameters for data processing and training.
@@ -261,7 +309,7 @@ def train(
     # Define optimizer & scheduler
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, mode="min", factor=args.lr_factor, patience=args.lr_patience
+        optimizer, mode="min", factor=0.05, patience=5
     )
 
     # Trainer module
@@ -275,7 +323,7 @@ def train(
     )
 
     # Train
-    best_model, best_val_loss = trainer.train(
+    best_val_loss, best_model = trainer.train(
         args.num_epochs, args.patience, train_dataloader, val_dataloader
     )
 
@@ -320,6 +368,7 @@ def evaluate(
 
 def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     """Operations for training.
+
     1. Set seed
     2. Set device
     3. Load data
@@ -342,24 +391,32 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     """
     # 1. Set seed
     utils.set_seed(seed=args.seed)
+
     # 2. Set device
     device = utils.set_device(cuda=args.cuda)
+
     # 3. Load data
     df, projects_dict, tags_dict = data.load(
         shuffle=args.shuffle, num_samples=args.num_samples
     )
+
     # 4. Clean data
     df, tags_dict, tags_above_frequency = data.clean(
         df=df, tags_dict=tags_dict, min_tag_freq=args.min_tag_freq
     )
+
     # 5. Preprocess data
     df.text = df.text.apply(data.preprocess, lower=args.lower, stem=args.stem)
+
     # 6. Encode labels
     y, class_weights, label_encoder = data.encode_labels(labels=df.tags)
+
     # 7. Split data
+    utils.set_seed(seed=args.seed)  # needed for skmultilearn
     X_train, X_val, X_test, y_train, y_val, y_test = data.split(
         X=df.text.to_numpy(), y=y, train_size=args.train_size
     )
+
     # 8. Tokenize inputs
     X_train, tokenizer = data.tokenize_text(
         X=X_train, char_level=args.char_level
@@ -370,6 +427,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     X_test, _ = data.tokenize_text(
         X=X_test, char_level=args.char_level, tokenizer=tokenizer
     )
+
     # 9. Create dataloaders
     train_dataloader = data.get_dataloader(
         data=[X_train, y_train],
@@ -386,6 +444,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         max_filter_size=args.max_filter_size,
         batch_size=args.batch_size,
     )
+
     # 10. Initialize model
     model = initialize_model(
         args=args,
@@ -393,6 +452,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         num_classes=len(label_encoder),
         device=device,
     )
+
     # 11. Train model
     logger.info(
         f"Arguments: {json.dumps(args.__dict__, indent=2, cls=NumpyEncoder)}"
@@ -406,6 +466,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         class_weights=class_weights,
         trial=trial,
     )
+
     # 12. Evaluate model
     device = torch.device("cpu")
     performance = evaluate(
@@ -426,17 +487,22 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     }
 
 
-def objective(args, trial):
-    """Objective function for optimization trials."""
+def objective(args: Namespace, trial: optuna.trial._trial.Trial) -> float:
+    """Objective function for optimization trials.
+
+    Args:
+        args (Namespace): Input arguments for each trial (see `config/args.json`) for argument names.
+        trial (optuna.trial._trial.Trial): Optuna optimization trial.
+
+    Returns:
+        F1 score from evaluating the trained model on the test data split.
+    """
     # Paramters (to tune)
-    args.batch_size = trial.suggest_int("batch_size", 64, 128)
-    args.embedding_dim = trial.suggest_int("embedding_dim", 200, 300)
-    args.num_filters = trial.suggest_int("num_filters", 256, 512)
-    args.hidden_dim = trial.suggest_int("hidden_dim", 256, 512)
+    args.embedding_dim = trial.suggest_int("embedding_dim", 128, 512)
+    args.num_filters = trial.suggest_int("num_filters", 128, 512)
+    args.hidden_dim = trial.suggest_int("hidden_dim", 128, 512)
     args.dropout_p = trial.suggest_uniform("dropout_p", 0.3, 0.8)
-    args.lr = trial.suggest_loguniform("lr", 7e-5, 7e-4)
-    args.lr_factor = trial.suggest_loguniform("lr_factor", 0.01, 0.05)
-    args.lr_patience = trial.suggest_int("lr_patience", 1, 5)
+    args.lr = trial.suggest_loguniform("lr", 5e-5, 5e-4)
 
     # Train (can move some of these outside for efficiency)
     logger.info(f"\nTrial {trial.number}:")
@@ -446,9 +512,10 @@ def objective(args, trial):
     # Set additional attributes
     args = artifacts["args"]
     performance = artifacts["performance"]
+    logger.info(json.dumps(performance["overall"], indent=2))
     trial.set_user_attr("threshold", args.threshold)
     trial.set_user_attr("precision", performance["overall"]["precision"])
     trial.set_user_attr("recall", performance["overall"]["recall"])
     trial.set_user_attr("f1", performance["overall"]["f1"])
 
-    return artifacts["loss"]
+    return performance["overall"]["f1"]

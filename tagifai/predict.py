@@ -17,6 +17,31 @@ def predict(texts: List, run_id: str) -> Dict:
     """Predict tags for an input text using the
     best model from the `best` experiment.
 
+    Usage:
+
+    ```python
+    texts = ["Transfer learning with BERT."]
+    predict(texts=texts, run_id="264ac530b78c42608e5dea1086bc2c73")
+    ```
+    <pre>
+    [
+      {
+          "input_text": "Transfer learning with BERT.",
+          "preprocessed_text": "transfer learning bert",
+          "predicted_tags": [
+            "attention",
+            "language-modeling",
+            "natural-language-processing",
+            "transfer-learning",
+            "transformers"
+          ]
+      }
+    ]
+    </pre>
+
+    Note:
+        The input argument `texts` can hold multiple input texts and so the resulting prediction dictionary will have `len(texts)` items.
+
     Args:
         texts (List): List of input text to predict tags for.
         run_id (str): ID of the run to load model artifacts from.

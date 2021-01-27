@@ -1,0 +1,112 @@
+# Project information
+site_name: TagifAI
+site_url: https://madewithml.com/#applied-ml
+site_description: Tag suggestions for projects on Made With ML.
+site_author: Goku Mohandas
+
+# Repository
+repo_url: https://github.com/GokuMohandas/applied-ml
+repo_name: GokuMohandas/applied-ml
+edit_uri: "" #disables edit button
+
+# Copyright
+copyright: Copyright &copy; 2021 Maintained by <a href="https://twitter.com/GokuMohandas" target="_blank">Goku Mohandas</a>.
+
+# Social media
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/GokuMohandas
+    - icon: fontawesome/brands/linkedin
+      link: https://linkedin.com/in/goku
+    - icon: fontawesome/brands/github
+      link: https://github.com/GokuMohandas
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/madewithml?sub_confirmation=1
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:hello@madewithml.com
+
+# Configuration
+theme:
+  name: material
+  logo: static/images/logo.png
+  favicon: static/images/favicon.ico
+  palette:
+    primary: indigo
+    accent: indigo
+  font:
+    text: Roboto
+    code: Roboto Mono
+  features:
+    - navigation.tabs
+    - navigation.expand
+  icon:
+    repo: fontawesome/brands/github
+
+# Extensions
+markdown_extensions:
+  - meta
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - admonition # alerts
+  - pymdownx.details #  collapsible alerts
+  - pymdownx.superfences # nest code and content inside alerts
+  - attr_list # add HTML and CSS to Markdown elements
+  - pymdownx.inlinehilite # inline code highlights
+  - pymdownx.keys # show keystroke symbols
+  - pymdownx.snippets # insert content from other files
+  - pymdownx.tabbed # content tabs
+  - footnotes
+  - def_list
+  - pymdownx.arithmatex: # mathjax
+      generic: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  - codehilite
+  - pymdownx.highlight:
+      use_pygments: true
+  - toc:
+      toc_depth: 4
+
+# Plugins
+plugins:
+  - search
+  - macros
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_heading: false
+            show_source: true
+            show_category_heading: true
+      watch:
+        - tagifai
+
+# Extra CSS
+extra_css:
+  - static/css/custom.css
+
+# Extra JS
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/tablesort/5.2.1/tablesort.min.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+# Page tree
+nav:
+  - Home:
+      - TagIfAI: index.md
+  - Getting started:
+    - Workflow: workflows.md
+  - Reference:
+    - CLI: tagifai/main.md
+    - Configuration: tagifai/config.md
+    - Data: tagifai/data.md
+    - Models: tagifai/models.md
+    - Training: tagifai/train.md
+    - Inference: tagifai/predict.md
+    - Utilities: tagifai/utils.md
+  - API: api.md

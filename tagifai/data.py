@@ -6,7 +6,7 @@ import json
 import re
 from collections import Counter
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Sequence, Tuple
 
 import nltk
 import numpy as np
@@ -64,6 +64,26 @@ def filter_items(items: List, include: List = [], exclude: List = []) -> List:
 
     Returns:
         Filtered list of items.
+
+    Usage:
+
+    ```python
+    # Inclusion/exclusion criteria for tags
+    include = list(tags_dict.keys())
+    exclude = [
+        "machine-learning",
+        "deep-learning",
+        "data-science",
+        "neural-networks",
+        "python",
+        "r",
+        "visualization",
+    ]
+
+    # Filter tags for each project
+    df.tags = df.tags.apply(filter_items, include=include, exclude=exclude)
+    ```
+
     """
     filtered = [
         item for item in items if item in include and item not in exclude
@@ -122,6 +142,15 @@ def preprocess(
 ) -> str:
     """Conditional preprocessing on text.
 
+    Usage:
+
+    ```python
+    preprocess(text="Transfer learning with BERT!", lower=True, stem=True)
+    ```
+    <pre>
+    'transfer learn bert'
+    </pre>
+
     Args:
         text (str): String to preprocess.
         lower (bool, optional): Lower the text. Defaults to True.
@@ -158,7 +187,18 @@ def preprocess(
 
 
 class LabelEncoder(object):
-    """Encode labels into unique indices."""
+    """Encode labels into unique indices.
+
+    Usage:
+
+    ```python
+    # Encode labels
+    label_encoder = LabelEncoder()
+    label_encoder.fit(labels)
+    y = label_encoder.encode(labels)
+    ```
+
+    """
 
     def __init__(self, class_to_index: dict = {}):
         self.class_to_index = class_to_index
@@ -171,23 +211,11 @@ class LabelEncoder(object):
     def __str__(self):
         return f"<LabelEncoder(num_classes={len(self)})>"
 
-    def fit(self, y: pd.Series):
+    def fit(self, y: Sequence):
         """Learn label mappings from a series of class labels.
 
         Args:
-            y (pd.Series): Collection of labels as a pandas Series object.
-
-        Note:
-            Input `y` can be any iterable object.
-
-        Usage:
-
-        ```python linenums="1"
-        # Encode labels
-        label_encoder = LabelEncoder()
-        label_encoder.fit(labels)
-        y = label_encoder.encode(labels)
-        ```
+            y (Sequence): Collection of labels as a pandas Series object.
         """
         classes = np.unique(list(itertools.chain.from_iterable(y)))
         for i, class_ in enumerate(classes):
@@ -240,6 +268,12 @@ class LabelEncoder(object):
 
 def encode_labels(labels: pd.Series) -> tuple:
     """Encode labels into unique integers.
+
+    Usage:
+
+    ```python
+    y, class_weights, label_encoder = data.encode_labels(labels=df.tags)
+    ```
 
     Args:
         labels (pd.Series): Pandas Series of all the labels.
@@ -294,6 +328,12 @@ def iterative_train_test_split(
 def split(X: pd.Series, y: np.ndarray, train_size: float = 0.7) -> Tuple:
     """Split data into three (train, val, test) splits.
 
+    Usage:
+
+    ```python
+    X_train, X_val, X_test, y_train, y_val, y_test = data.split(X=X, y=y, train_size=0.7)
+    ```
+
     Args:
         X (pd.Series): input features as a pandas Series object.
         y (np.ndarray): one-hot encoded labels.
@@ -312,6 +352,18 @@ def split(X: pd.Series, y: np.ndarray, train_size: float = 0.7) -> Tuple:
 
 
 class Tokenizer(object):
+    """Tokenize a feature using a built vocabulary.
+
+    Usage:
+
+    ```python
+    tokenizer = Tokenizer(char_level=char_level)
+    tokenizer.fit_on_texts(texts=X)
+    X = np.array(tokenizer.texts_to_sequences(X))
+    ```
+
+    """
+
     def __init__(
         self,
         char_level: bool,
@@ -414,7 +466,16 @@ class Tokenizer(object):
 def tokenize_text(
     X: np.ndarray, char_level: bool, tokenizer: Tokenizer = None
 ) -> Tuple:
-    """Tokenize an array containining text.
+    """Tokenize an array containing text.
+
+    Usage:
+
+    ```python
+    # Tokenize inputs
+    X_train, tokenizer = data.tokenize_text(X=X_train, char_level=True)
+    X_val, _ = data.tokenize_text(X=X_val, char_level=True, tokenizer=tokenizer)
+    X_test, _ = data.tokenize_text(X=X_test, char_level=True, tokenizer=tokenizer)
+    ```
 
     Args:
         X (np.ndarray): Arrays containing the data to tokenize.
@@ -432,16 +493,48 @@ def tokenize_text(
     return X, tokenizer
 
 
-def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0):
-    """Pad sequences to max length in sequence.
+def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0) -> np.ndarray:
+    """Zero pad sequences to a specified `max_seq_len`
+    or to the length of the largest sequence in `sequences`.
+
+    Usage:
+
+    ```python
+    # Pad inputs
+    seq = np.array([[1, 2, 3], [1, 2]], dtype=object)
+    padded_seq = pad_sequences(sequences=seq, max_seq_len=5)
+    print (padded_seq)
+    ```
+    <pre>
+    [[1. 2. 3. 0. 0.]
+     [1. 2. 0. 0. 0.]]
+    </pre>
+
+    Note:
+        Input `sequences` must be 2D.
+        Check out this [implemention](https://madewithml.com/courses/ml-foundations/convolutional-neural-networks/#padding){:target="_blank"} for a more generalized approach.
 
     Args:
-        sequences (np.ndarray): Collection of sequences to pad.
+        sequences (np.ndarray): 2D array of data to be padded.
         max_seq_len (int, optional): Length to pad sequences to. Defaults to 0.
+
+    Raises:
+        ValueError: Input sequences are not two-dimensional.
+
+    Returns:
+        An array with the zero padded sequences.
+
     """
+    # Check shape
+    if not np.shape(sequences)[0] == 2:
+        raise ValueError("Input sequences are not two-dimensional.")
+
+    # Get max sequence length
     max_seq_len = max(
         max_seq_len, max(len(sequence) for sequence in sequences)
     )
+
+    # Pad
     padded_sequences = np.zeros((len(sequences), max_seq_len))
     for i, sequence in enumerate(sequences):
         padded_sequences[i][: len(sequence)] = sequence
@@ -449,6 +542,22 @@ def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0):
 
 
 class CNNTextDataset(torch.utils.data.Dataset):
+    """Create `torch.utils.data.Dataset` objects to use for
+    efficiently feeding data into our models.
+
+    Usage:
+
+    ```python
+    # Create dataset
+    X, y = data
+    dataset = CNNTextDataset(X=X, y=y, max_filter_size=max_filter_size)
+
+    # Create dataloaders
+    dataloader = dataset.create_dataloader(batch_size=batch_size)
+    ```
+
+    """
+
     def __init__(self, X, y, max_filter_size):
         self.X = X
         self.y = y
@@ -466,13 +575,14 @@ class CNNTextDataset(torch.utils.data.Dataset):
         return [X, y]
 
     def collate_fn(self, batch: List) -> Tuple:
-        """Processing on a batch.
+        """Processing on a batch. It's used to override the default `collate_fn` in `torch.utils.data.DataLoader`.
 
         Args:
             batch (List): List of inputs and outputs.
 
         Returns:
             Processed inputs and outputs.
+
         """
         # Get inputs
         X = np.array(batch, dtype=object)[:, 0]
@@ -489,8 +599,19 @@ class CNNTextDataset(torch.utils.data.Dataset):
 
     def create_dataloader(
         self, batch_size: int, shuffle: bool = False, drop_last: bool = False
-    ):
+    ) -> torch.utils.data.DataLoader:
         """Create dataloaders to load batches with.
+
+        Usage:
+
+        ```python
+        # Create dataset
+        X, y = data
+        dataset = CNNTextDataset(X=X, y=y, max_filter_size=max_filter_size)
+
+        # Create dataloaders
+        dataloader = dataset.create_dataloader(batch_size=batch_size)
+        ```
 
         Args:
             batch_size (int): Number of samples per batch.
@@ -516,9 +637,9 @@ def get_dataloader(
     """Create dataloader from data.
 
     Args:
-        data (Tuple): [description]
-        max_filter_size (int): [description]
-        batch_size (int): [description]
+        data (Tuple): Data to load into the DataLoader object.
+        max_filter_size (int): length of the largest CNN filter.
+        batch_size (int): number of samples per batch.
 
     Returns:
         Created dataloader with data.

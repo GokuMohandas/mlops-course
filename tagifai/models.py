@@ -21,7 +21,27 @@ class CNN(nn.Module):
         num_classes: int,
         padding_idx: int = 0,
     ) -> None:
-        """[summary]
+        """A [convolutional neural network](https://madewithml.com/courses/ml-foundations/convolutional-neural-networks/){:target="_blank"} architecture
+        created for natural language processing tasks where filters convolve across the given text inputs.
+
+        ![text CNN](https://raw.githubusercontent.com/GokuMohandas/madewithml/main/images/ml-foundations/embeddings/model.png)
+
+        Usage:
+
+        ```python
+        # Initialize model
+        filter_sizes = list(range(1, int(args.max_filter_size) + 1))
+        model = models.CNN(
+            embedding_dim=int(args.embedding_dim),
+            vocab_size=int(vocab_size),
+            num_filters=int(args.num_filters),
+            filter_sizes=filter_sizes,
+            hidden_dim=int(args.hidden_dim),
+            dropout_p=float(args.dropout_p),
+            num_classes=int(num_classes),
+        )
+        model = model.to(device)
+        ```
 
         Args:
             embedding_dim (int): Embedding dimension for tokens.

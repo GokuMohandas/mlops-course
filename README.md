@@ -60,7 +60,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td>RESTful API</td>
     </tr>
     <tr>
-        <td>Documentation</td>
+        <td><a href="https://madewithml.com/courses/applied-ml/documentation/">Documentation</a></td>
         <td>Testing <small>(data)</small></td>
         <td>Databases</td>
     </tr>
@@ -113,7 +113,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-python -m pip install --upgrade pip
+python -m pip install --upgrade pip setuptools wheel
 make install-dev
 ```
 
@@ -126,11 +126,6 @@ jupyter lab
 ```
 > You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/tagifai.ipynb).
 
-## Actions
-```
-tagifai --help
-```
-
 ## Directory structure
 ```
 tagifai/
@@ -141,6 +136,31 @@ tagifai/
 ├── predict.py    - inference utilities
 ├── train.py      - training utilities
 └── utils.py      - supplementary utilities
+```
+> Documentation can be found [here](https://gokumohandas.github.io/applied-ml/).
+
+## Workflow
+1. View all available options using the CLI app:
+```
+tagifai --help
+tagifai train-model --help
+```
+2. Download the necessary data files to `assets/data`.
+```
+tagifai download-data
+```
+3. Optimize using distributions specified in `tagifai.train.objective`. This also writes the best model's args to `config/args.json`
+```
+tagifai optimize --num-trials 100
+```
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai set-artifact-metadata` to match all metadata as if it were run from your machine.
+4. Train a model (and save all it's artifacts) using args from `config/args.json`
+```
+tagifai train-model --args-fp config/args.json
+```
+5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
+```
+tagifai predict-tags --text "Transfer learning with BERT"
 ```
 
 ## MLFlow

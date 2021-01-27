@@ -50,6 +50,9 @@ def load_dict(filepath: str) -> Dict:
 def save_dict(d: Dict, filepath: str) -> None:
     """Save a dictionary to a specific location.
 
+    Warning:
+        This will overwrite any existing file at `filepath`.
+
     Args:
         d (Dict): dictionary to save.
         filepath (str): location to save the dictionary to as a JSON file.
