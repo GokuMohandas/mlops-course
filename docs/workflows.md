@@ -1,5 +1,3 @@
-## Workflow
-
 1. View all available options using the CLI app:
     ```bash
     # View all CLI commands

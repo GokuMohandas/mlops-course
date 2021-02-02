@@ -2,7 +2,7 @@
 # Configurations.
 
 import logging
-import logging.config
+import sys
 from pathlib import Path
 
 import mlflow
@@ -25,10 +25,44 @@ utils.create_dirs(dirpath=ASSETS_DIR)
 utils.create_dirs(dirpath=DATA_DIR)
 utils.create_dirs(dirpath=EXPERIMENTS_DIR)
 
-# Loggers
-logging.config.fileConfig(Path(CONFIG_DIR, "logging.config"))
-logger = logging.getLogger()
-logger.handlers[0] = RichHandler(markup=True)  # set rich handler
-
 # MLFlow
 mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))
+
+# Logger
+logging_config = {
+    "version": 1,
+    "formatters": {
+        "minimal": {"format": "%(message)s"},
+        "detailed": {
+            "format": "%(levelname)s %(asctime)s [%(filename)s:%(funcName)s:%(lineno)d]\n%(message)s\n"
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "stream": sys.stdout,
+            "formatter": "minimal",
+            "level": logging.DEBUG,
+        },
+        "info": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": Path(LOGS_DIR, "info.log"),
+            "maxBytes": 10485760,  # 1 MB
+            "backupCount": 10,
+            "formatter": "detailed",
+            "level": logging.INFO,
+        },
+        "error": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": Path(LOGS_DIR, "error.log"),
+            "maxBytes": 10485760,  # 1 MB
+            "backupCount": 10,
+            "formatter": "detailed",
+            "level": logging.ERROR,
+        },
+    },
+    "root": {"handlers": ["console", "info", "error"], "level": logging.DEBUG},
+}
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger()
+logger.handlers[0] = RichHandler(markup=True)

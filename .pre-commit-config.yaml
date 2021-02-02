@@ -1,0 +1,40 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.4.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: check-yaml
+        exclude: "mkdocs.yml"
+    -   id: check-added-large-files
+        args: ['--maxkb=1000']
+    -   id: check-ast
+    -   id: check-json
+    -   id: check-merge-conflict
+    -   id: check-json
+-   repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+    -   id: black
+        args: []
+        files: .
+-   repo: https://gitlab.com/PyCQA/flake8
+    rev: 3.8.3
+    hooks:
+    -   id: flake8
+-   repo: https://github.com/PyCQA/isort
+    rev: 5.5.3
+    hooks:
+    -   id: isort
+        args: []
+        files: .
+- repo: local
+  hooks:
+    - id: test
+      name: test
+      entry: make
+      args: ["test"]
+      language: system
+      types: [python]
+      pass_filenames: false

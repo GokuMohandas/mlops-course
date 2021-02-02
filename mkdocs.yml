@@ -100,7 +100,7 @@ nav:
   - Home:
       - TagIfAI: index.md
   - Getting started:
-    - Workflow: workflows.md
+    - Workflows: workflows.md
   - Reference:
     - CLI: tagifai/main.md
     - Configuration: tagifai/config.md

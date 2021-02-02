@@ -1,15 +1,15 @@
 # train.py
 # Training operations.
 
-from argparse import Namespace
 import json
+from argparse import Namespace
 from typing import Dict, List, Tuple
 
 import numpy as np
-from numpyencoder import NumpyEncoder
 import optuna
 import torch
 import torch.nn as nn
+from numpyencoder import NumpyEncoder
 from sklearn.metrics import (
     precision_recall_curve,
     precision_recall_fscore_support,

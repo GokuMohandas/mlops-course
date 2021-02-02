@@ -1,6 +1,10 @@
 ## Lessons
 All the Applied ML course lessons can be found [here](https://madewithml.com/#applied-ml){:target="_blank"}.
 
+- [Getting started](workflows.md): Overview of common workflows and examples.
+- [Reference](tagifai/main.md): Detailed documentation of each script and it's respective functions and classes.
+- [API](api.md): Documentation of the different API calls with information on payloads, responses, etc.
+
 ## Set up
 ```bash
 python3 -m venv venv
