@@ -62,7 +62,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td>Code</td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/packaging/">Packaing</a></td>
+        <td><a href="https://madewithml.com/courses/applied-ml/packaging/">Packaging</a></td>
         <td><a href="https://madewithml.com/courses/applied-ml/makefile/">Makefile</a></td>
         <td>RESTful API</td>
         <td>Data</td>
