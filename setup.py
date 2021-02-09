@@ -24,7 +24,6 @@ dev_packages = [
     "mkdocs==1.1.2",
     "mkdocs-macros-plugin==0.5.0",
     "mkdocs-material==6.2.4",
-    "mkdocs-redirects==1.0.1",
     "mkdocstrings==0.14.0",
     "pre-commit==2.7.1",
 ]
@@ -57,7 +56,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "tagifai = tagifai.main:app",
+            "tagifai = app.cli:app",
         ],
     },
 )

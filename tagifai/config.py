@@ -31,6 +31,7 @@ mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))
 # Logger
 logging_config = {
     "version": 1,
+    "disable_existing_loggers": False,
     "formatters": {
         "minimal": {"format": "%(message)s"},
         "detailed": {
@@ -61,8 +62,14 @@ logging_config = {
             "level": logging.ERROR,
         },
     },
-    "root": {"handlers": ["console", "info", "error"], "level": logging.DEBUG},
+    "loggers": {
+        "root": {
+            "handlers": ["console", "info", "error"],
+            "level": logging.INFO,
+            "propagate": True,
+        },
+    },
 }
 logging.config.dictConfig(logging_config)
-logger = logging.getLogger()
+logger = logging.getLogger("root")
 logger.handlers[0] = RichHandler(markup=True)

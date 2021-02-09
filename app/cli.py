@@ -1,7 +1,8 @@
-# main.py
-# Main operations.
+# cli.py
+# Command line interface (CLI) application.
 
 import json
+import shutil
 import tempfile
 import warnings
 from argparse import Namespace
@@ -119,7 +120,8 @@ def predict_tags(
         run_id = all_runs.iloc[0].run_id
 
     # Predict
-    prediction = predict.predict(texts=[text], run_id=run_id)
+    artifacts = predict.load_artifacts(run_id=run_id)
+    prediction = predict.predict(texts=[text], artifacts=artifacts)
     logger.info(json.dumps(prediction, indent=2))
 
     return prediction
@@ -220,11 +222,40 @@ def set_artifact_metadata():
     )
     for meta_yaml in experiment_meta_yamls:
         set_artifact_location(var="artifact_location", fp=meta_yaml)
+        logger.info(f"Set artfifact location for {meta_yaml}")
 
     # Change artifact URI
     run_meta_yamls = list(Path(config.EXPERIMENTS_DIR).glob("*/*/meta.yaml"))
     for meta_yaml in run_meta_yamls:
         set_artifact_uri(var="artifact_uri", fp=meta_yaml)
+        logger.info(f"Set artfifact URI for {meta_yaml}")
+
+
+@app.command()
+def clean_experiments(experiments_to_keep: str = "best"):
+    """Removes all experiments besides the
+    ones specified in `experiments_to_keep`.
+
+    Args:
+        experiments_to_keep (str): comma separated string of experiments to keep.
+    """
+    # Get experiments to keep
+    experiments_to_keep = list(
+        set([exp.strip() for exp in experiments_to_keep.split(",")])
+    )
+    if not len(experiments_to_keep):
+        raise ValueError("You must keep at least one experiment.")
+
+    # Filter and delete
+    client = mlflow.tracking.MlflowClient()
+    for experiment in client.list_experiments():
+        if experiment.name not in experiments_to_keep:
+            logger.info(f"Deleting Experiment {experiment.name}")
+            client.delete_experiment(experiment_id=experiment.experiment_id)
+
+    # Delete MLFlow trash
+    shutil.rmtree(Path(config.EXPERIMENTS_DIR, ".trash"))
+    logger.info(f"Cleared experiments besides {experiments_to_keep}")
 
 
 if __name__ == "__main__":

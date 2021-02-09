@@ -99,14 +99,11 @@ extra_javascript:
 nav:
   - Home:
       - TagIfAI: index.md
-  - Getting started:
-    - Workflows: workflows.md
+  - Getting started: getting_started.md
   - Reference:
-    - CLI: tagifai/main.md
-    - Configuration: tagifai/config.md
+    - Config: tagifai/config.md
     - Data: tagifai/data.md
     - Models: tagifai/models.md
     - Training: tagifai/train.md
     - Inference: tagifai/predict.md
     - Utilities: tagifai/utils.md
-  - API: api.md

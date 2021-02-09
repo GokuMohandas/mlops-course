@@ -64,20 +64,14 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/packaging/">Packaging</a></td>
         <td><a href="https://madewithml.com/courses/applied-ml/makefile/">Makefile</a></td>
-        <td>RESTful API</td>
+        <td><a href="https://madewithml.com/courses/applied-ml/api/">RESTful API</a></td>
         <td>Data</td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/documentation/">Documentation</a></td>
-        <td></td>
-        <td>Databases</td>
-        <td>Model</td>
-    </tr>
-    <tr>
         <td><a href="https://madewithml.com/courses/applied-ml/logging/">Logging</a></td>
         <td></td>
-        <td>Authentication</td>
-        <td></td>
+        <td>Model</td>
     </tr>
 </table>
 
@@ -132,11 +126,14 @@ jupyter lab
 > You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/tagifai.ipynb).
 
 ## Directory structure
-```
+```bash
+app/
+├── api.py        - FastAPI app
+└── cli.py        - CLI app
+├── schemas.py    - API model schemas
 tagifai/
 ├── config.py     - configuration setup
 ├── data.py       - data processing utilities
-├── main.py       - main operations (CLI)
 ├── models.py     - model architectures
 ├── predict.py    - inference utilities
 ├── train.py      - training utilities
@@ -146,35 +143,41 @@ tagifai/
 
 ## Workflow
 1. View all available options using the CLI app:
-```
+```bash
 tagifai --help
 tagifai train-model --help
 ```
 2. Download the necessary data files to `assets/data`.
-```
+```bash
 tagifai download-data
 ```
 3. Optimize using distributions specified in `tagifai.train.objective`. This also writes the best model's args to `config/args.json`
-```
+```bash
 tagifai optimize --num-trials 100
 ```
 > We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai set-artifact-metadata` to match all metadata as if it were run from your machine.
 4. Train a model (and save all it's artifacts) using args from `config/args.json`
-```
+```bash
 tagifai train-model --args-fp config/args.json
 ```
 5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
-```
+```bash
 tagifai predict-tags --text "Transfer learning with BERT"
 ```
 
-## MLFlow
+## API
+```bash
+uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app # start API
+gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app  # gunicorn
 ```
+
+## MLFlow
+```bash
 mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri assets/experiments/
 ```
 
 ## Mkdocs
-```
+```bash
 python -m mkdocs serve
 ```
 

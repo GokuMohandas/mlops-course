@@ -38,3 +38,10 @@ repos:
       language: system
       types: [python]
       pass_filenames: false
+    - id: clean
+      name: clean
+      entry: make
+      args: ["clean"]
+      language: system
+      types: [python]
+      pass_filenames: false

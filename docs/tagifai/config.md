@@ -17,18 +17,18 @@ utils.create_dirs(dirpath=DATA_DIR)
 utils.create_dirs(dirpath=EXPERIMENTS_DIR)
 ```
 
-Then we'll establish our logger using the configuration file from `config/logging.config`:
-```python
-# Loggers
-logging.config.fileConfig(Path(CONFIG_DIR, "logging.config"))
-logger = logging.getLogger()
-logger.handlers[0] = RichHandler(markup=True)  # set rich handler
-```
-
-Finally we'll set the tracking URI for all MLFlow experiments:
+Then, we'll set the tracking URI for all MLFlow experiments:
 ```python
 # MLFlow
 mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))
+```
+
+Finally, we'll establish our logger using the `logging_config` dictionary:
+```python
+# Logger
+logging.config.dictConfig(logging_config)
+logger = logging.getLogger("root")
+logger.handlers[0] = RichHandler(markup=True)
 ```
 
 ::: tagifai.config

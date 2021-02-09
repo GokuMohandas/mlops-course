@@ -1,3 +1,5 @@
+.PHONY: app docs
+
 help:
 	@echo "Commands:"
 	@echo "install         : installs requirements."
@@ -20,6 +22,12 @@ install-dev:
 install-test:
 	python -m pip install -e ".[test]"
 
+app:
+	uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
+
+app-prod:
+	gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app
+
 test:
 	pytest --cov tagifai --cov-report html --disable-pytest-warnings
 
@@ -29,6 +37,7 @@ style:
 	isort .
 
 clean:
+	tagifai clean-experiments --experiments-to-keep "best"
 	find . -type f -name "*.DS_Store" -ls -delete
 	find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
 	find . | grep -E ".pytest_cache" | xargs rm -rf
@@ -42,5 +51,3 @@ pypi:
 
 docs:
 	python -m mkdocs serve
-
-.PHONY: docs

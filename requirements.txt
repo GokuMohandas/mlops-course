@@ -13,5 +13,5 @@ seaborn==0.11.1
 sklearn==0.0
 torch==1.7.0
 typer==0.3.2
-uvicorn==0.13.3
+uvicorn[standard]==0.13.3
 wordcloud==1.5.0

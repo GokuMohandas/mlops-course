@@ -525,10 +525,6 @@ def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0) -> np.ndarray:
         An array with the zero padded sequences.
 
     """
-    # Check shape
-    if not np.shape(sequences)[0] == 2:
-        raise ValueError("Input sequences are not two-dimensional.")
-
     # Get max sequence length
     max_seq_len = max(
         max_seq_len, max(len(sequence) for sequence in sequences)
@@ -585,8 +581,9 @@ class CNNTextDataset(torch.utils.data.Dataset):
 
         """
         # Get inputs
-        X = np.array(batch, dtype=object)[:, 0]
-        y = np.stack(np.array(batch, dtype=object)[:, 1], axis=0)
+        batch = np.array(batch, dtype=object)
+        X = batch[:, 0]
+        y = np.stack(batch[:, 1], axis=0)
 
         # Pad inputs
         X = pad_sequences(sequences=X, max_seq_len=self.max_filter_size)

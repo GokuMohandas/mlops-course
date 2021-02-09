@@ -250,35 +250,6 @@ def get_performance(
     return performance
 
 
-def initialize_model(
-    args: Namespace,
-    vocab_size: int,
-    num_classes: int,
-    device: torch.device = torch.device("cpu"),
-) -> nn.Module:
-    """Initialize a model using parameters (converted to appropriate data types).
-
-    Args:
-        args (Namespace): Parameters for data processing and training.
-        vocab_size (int): Size of the vocabulary.
-        num_classes (int): Number on unique classes.
-        device (torch.device): Device to run model on. Defaults to CPU.
-    """
-    # Initialize model
-    filter_sizes = list(range(1, int(args.max_filter_size) + 1))
-    model = models.CNN(
-        embedding_dim=int(args.embedding_dim),
-        vocab_size=int(vocab_size),
-        num_filters=int(args.num_filters),
-        filter_sizes=filter_sizes,
-        hidden_dim=int(args.hidden_dim),
-        dropout_p=float(args.dropout_p),
-        num_classes=int(num_classes),
-    )
-    model = model.to(device)
-    return model
-
-
 def train(
     args: Namespace,
     train_dataloader: torch.utils.data.DataLoader,
@@ -446,7 +417,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     )
 
     # 10. Initialize model
-    model = initialize_model(
+    model = models.initialize_model(
         args=args,
         vocab_size=len(tokenizer),
         num_classes=len(label_encoder),

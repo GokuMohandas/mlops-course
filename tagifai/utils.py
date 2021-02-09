@@ -4,9 +4,10 @@
 import json
 import random
 from pathlib import Path
-from typing import Dict
+from typing import Dict, List
 from urllib.request import urlopen
 
+import mlflow
 import numpy as np
 import torch
 
@@ -91,3 +92,32 @@ def set_device(cuda: bool) -> torch.device:
     if device.type == "cuda":
         torch.set_default_tensor_type("torch.cuda.FloatTensor")
     return device
+
+
+def get_sorted_runs(experiment_name: str, order_by: List) -> List[Dict]:
+    """Get sorted list of runs from Experiment `experiment_name`.
+
+    Usage:
+
+    ```python
+    runs = get_sorted_runs(experiment_name="best", order_by=["metrics.f1 DESC"])
+    ```
+
+    Args:
+        experiment_name (str): Name of the experiment to fetch runs from.
+        order_by (List): List specification for how to order the runs.
+
+    Returns:
+        List[Dict]: List of ordered runs with their respective info.
+    """
+    client = mlflow.tracking.MlflowClient()
+    experiment_id = client.get_experiment_by_name("best").experiment_id
+    runs_df = mlflow.search_runs(
+        experiment_ids=experiment_id,
+        order_by=order_by,
+    )
+
+    # Convert DataFrame to List[Dict]
+    runs = runs_df.to_dict("records")
+
+    return runs
