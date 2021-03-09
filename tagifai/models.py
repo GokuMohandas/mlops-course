@@ -81,9 +81,7 @@ class CNN(nn.Module):
         self.fc1 = nn.Linear(num_filters * len(filter_sizes), hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, num_classes)
 
-    def forward(
-        self, inputs: List, channel_first: bool = False
-    ) -> torch.Tensor:
+    def forward(self, inputs: List, channel_first: bool = False) -> torch.Tensor:
         """Forward pass.
 
         Args:
@@ -106,11 +104,7 @@ class CNN(nn.Module):
 
             # `SAME` padding
             padding_left = int(
-                (
-                    self.conv[i].stride[0] * (max_seq_len - 1)
-                    - max_seq_len
-                    + self.filter_sizes[i]
-                )
+                (self.conv[i].stride[0] * (max_seq_len - 1) - max_seq_len + self.filter_sizes[i])
                 / 2
             )
             padding_right = int(

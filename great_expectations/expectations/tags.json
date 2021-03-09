@@ -1,0 +1,119 @@
+{
+  "data_asset_type": "CustomPandasDataset",
+  "expectation_suite_name": "tags",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_column_count_to_equal",
+      "kwargs": {
+        "value": 3
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "kwargs": {
+        "column_list": [
+          "tag",
+          "aliases",
+          "parents"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "tag"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "tag"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_value_lengths_to_be_between",
+      "kwargs": {
+        "column": "tag",
+        "min_value": 1
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_list_values_to_be_not_null",
+      "kwargs": {
+        "column": "aliases"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_list_values_to_be_unique",
+      "kwargs": {
+        "column": "aliases"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_list_values_to_be_not_null",
+      "kwargs": {
+        "column": "parents"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_list_values_to_be_unique",
+      "kwargs": {
+        "column": "parents"
+      },
+      "meta": {}
+    }
+  ],
+  "meta": {
+    "BasicSuiteBuilderProfiler": {
+      "batch_kwargs": {
+        "data_asset_name": "tags",
+        "datasource": "data",
+        "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../assets/data/tags.json"
+      },
+      "created_at": 1614271881.0055628,
+      "created_by": "BasicSuiteBuilderProfiler"
+    },
+    "citations": [
+      {
+        "batch_kwargs": {
+          "data_asset_name": "tags",
+          "datasource": "data",
+          "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../assets/data/tags.json"
+        },
+        "batch_markers": {
+          "ge_load_time": "20210225T165120.984713Z",
+          "pandas_data_fingerprint": "07b1d12ce90489987b292dee39da3c81"
+        },
+        "batch_parameters": null,
+        "citation_date": "20210225T165121.023376Z",
+        "comment": "BasicSuiteBuilderProfiler added a citation based on the current batch."
+      }
+    ],
+    "columns": {
+      "aliases": {
+        "description": ""
+      },
+      "parents": {
+        "description": ""
+      },
+      "tag": {
+        "description": ""
+      }
+    },
+    "great_expectations_version": "0.13.7",
+    "notes": {
+      "content": [
+        "_To add additional notes, edit the <code>meta.notes.content</code> field in the appropriate Expectation json file._"
+      ],
+      "format": "markdown"
+    }
+  }
+}

@@ -2413,9 +2413,7 @@
     {
         "tag": "transformers",
         "aliases": [],
-        "parents": [
-            "natural-language-processing"
-        ]
+        "parents": []
     },
     {
         "tag": "unit-tests",

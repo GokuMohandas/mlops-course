@@ -10,8 +10,8 @@ on:
     - main
 
 jobs:
-  documentation:
-    name: Build docs
+  build:
+    name: Build on commit
     runs-on: ubuntu-latest
     steps:
 
@@ -23,15 +23,16 @@ jobs:
         with:
           python-version: 3.6.9
 
+      - name: Caching
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles("setup.py") }}-${{ hashFiles("requirements.txt") }}
+
       - name: Install dependencies
         run: |
-          pip install .
-          pip install \
-            mkdocs==1.1.2 \
-            mkdocs-macros-plugin==0.5.0 \
-            mkdocs-material==6.2.4 \
-            mkdocs-redirects==1.0.1 \
-            mkdocstrings==0.14.0
+          python -m pip install -e .
+          python -m pip install -e ".[docs]"
 
       - name: Deploy documentation
         run: mkdocs gh-deploy --force

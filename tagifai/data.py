@@ -5,53 +5,13 @@ import itertools
 import json
 import re
 from collections import Counter
-from pathlib import Path
-from typing import Dict, List, Sequence, Tuple
+from typing import List, Sequence, Tuple
 
-import nltk
 import numpy as np
 import pandas as pd
 import torch
-from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from skmultilearn.model_selection import IterativeStratification
-
-from tagifai import config, utils
-
-# NLTK
-nltk.download("stopwords")
-STOPWORDS = stopwords.words("english")
-porter = PorterStemmer()
-
-
-def load(shuffle: bool, num_samples: int = 0) -> pd.DataFrame:
-    """Load the data from local drive to a Pandas DataFrame.
-
-    Args:
-        shuffle (bool): Shuffle the data.
-        num_samples (int, optional): Number of samples to include (used for quick testting). Defaults to 0 which includes all samples.
-
-    Returns:
-        Dataframe, projects and tags dictionaries.
-    """
-    # Load data
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    projects_dict = utils.load_dict(filepath=projects_fp)
-    tags_dict = utils.load_dict(filepath=tags_fp)
-
-    # Create dataframe
-    df = pd.DataFrame(projects_dict)
-
-    # Shuffling since projects are chronologically organized
-    if shuffle:
-        df = df.sample(frac=1).reset_index(drop=True)
-
-    # Subset
-    if num_samples:
-        df = df[:num_samples]
-
-    return df, projects_dict, tags_dict
 
 
 def filter_items(items: List, include: List = [], exclude: List = []) -> List:
@@ -68,69 +28,74 @@ def filter_items(items: List, include: List = [], exclude: List = []) -> List:
     Usage:
 
     ```python
-    # Inclusion/exclusion criteria for tags
-    include = list(tags_dict.keys())
-    exclude = [
-        "machine-learning",
-        "deep-learning",
-        "data-science",
-        "neural-networks",
-        "python",
-        "r",
-        "visualization",
-    ]
-
     # Filter tags for each project
-    df.tags = df.tags.apply(filter_items, include=include, exclude=exclude)
+    df.tags = df.tags.apply(
+        filter_items,
+        include=list(tags_dict.keys()),
+        exclude=config.EXCLDUE,
+        )
     ```
 
     """
-    filtered = [
-        item for item in items if item in include and item not in exclude
-    ]
+    # Filter
+    filtered = [item for item in items if item in include and item not in exclude]
+
     return filtered
 
 
-def clean(df: pd.DataFrame, tags_dict: Dict, min_tag_freq: int = 30) -> Tuple:
+def clean(
+    df: pd.DataFrame, include: List = [], exclude: List = [], min_tag_freq: int = 30
+) -> Tuple:
     """Cleaning the raw data.
 
     Args:
         df (pd.DataFrame): Pandas DataFrame with data.
-        tags_dict (Dict): Dictionary of tags and their metadata (parents, aliases, etc.)
+        include (List): list of tags to include.
+        exclude (List): list of tags to exclude.
         min_tag_freq (int, optional): Minimum frequency of tags required. Defaults to 30.
 
     Returns:
-        A cleaned dataframe, dictionary of all tags and tags above the frequency threshold.
+        A cleaned dataframe and dictionary of tags and counts above the frequency threshold.
     """
     # Combine features
     df["text"] = df.title + " " + df.description
-
-    # Inclusion/exclusion criteria for tags
-    include = list(tags_dict.keys())
-    exclude = [
-        "machine-learning",
-        "deep-learning",
-        "data-science",
-        "neural-networks",
-        "python",
-        "r",
-        "visualization",
-    ]
 
     # Filter tags for each project
     df.tags = df.tags.apply(filter_items, include=include, exclude=exclude)
     tags = Counter(itertools.chain.from_iterable(df.tags.values))
 
     # Filter tags that have fewer than `min_tag_freq` occurrences
-    tags_above_freq = Counter(
-        tag for tag in tags.elements() if tags[tag] >= min_tag_freq
-    )
+    tags_above_freq = Counter(tag for tag in tags.elements() if tags[tag] >= min_tag_freq)
     df.tags = df.tags.apply(filter_items, include=list(tags_above_freq.keys()))
 
     # Remove projects with no more remaining relevant tags
     df = df[df.tags.map(len) > 0]
 
-    return df, tags_dict, tags_above_freq
+    return df, tags_above_freq
+
+
+class Stemmer(PorterStemmer):
+    def stem(self, word):
+
+        if self.mode == self.NLTK_EXTENSIONS and word in self.pool:  # pragma: no cover, nltk
+            return self.pool[word]
+
+        if self.mode != self.ORIGINAL_ALGORITHM and len(word) <= 2:  # pragma: no cover, nltk
+            # With this line, strings of length 1 or 2 don't go through
+            # the stemming process, although no mention is made of this
+            # in the published algorithm.
+            return word
+
+        stem = self._step1a(word)
+        stem = self._step1b(stem)
+        stem = self._step1c(stem)
+        stem = self._step2(stem)
+        stem = self._step3(stem)
+        stem = self._step4(stem)
+        stem = self._step5a(stem)
+        stem = self._step5b(stem)
+
+        return stem
 
 
 def preprocess(
@@ -138,7 +103,187 @@ def preprocess(
     lower: bool = True,
     stem: bool = False,
     filters: str = r"[!\"'#$%&()*\+,-./:;<=>?@\\\[\]^_`{|}~]",
-    stopwords: List = STOPWORDS,
+    stopwords: List = [
+        "i",
+        "me",
+        "my",
+        "myself",
+        "we",
+        "our",
+        "ours",
+        "ourselves",
+        "you",
+        "you're",
+        "you've",
+        "you'll",
+        "you'd",
+        "your",
+        "yours",
+        "yourself",
+        "yourselves",
+        "he",
+        "him",
+        "his",
+        "himself",
+        "she",
+        "she's",
+        "her",
+        "hers",
+        "herself",
+        "it",
+        "it's",
+        "its",
+        "itself",
+        "they",
+        "them",
+        "their",
+        "theirs",
+        "themselves",
+        "what",
+        "which",
+        "who",
+        "whom",
+        "this",
+        "that",
+        "that'll",
+        "these",
+        "those",
+        "am",
+        "is",
+        "are",
+        "was",
+        "were",
+        "be",
+        "been",
+        "being",
+        "have",
+        "has",
+        "had",
+        "having",
+        "do",
+        "does",
+        "did",
+        "doing",
+        "a",
+        "an",
+        "the",
+        "and",
+        "but",
+        "if",
+        "or",
+        "because",
+        "as",
+        "until",
+        "while",
+        "of",
+        "at",
+        "by",
+        "for",
+        "with",
+        "about",
+        "against",
+        "between",
+        "into",
+        "through",
+        "during",
+        "before",
+        "after",
+        "above",
+        "below",
+        "to",
+        "from",
+        "up",
+        "down",
+        "in",
+        "out",
+        "on",
+        "off",
+        "over",
+        "under",
+        "again",
+        "further",
+        "then",
+        "once",
+        "here",
+        "there",
+        "when",
+        "where",
+        "why",
+        "how",
+        "all",
+        "any",
+        "both",
+        "each",
+        "few",
+        "more",
+        "most",
+        "other",
+        "some",
+        "such",
+        "no",
+        "nor",
+        "not",
+        "only",
+        "own",
+        "same",
+        "so",
+        "than",
+        "too",
+        "very",
+        "s",
+        "t",
+        "can",
+        "will",
+        "just",
+        "don",
+        "don't",
+        "should",
+        "should've",
+        "now",
+        "d",
+        "ll",
+        "m",
+        "o",
+        "re",
+        "ve",
+        "y",
+        "ain",
+        "aren",
+        "aren't",
+        "couldn",
+        "couldn't",
+        "didn",
+        "didn't",
+        "doesn",
+        "doesn't",
+        "hadn",
+        "hadn't",
+        "hasn",
+        "hasn't",
+        "haven",
+        "haven't",
+        "isn",
+        "isn't",
+        "ma",
+        "mightn",
+        "mightn't",
+        "mustn",
+        "mustn't",
+        "needn",
+        "needn't",
+        "shan",
+        "shan't",
+        "shouldn",
+        "shouldn't",
+        "wasn",
+        "wasn't",
+        "weren",
+        "weren't",
+        "won",
+        "won't",
+        "wouldn",
+        "wouldn't",
+    ],
 ) -> str:
     """Conditional preprocessing on text.
 
@@ -166,8 +311,9 @@ def preprocess(
         text = text.lower()
 
     # Remove stopwords
-    pattern = re.compile(r"\b(" + r"|".join(stopwords) + r")\b\s*")
-    text = pattern.sub("", text)
+    if len(stopwords):
+        pattern = re.compile(r"\b(" + r"|".join(stopwords) + r")\b\s*")
+        text = pattern.sub("", text)
 
     # Spacing and filters
     text = re.sub(r"([-;;.,!?<=>])", r" \1 ", text)
@@ -181,7 +327,8 @@ def preprocess(
 
     # Stemming
     if stem:
-        text = " ".join([porter.stem(word) for word in text.split(" ")])
+        stemmer = Stemmer()
+        text = " ".join([stemmer.stem(word) for word in text.split(" ")])
 
     return text
 
@@ -201,15 +348,82 @@ class LabelEncoder(object):
     """
 
     def __init__(self, class_to_index: dict = {}):
-        self.class_to_index = class_to_index
+        self.class_to_index = class_to_index or {}  # mutable defaults ;)
         self.index_to_class = {v: k for k, v in self.class_to_index.items()}
         self.classes = list(self.class_to_index.keys())
 
     def __len__(self):
         return len(self.class_to_index)
 
+    def save(self, fp: str):
+        with open(fp, "w") as fp:
+            contents = {"class_to_index": self.class_to_index}
+            json.dump(contents, fp, indent=4, sort_keys=False)
+
+    @classmethod
+    def load(cls, fp: str):
+        with open(fp, "r") as fp:
+            kwargs = json.load(fp=fp)
+        return cls(**kwargs)
+
+
+class MultiClassLabelEncoder(LabelEncoder):
+    """Encode labels into unique indices
+    for multi-class classification.
+    """
+
     def __str__(self):
-        return f"<LabelEncoder(num_classes={len(self)})>"
+        return f"<MultiClassLabelEncoder(num_classes={len(self)})>"
+
+    def fit(self, y: Sequence):
+        """Learn label mappings from a series of class labels.
+
+        Args:
+            y (Sequence): Collection of labels as a pandas Series object.
+        """
+        classes = np.unique(y)
+        for i, class_ in enumerate(classes):
+            self.class_to_index[class_] = i
+        self.index_to_class = {v: k for k, v in self.class_to_index.items()}
+        self.classes = list(self.class_to_index.keys())
+        return self
+
+    def encode(self, y: pd.Series) -> np.ndarray:
+        """Encode a collection of classes.
+
+        Args:
+            y (pd.Series): Collection of labels as a pandas Series object.
+
+        Returns:
+            Labels as (multilabel) one-hot encodings
+        """
+        encoded = np.zeros((len(y)), dtype=int)
+        for i, item in enumerate(y):
+            encoded[i] = self.class_to_index[item]
+        return encoded
+
+    def decode(self, y: np.ndarray) -> List[List[str]]:
+        """Decode a collection of class indices.
+
+        Args:
+            y (np.ndarray): Labels as (multilabel) one-hot encodings
+
+        Returns:
+            List of original labels for each output.
+        """
+        classes = []
+        for i, item in enumerate(y):
+            classes.append(self.index_to_class[item])
+        return classes
+
+
+class MultiLabelLabelEncoder(LabelEncoder):
+    """Encode labels into unique indices
+    for multi-label classification.
+    """
+
+    def __str__(self):
+        return f"<MultiLabelLabelEncoder(num_classes={len(self)})>"
 
     def fit(self, y: Sequence):
         """Learn label mappings from a series of class labels.
@@ -250,55 +464,12 @@ class LabelEncoder(object):
         """
         classes = []
         for i, item in enumerate(y):
-            indices = np.where(item == 1)[0]
+            indices = np.where(np.asarray(item) == 1)[0]
             classes.append([self.index_to_class[index] for index in indices])
         return classes
 
-    def save(self, fp: str):
-        with open(fp, "w") as fp:
-            contents = {"class_to_index": self.class_to_index}
-            json.dump(contents, fp, indent=4, sort_keys=False)
 
-    @classmethod
-    def load(cls, fp: str):
-        with open(fp, "r") as fp:
-            kwargs = json.load(fp=fp)
-        return cls(**kwargs)
-
-
-def encode_labels(labels: pd.Series) -> tuple:
-    """Encode labels into unique integers.
-
-    Usage:
-
-    ```python
-    y, class_weights, label_encoder = data.encode_labels(labels=df.tags)
-    ```
-
-    Args:
-        labels (pd.Series): Pandas Series of all the labels.
-
-    Returns:
-        Encoded labels, class weights and the encoder.
-    """
-    # Encode labels
-    label_encoder = LabelEncoder()
-    label_encoder.fit(labels)
-    y = label_encoder.encode(labels)
-
-    # Class weights
-    all_tags = list(itertools.chain.from_iterable(labels.values))
-    counts = np.bincount(
-        [label_encoder.class_to_index[class_] for class_ in all_tags]
-    )
-    class_weights = {i: 1.0 / count for i, count in enumerate(counts)}
-
-    return y, class_weights, label_encoder
-
-
-def iterative_train_test_split(
-    X: pd.Series, y: np.ndarray, train_size: float = 0.7
-) -> Tuple:
+def iterative_train_test_split(X: pd.Series, y: np.ndarray, train_size: float = 0.7) -> Tuple:
     """Custom iterative train test split which
     'maintains balanced representation with respect
     to order-th label combinations.'
@@ -325,32 +496,6 @@ def iterative_train_test_split(
     return X_train, X_test, y_train, y_test
 
 
-def split(X: pd.Series, y: np.ndarray, train_size: float = 0.7) -> Tuple:
-    """Split data into three (train, val, test) splits.
-
-    Usage:
-
-    ```python
-    X_train, X_val, X_test, y_train, y_val, y_test = data.split(X=X, y=y, train_size=0.7)
-    ```
-
-    Args:
-        X (pd.Series): input features as a pandas Series object.
-        y (np.ndarray): one-hot encoded labels.
-        train_size (float, optional): proportion of data for train split. Defaults to 0.7.
-
-    Returns:
-        Inputs and outputs of the three splits (respectively).
-    """
-    X_train, X_, y_train, y_ = iterative_train_test_split(
-        X, y, train_size=train_size
-    )
-    X_val, X_test, y_val, y_test = iterative_train_test_split(
-        X_, y_, train_size=0.5
-    )
-    return X_train, X_val, X_test, y_train, y_val, y_test
-
-
 class Tokenizer(object):
     """Tokenize a feature using a built vocabulary.
 
@@ -359,7 +504,7 @@ class Tokenizer(object):
     ```python
     tokenizer = Tokenizer(char_level=char_level)
     tokenizer.fit_on_texts(texts=X)
-    X = np.array(tokenizer.texts_to_sequences(X))
+    X = np.array(tokenizer.texts_to_sequences(X), dtype=object)
     ```
 
     """
@@ -377,9 +522,10 @@ class Tokenizer(object):
         if num_tokens:
             num_tokens -= 2  # pad + unk tokens
         self.num_tokens = num_tokens
+        self.pad_token = pad_token
         self.oov_token = oov_token
         if not token_to_index:
-            token_to_index = {"<PAD>": 0, "<UNK>": 1}
+            token_to_index = {pad_token: 0, oov_token: 1}
         self.token_to_index = token_to_index
         self.index_to_token = {v: k for k, v in self.token_to_index.items()}
 
@@ -395,10 +541,9 @@ class Tokenizer(object):
         Args:
             texts (List): List of texts made of tokens.
         """
-        if self.char_level:
-            all_tokens = [token for text in texts for token in text]
         if not self.char_level:
-            all_tokens = [token for text in texts for token in text.split(" ")]
+            texts = [text.split(" ") for text in texts]
+        all_tokens = [token for text in texts for token in text]
         counts = Counter(all_tokens).most_common(self.num_tokens)
         self.min_token_freq = counts[-1][1]
         for token, count in counts:
@@ -407,14 +552,14 @@ class Tokenizer(object):
             self.index_to_token[index] = token
         return self
 
-    def texts_to_sequences(self, texts: List) -> List[np.ndarray]:
+    def texts_to_sequences(self, texts: List) -> List[List]:
         """Convert a list of texts to a lists of arrays of indices.
 
         Args:
             texts (List): List of texts to tokenize and map to indices.
 
         Returns:
-            A list of mapped tokens.
+            A list of mapped sequences (list of indices).
         """
         sequences = []
         for text in texts:
@@ -422,12 +567,8 @@ class Tokenizer(object):
                 text = text.split(" ")
             sequence = []
             for token in text:
-                sequence.append(
-                    self.token_to_index.get(
-                        token, self.token_to_index[self.oov_token]
-                    )
-                )
-            sequences.append(np.asarray(sequence))
+                sequence.append(self.token_to_index.get(token, self.token_to_index[self.oov_token]))
+            sequences.append(sequence)
         return sequences
 
     def sequences_to_texts(self, sequences: List) -> List:
@@ -463,36 +604,6 @@ class Tokenizer(object):
         return cls(**kwargs)
 
 
-def tokenize_text(
-    X: np.ndarray, char_level: bool, tokenizer: Tokenizer = None
-) -> Tuple:
-    """Tokenize an array containing text.
-
-    Usage:
-
-    ```python
-    # Tokenize inputs
-    X_train, tokenizer = data.tokenize_text(X=X_train, char_level=True)
-    X_val, _ = data.tokenize_text(X=X_val, char_level=True, tokenizer=tokenizer)
-    X_test, _ = data.tokenize_text(X=X_test, char_level=True, tokenizer=tokenizer)
-    ```
-
-    Args:
-        X (np.ndarray): Arrays containing the data to tokenize.
-        char_level (bool): Whether to tokenize at character level.
-        tokenizer (Tokenizer): Tokenizer to use for tokenization. Defaults to None.
-
-    Returns:
-        Tokenized inputs and tokenizer.
-    """
-    # Tokenize inputs
-    if not tokenizer:
-        tokenizer = Tokenizer(char_level=char_level)
-        tokenizer.fit_on_texts(texts=X)
-    X = np.array(tokenizer.texts_to_sequences(X))
-    return X, tokenizer
-
-
 def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0) -> np.ndarray:
     """Zero pad sequences to a specified `max_seq_len`
     or to the length of the largest sequence in `sequences`.
@@ -526,9 +637,7 @@ def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0) -> np.ndarray:
 
     """
     # Get max sequence length
-    max_seq_len = max(
-        max_seq_len, max(len(sequence) for sequence in sequences)
-    )
+    max_seq_len = max(max_seq_len, max(len(sequence) for sequence in sequences))
 
     # Pad
     padded_sequences = np.zeros((len(sequences), max_seq_len))
@@ -626,30 +735,3 @@ class CNNTextDataset(torch.utils.data.Dataset):
             drop_last=drop_last,
             pin_memory=True,
         )
-
-
-def get_dataloader(
-    data: Tuple, max_filter_size: int, batch_size: int
-) -> Tuple:
-    """Create dataloader from data.
-
-    Args:
-        data (Tuple): Data to load into the DataLoader object.
-        max_filter_size (int): length of the largest CNN filter.
-        batch_size (int): number of samples per batch.
-
-    Returns:
-        Created dataloader with data.
-    """
-    # Create dataset
-    X, y = data
-    dataset = CNNTextDataset(X=X, y=y, max_filter_size=max_filter_size)
-
-    # Create dataloaders
-    dataloader = dataset.create_dataloader(batch_size=batch_size)
-
-    return dataloader
-
-
-if __name__ == "__main__":
-    pass

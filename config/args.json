@@ -2,7 +2,7 @@
     "seed": 1234,
     "cuda": true,
     "shuffle": true,
-    "num_samples": 0,
+    "num_samples": null,
     "min_tag_freq": 30,
     "lower": true,
     "stem": false,

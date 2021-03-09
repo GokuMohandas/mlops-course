@@ -12,6 +12,7 @@ with open(Path(BASE_DIR, "requirements.txt"), "r") as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
 test_packages = [
+    "great-expectations==0.13.7",
     "pytest==6.0.2",
     "pytest-cov==2.10.1",
 ]
@@ -21,11 +22,14 @@ dev_packages = [
     "flake8==3.8.3",
     "isort==5.5.3",
     "jupyterlab==2.2.8",
+    "pre-commit==2.7.1",
+]
+
+docs_packages = [
     "mkdocs==1.1.2",
     "mkdocs-macros-plugin==0.5.0",
     "mkdocs-material==6.2.4",
     "mkdocstrings==0.14.0",
-    "pre-commit==2.7.1",
 ]
 
 setup(
@@ -52,7 +56,8 @@ setup(
     install_requires=[required_packages],
     extras_require={
         "test": test_packages,
-        "dev": test_packages + dev_packages,
+        "dev": test_packages + dev_packages + docs_packages,
+        "docs": docs_packages,
     },
     entry_points={
         "console_scripts": [

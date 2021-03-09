@@ -31,10 +31,10 @@ repos:
         files: .
 - repo: local
   hooks:
-    - id: test
-      name: test
+    - id: test-non-training
+      name: test-non-training
       entry: make
-      args: ["test"]
+      args: ["test-non-training"]
       language: system
       types: [python]
       pass_filenames: false

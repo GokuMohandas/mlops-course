@@ -1,6 +1,6 @@
 # Black formatting
 [tool.black]
-line-length = 79
+line-length = 100
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -28,6 +28,13 @@ virtual_env = "venv"
 
 # Pytest
 [tool.pytest.ini_options]
-testpaths = [
-    "tests",
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "--strict-markers --disable-pytest-warnings"
+markers = [
+    "training: tests that involve training",
 ]
+
+# Pytest coverage
+[tool.coverage.run]
+omit = ["app/main.py"]

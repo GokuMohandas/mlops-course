@@ -7,10 +7,11 @@ from functools import wraps
 from http import HTTPStatus
 from typing import Dict, Optional
 
+import torch
 from fastapi import FastAPI, Request
 
 from app.schemas import PredictPayload
-from tagifai import predict, utils
+from tagifai import main, predict, utils
 from tagifai.config import logger
 
 # Define application
@@ -24,15 +25,11 @@ app = FastAPI(
 @app.on_event("startup")
 def load_best_artifacts():
     global runs, run_ids, best_artifacts, best_run_id
-    runs = utils.get_sorted_runs(
-        experiment_name="best", order_by=["metrics.f1 DESC"]
-    )
+    runs = utils.get_sorted_runs(experiment_name="best", order_by=["metrics.f1 DESC"])
     run_ids = [run["run_id"] for run in runs]
     best_run_id = run_ids[0]
-    best_artifacts = predict.load_artifacts(run_id=best_run_id)
-    logger.info(
-        "Loaded trained model and other required artifacts for inference!"
-    )
+    best_artifacts = main.load_artifacts(run_id=best_run_id, device=torch.device("cpu"))
+    logger.info("Loaded trained model and other required artifacts for inference!")
 
 
 def construct_response(f):
@@ -128,7 +125,7 @@ def _runs(request: Request, top: Optional[int] = None) -> Dict:
 @validate_run_id
 def _run(request: Request, run_id: str) -> Dict:
     """Get details about a specific run."""
-    artifacts = predict.load_artifacts(run_id=run_id)
+    artifacts = main.load_artifacts(run_id=run_id)
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,
@@ -142,7 +139,7 @@ def _run(request: Request, run_id: str) -> Dict:
 @validate_run_id
 def _predict(request: Request, run_id: str, payload: PredictPayload) -> Dict:
     """Predict tags for a list of texts using artifacts from run `run_id`."""
-    artifacts = predict.load_artifacts(run_id=run_id)
+    artifacts = main.load_artifacts(run_id=run_id)
     texts = [item.text for item in payload.texts]
     predictions = predict.predict(texts=texts, artifacts=artifacts)
     response = {

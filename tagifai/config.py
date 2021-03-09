@@ -73,3 +73,15 @@ logging_config = {
 logging.config.dictConfig(logging_config)
 logger = logging.getLogger("root")
 logger.handlers[0] = RichHandler(markup=True)
+
+# Exclusion criteria
+EXCLUDE = [
+    "machine-learning",
+    "deep-learning",
+    "data-science",
+    "neural-networks",
+    "python",
+    "r",
+    "visualization",
+    "wandb",
+]

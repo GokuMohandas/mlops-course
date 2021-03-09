@@ -28,12 +28,8 @@ def predict():
     data = {
         "run_id": "",
         "texts": [
-            {
-                "text": "Transfer learning with transformers for self-supervised learning."
-            },
-            {
-                "text": "Generative adversarial networks in both PyTorch and TensorFlow."
-            },
+            {"text": "Transfer learning with transformers for self-supervised learning."},
+            {"text": "Generative adversarial networks in both PyTorch and TensorFlow."},
         ],
     }
     response = requests.post(

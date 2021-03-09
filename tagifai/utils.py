@@ -10,6 +10,7 @@ from urllib.request import urlopen
 import mlflow
 import numpy as np
 import torch
+from tabulate import tabulate
 
 
 def load_json_from_url(url: str) -> Dict:
@@ -62,6 +63,24 @@ def save_dict(d: Dict, filepath: str) -> None:
         json.dump(d, indent=2, sort_keys=False, fp=fp)
 
 
+def list_to_dict(list_of_dicts: List, key: str) -> Dict:
+    """Convert a list of `dict_a` to a `dict_b` where
+    the `key` in `dict_b` is an item in each `dict_a`.
+
+    Args:
+        list_of_dicts (List): list of items to convert to dict.
+        key (str): Name of the item in `dict_a` to use as primary key for `dict_b`.
+
+    Returns:
+        A dictionary with items from the list organized by key.
+    """
+    d_b = {}
+    for d_a in list_of_dicts:
+        d_b_key = d_a.pop(key)
+        d_b[d_b_key] = d_a
+    return d_b
+
+
 def set_seed(seed: int = 1234) -> None:
     """Set seed for reproducability.
 
@@ -85,16 +104,25 @@ def set_device(cuda: bool) -> torch.device:
     Returns:
         Device that will be use for compute.
     """
-    device = torch.device(
-        "cuda" if (torch.cuda.is_available() and cuda) else "cpu"
-    )
+    device = torch.device("cuda" if (torch.cuda.is_available() and cuda) else "cpu")
     torch.set_default_tensor_type("torch.FloatTensor")
-    if device.type == "cuda":
+    if device.type == "cuda":  # pragma: no cover, simple tensor type setting
         torch.set_default_tensor_type("torch.cuda.FloatTensor")
     return device
 
 
-def get_sorted_runs(experiment_name: str, order_by: List) -> List[Dict]:
+def delete_experiment(experiment_name: str):
+    """Delete an experiment with name `experiment_name`.
+
+    Args:
+        experiment_name (str): Name of the experiment.
+    """
+    client = mlflow.tracking.MlflowClient()
+    experiment_id = client.get_experiment_by_name(experiment_name).experiment_id
+    client.delete_experiment(experiment_id=experiment_id)
+
+
+def get_sorted_runs(experiment_name: str, order_by: List, verbose: bool = True) -> List[Dict]:
     """Get sorted list of runs from Experiment `experiment_name`.
 
     Usage:
@@ -106,6 +134,7 @@ def get_sorted_runs(experiment_name: str, order_by: List) -> List[Dict]:
     Args:
         experiment_name (str): Name of the experiment to fetch runs from.
         order_by (List): List specification for how to order the runs.
+        verbose (bool, optional): Toggle printing the table with sorted runs.
 
     Returns:
         List[Dict]: List of ordered runs with their respective info.
@@ -119,5 +148,23 @@ def get_sorted_runs(experiment_name: str, order_by: List) -> List[Dict]:
 
     # Convert DataFrame to List[Dict]
     runs = runs_df.to_dict("records")
+    if verbose:
+        print(
+            tabulate(
+                runs_df[
+                    [
+                        "run_id",
+                        "end_time",
+                        "tags.data_version",
+                        "metrics.f1",
+                        "metrics.slices_f1",
+                        "metrics.behavioral_score",
+                    ]
+                ],
+                headers="keys",
+                tablefmt="psql",
+                showindex=False,
+            )
+        )
 
     return runs
