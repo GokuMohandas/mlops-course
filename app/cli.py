@@ -93,15 +93,14 @@ def train_model(
 
         # Log metrics
         performance = artifacts["performance"]
-        behavioral_report = artifacts["behavioral_report"]
         logger.info(json.dumps(performance["overall"], indent=2))
         metrics = {
             "precision": performance["overall"]["precision"],
             "recall": performance["overall"]["recall"],
             "f1": performance["overall"]["f1"],
             "best_val_loss": artifacts["loss"],
-            "behavioral_score": behavioral_report["score"],
-            "slices_f1": performance["slices"]["f1"],
+            "behavioral_score": performance["behavioral_report"]["score"],
+            "slices_f1": performance["slices"]["overall"]["f1"],
         }
         mlflow.log_metrics(metrics)
 
@@ -111,14 +110,12 @@ def train_model(
             artifacts["tokenizer"].save(Path(dp, "tokenizer.json"))
             torch.save(artifacts["model"].state_dict(), Path(dp, "model.pt"))
             utils.save_dict(performance, Path(dp, "performance.json"))
-            utils.save_dict(behavioral_report, Path(dp, "behavioral_report.json"))
             mlflow.log_artifacts(dp)
         mlflow.log_params(vars(artifacts["args"]))
 
         # Publish metrics
         if publish_metrics:  # pragma: no cover, boolean to publish metrics
             utils.save_dict(performance, Path(config.METRICS_DIR, "performance.json"))
-            utils.save_dict(behavioral_report, Path(config.METRICS_DIR, "behavioral_report.json"))
 
 
 @app.command()
@@ -212,6 +209,115 @@ def optimize(
 
 
 @app.command()
+def diff(commit_a: str = "workspace", commit_b: str = "head"):
+    """Compare relevant differences (args, metrics) between commits.
+    Inspired by DVC's `dvc metrics diff`but repurposed to
+    display diffs pertinent to our experiments.
+
+    Args:
+        commit_a (str, optional): Primary commit. Defaults to "workspace".
+        commit_b (str, optional): Commit to compare to. Defaults to "head".
+
+    Raises:
+        ValueError: Invalid commit.
+    """
+    commits = ["a", "b"]
+    if commit_a in ("head", "current"):
+        commit_a = "main"
+    if commit_b in ("head", "current"):
+        commit_b = "main"
+
+    # Get args
+    args = {"a": [], "b": {}}
+    for i, commit in enumerate([commit_a, commit_b]):
+        if commit == "workspace":
+            args[commits[i]] = utils.load_dict(filepath=Path(config.CONFIG_DIR, "args.json"))
+            continue
+        args_url = (
+            f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/config/args.json"
+        )
+        args[commits[i]] = utils.load_json_from_url(url=args_url)
+
+    # Get metrics
+    metrics = {"a": {}, "b": {}}
+    for i, commit in enumerate([commit_a, commit_b]):
+        if commit == "workspace":
+            metrics[commits[i]] = utils.load_dict(
+                filepath=Path(config.METRICS_DIR, "performance.json")
+            )
+            continue
+        metrics_url = f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/metrics/performance.json"
+        metrics[commits[i]] = utils.load_json_from_url(url=metrics_url)
+
+    # Differences
+    diffs = {"args": {}}
+    for arg in args["a"]:
+        a = args["a"][arg]
+        b = args["b"][arg]
+        if a != b:
+            diffs["args"][arg] = {commit_a: a, commit_b: b}
+            diffs["args"]["diffs"] = arg
+
+    # Overall metrics
+    _type = "overall"
+    diffs[_type] = {}
+    for metric in metrics["a"][_type]:
+        if a - b:
+            diffs[_type][metric] = {
+                commit_a: a,
+                commit_b: b,
+                "diff": a - b,
+            }
+
+    # Class metrics
+    _type = "class"
+    diffs[_type] = {}
+    for _class in metrics["a"][_type]:
+        diffs[_type][_class] = {}
+        for metric in metrics["a"][_type][_class]:
+            a = metrics["a"][_type][_class][metric]
+            b = metrics["b"][_type][_class][metric]
+            if a - b:
+                diffs[_type][_class][metric] = {
+                    commit_a: a,
+                    commit_b: b,
+                    "diff": a - b,
+                }
+
+    # Overall slice metrics
+    diffs["slices"] = {}
+    _type = "overall"
+    diffs["slices"][_type] = {}
+    for metric in metrics["a"]["slices"][_type]:
+        a = metrics["a"]["slices"][_type][metric]
+        b = metrics["b"]["slices"][_type][metric]
+        if a - b:
+            diffs["slices"][_type][metric] = {
+                commit_a: a,
+                commit_b: b,
+                "diff": a - b,
+            }
+
+    # Slice class metrics
+    _type = "class"
+    diffs["slices"][_type] = {}
+    for _class in metrics["a"]["slices"][_type]:
+        diffs["slices"][_type][_class] = {}
+        for metric in metrics["a"]["slices"][_type][_class]:
+            a = metrics["a"]["slices"][_type][_class][metric]
+            b = metrics["b"]["slices"][_type][_class][metric]
+            if a - b:
+                diffs["slices"][_type][_class][metric] = {
+                    commit_a: a,
+                    commit_b: b,
+                    "diff": a - b,
+                }
+
+    # Log
+    logger.info(json.dumps(diffs, indent=2))
+
+
+@app.command()
 def behavioral_reevaluation(
     experiment_name: Optional[str] = "best",
 ):  # pragma: no cover, requires changing existing runs
@@ -231,16 +337,17 @@ def behavioral_reevaluation(
         with mlflow.start_run(run_id=run_id):
             # Generate behavioral report
             artifacts = main.load_artifacts(run_id=run_id)
-            behavioral_report = eval.get_behavioral_report(artifacts=artifacts)
-            mlflow.log_metric("behavioral_score", behavioral_report["score"])
+            performance = artifacts["performance"]
+            performance["behavioral_report"] = eval.get_behavioral_report(artifacts=artifacts)
+            mlflow.log_metric("behavioral_score", performance["behavioral_report"]["score"])
 
             # Log artifacts
             with tempfile.TemporaryDirectory() as dp:
-                utils.save_dict(behavioral_report, Path(dp, "behavioral_report.json"))
+                utils.save_dict(performance, Path(dp, "performance.json"))
                 mlflow.log_artifacts(dp)
 
             # Publish metrics
-            utils.save_dict(behavioral_report, Path(config.METRICS_DIR, "behavioral_report.json"))
+            utils.save_dict(performance, Path(config.METRICS_DIR, "performance.json"))
 
         logger.info(f"Updated behavioral report for run_id {run_id}")
 

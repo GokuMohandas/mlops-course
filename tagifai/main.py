@@ -131,14 +131,13 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         "loss": loss,
     }
     device = torch.device("cpu")
-    performance, behavioral_report = eval.evaluate(
+    performance = eval.evaluate(
         artifacts=artifacts,
         dataloader=test_dataloader,
         df=test_df,
         device=device,
     )
     artifacts["performance"] = performance
-    artifacts["behavioral_report"] = behavioral_report
 
     return artifacts
 
@@ -198,7 +197,6 @@ def load_artifacts(
         tokenizer = data.Tokenizer.load(fp=Path(dp, "tokenizer.json"))
         model_state = torch.load(Path(dp, "model.pt"), map_location=device)
         performance = utils.load_dict(filepath=Path(dp, "performance.json"))
-        behavioral_report = utils.load_dict(filepath=Path(dp, "behavioral_report.json"))
 
     # Load model
     run = mlflow.get_run(run_id=run_id)
@@ -214,5 +212,4 @@ def load_artifacts(
         "tokenizer": tokenizer,
         "model": model,
         "performance": performance,
-        "behavioral_report": behavioral_report,
     }

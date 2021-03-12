@@ -132,7 +132,6 @@ def _run(request: Request, run_id: str) -> Dict:
         "data": {
             "run_id": run_id,
             "performance": artifacts["performance"],
-            "behavioral_report": artifacts["behavioral_report"],
         },
     }
     return response

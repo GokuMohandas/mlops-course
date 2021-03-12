@@ -10,12 +10,12 @@
   "char_level": true,
   "max_filter_size": 3,
   "batch_size": 128,
-  "embedding_dim": 428,
-  "num_filters": 221,
-  "hidden_dim": 373,
-  "dropout_p": 0.7048775142641577,
-  "lr": 0.0004559514988737101,
+  "embedding_dim": 383,
+  "num_filters": 358,
+  "hidden_dim": 164,
+  "dropout_p": 0.7527584395310412,
+  "lr": 5.6538433537233714e-05,
   "num_epochs": 1,
   "patience": 10,
-  "threshold": 0.388778418302536
+  "threshold": 0.3260039985179901
 }

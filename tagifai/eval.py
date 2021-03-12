@@ -25,7 +25,7 @@ def short_text(x):
     return len(x.text.split()) < 7  # less than 7 words
 
 
-def get_performance(
+def get_metrics(
     y_true: np.ndarray, y_pred: np.ndarray, classes: List, df: pd.DataFrame = None
 ) -> Dict:
     """Per-class performance metrics.
@@ -40,26 +40,26 @@ def get_performance(
         Dictionary of overall and per-class performance metrics.
     """
     # Performance
-    performance = {"overall": {}, "class": {}}
+    metrics = {"overall": {}, "class": {}}
 
-    # Overall performance
-    metrics = precision_recall_fscore_support(y_true, y_pred, average="weighted")
-    performance["overall"]["precision"] = metrics[0]
-    performance["overall"]["recall"] = metrics[1]
-    performance["overall"]["f1"] = metrics[2]
-    performance["overall"]["num_samples"] = np.float64(len(y_true))
+    # Overall metrics
+    overall_metrics = precision_recall_fscore_support(y_true, y_pred, average="weighted")
+    metrics["overall"]["precision"] = overall_metrics[0]
+    metrics["overall"]["recall"] = overall_metrics[1]
+    metrics["overall"]["f1"] = overall_metrics[2]
+    metrics["overall"]["num_samples"] = np.float64(len(y_true))
 
-    # Per-class performance
-    metrics = precision_recall_fscore_support(y_true, y_pred, average=None)
+    # Per-class metrics
+    class_metrics = precision_recall_fscore_support(y_true, y_pred, average=None)
     for i in range(len(classes)):
-        performance["class"][classes[i]] = {
-            "precision": metrics[0][i],
-            "recall": metrics[1][i],
-            "f1": metrics[2][i],
-            "num_samples": np.float64(metrics[3][i]),
+        metrics["class"][classes[i]] = {
+            "precision": class_metrics[0][i],
+            "recall": class_metrics[1][i],
+            "f1": class_metrics[2][i],
+            "num_samples": np.float64(class_metrics[3][i]),
         }
 
-    # Slicing performance
+    # Slicing metrics
     if df is not None:
         # Slices
         slicing_functions = [cv_transformers, short_text]
@@ -70,33 +70,36 @@ def get_performance(
         # Use snorkel.analysis.Scorer for multiclass tasks
         # Naive implementation for our multilabel task
         # based on snorkel.analysis.Scorer
-        performance["slices"] = {}
+        metrics["slices"] = {}
+        metrics["slices"]["class"] = {}
         for slice_name in slices.dtype.names:
             mask = slices[slice_name].astype(bool)
             if sum(mask):
-                metrics = precision_recall_fscore_support(
+                slice_metrics = precision_recall_fscore_support(
                     y_true[mask], y_pred[mask], average="micro"
                 )
-                performance["slices"][slice_name] = {}
-                performance["slices"][slice_name]["precision"] = metrics[0]
-                performance["slices"][slice_name]["recall"] = metrics[1]
-                performance["slices"][slice_name]["f1"] = metrics[2]
-                performance["slices"][slice_name]["num_samples"] = len(y_true[mask])
+                metrics["slices"]["class"][slice_name] = {}
+                metrics["slices"]["class"][slice_name]["precision"] = slice_metrics[0]
+                metrics["slices"]["class"][slice_name]["recall"] = slice_metrics[1]
+                metrics["slices"]["class"][slice_name]["f1"] = slice_metrics[2]
+                metrics["slices"]["class"][slice_name]["num_samples"] = len(y_true[mask])
 
         # Weighted slice f1
-        performance["slices"]["f1"] = np.mean(
-            list(
-                itertools.chain.from_iterable(
-                    [
-                        [performance["slices"][slice_name]["f1"]]
-                        * performance["slices"][slice_name]["num_samples"]
-                        for slice_name in performance["slices"]
-                    ]
+        metrics["slices"]["overall"] = {}
+        for metric in ["precision", "recall", "f1"]:
+            metrics["slices"]["overall"][metric] = np.mean(
+                list(
+                    itertools.chain.from_iterable(
+                        [
+                            [metrics["slices"][slice_name][metric]]
+                            * metrics["slices"][slice_name]["num_samples"]
+                            for slice_name in metrics["slices"]["class"]
+                        ]
+                    )
                 )
             )
-        )
 
-    return performance
+    return metrics
 
 
 def compare_tags(texts: str, tags: List, artifacts: Dict, test_type: str) -> List:
@@ -216,12 +219,11 @@ def evaluate(
     y_pred = np.array([np.where(prob >= float(args.threshold), 1, 0) for prob in y_prob])
 
     # Evaluate performance
-    performance = get_performance(df=df, y_true=y_true, y_pred=y_pred, classes=classes)
+    performance = {}
+    performance = get_metrics(df=df, y_true=y_true, y_pred=y_pred, classes=classes)
+    performance["behavioral_report"] = get_behavioral_report(artifacts=artifacts)
 
-    # Behavior tests
-    behavioral_report = get_behavioral_report(artifacts=artifacts)
-
-    return performance, behavioral_report
+    return performance
 
 
 if __name__ == "__main__":  # pragma: no cover, playground for eval components
@@ -314,11 +316,10 @@ if __name__ == "__main__":  # pragma: no cover, playground for eval components
 
     # Evaluation
     device = torch.device("cpu")
-    performance, behavioral_report = evaluate(
+    performance = evaluate(
         artifacts=artifacts,
         dataloader=test_dataloader,
         df=test_df,
         device=device,
     )
     logger.info(json.dumps(performance, indent=2))
-    logger.info(json.dumps(behavioral_report, indent=2))
