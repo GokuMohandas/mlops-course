@@ -8,13 +8,8 @@
 .idea
 
 # Data
-assets/
-data/
-embeddings/
-experiments/
 logs/
-tensorboard/
-mlruns/
+tmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -105,8 +100,8 @@ env.bak/
 venv.bak/
 
 # mkdocs
-/site
-/assets
+site/
 
 # DVC
 .dvc/
+/experiments

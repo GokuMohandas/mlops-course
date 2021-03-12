@@ -84,22 +84,22 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td>Git</td>
         <td>Dashboard</td>
-        <td>Serving</td>
+        <td>Feature stores</td>
     </tr>
     <tr>
         <td>Precommit</td>
         <td>Docker</td>
-        <td>Feature stores</td>
+        <td>Workflows</td>
     </tr>
     <tr>
         <td>Versioning</td>
         <td>CI/CD</td>
-        <td>Workflows</td>
+        <td>Active learning</td>
     </tr>
     <tr>
         <td></td>
         <td>Monitoring</td>
-        <td>Active learning</td>
+        <td></td>
     </tr>
 </table>
 
@@ -159,10 +159,10 @@ make assets
 ```bash
 tagifai optimize --args-fp config/args.json --study-name optimization --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai set-artifact-metadata` to match all metadata as if it were run from your machine.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai fix-artifact-metadata` to match all metadata as if it were run from your machine.
 4. Train a model (and save all it's artifacts) using args from `config/args.json`
 ```bash
-tagifai train-model --args-fp config/args.json --experiment-name best --run-name model
+tagifai train-model --args-fp config/args.json --experiment-name best --run-name model --publish-metrics
 ```
 5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
 ```bash
@@ -177,7 +177,7 @@ gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app  # g
 
 ## MLFlow
 ```bash
-mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri assets/experiments/
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri experiments/
 ```
 
 ## Mkdocs

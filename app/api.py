@@ -129,7 +129,11 @@ def _run(request: Request, run_id: str) -> Dict:
     response = {
         "message": HTTPStatus.OK.phrase,
         "status-code": HTTPStatus.OK,
-        "data": {"run_id": run_id, "performance": artifacts["performance"]},
+        "data": {
+            "run_id": run_id,
+            "performance": artifacts["performance"],
+            "behavioral_report": artifacts["behavioral_report"],
+        },
     }
     return response
 

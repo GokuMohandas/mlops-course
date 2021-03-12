@@ -81,8 +81,8 @@ def test_get_sorted_runs():
     assert "run_id" in result.stdout
 
 
-def test_set_artifact_metadata():
-    runner.invoke(app, ["set-artifact-metadata"])
+def test_fix_artifact_metadata():
+    runner.invoke(app, ["fix-artifact-metadata"])
 
     # Check an experiment
     sample_meta_yaml = list(Path(config.EXPERIMENTS_DIR).glob("*/meta.yaml"))[0]

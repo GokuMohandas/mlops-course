@@ -49,7 +49,6 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     device = utils.set_device(cuda=args.cuda)
 
     # 3. Load data
-    data_version = "0.0.1"  # TODO: Add data version from DVC
     projects_fp = Path(config.DATA_DIR, "projects.json")
     tags_fp = Path(config.DATA_DIR, "tags.json")
     projects = utils.load_dict(filepath=projects_fp)
@@ -126,7 +125,6 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     # 12. Evaluate model
     artifacts = {
         "args": args,
-        "data_version": data_version,
         "label_encoder": label_encoder,
         "tokenizer": tokenizer,
         "model": model,
@@ -200,6 +198,7 @@ def load_artifacts(
         tokenizer = data.Tokenizer.load(fp=Path(dp, "tokenizer.json"))
         model_state = torch.load(Path(dp, "model.pt"), map_location=device)
         performance = utils.load_dict(filepath=Path(dp, "performance.json"))
+        behavioral_report = utils.load_dict(filepath=Path(dp, "behavioral_report.json"))
 
     # Load model
     run = mlflow.get_run(run_id=run_id)
@@ -215,4 +214,5 @@ def load_artifacts(
         "tokenizer": tokenizer,
         "model": model,
         "performance": performance,
+        "behavioral_report": behavioral_report,
     }

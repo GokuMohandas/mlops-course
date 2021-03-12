@@ -41,7 +41,7 @@ venv:
 .PHONY: assets
 assets:
 	# Pull from S3 w/ DVC (coming soon)
-	tagifai set-artifact-metadata
+	tagifai fix-artifact-metadata
 
 .PHONY: app
 app:

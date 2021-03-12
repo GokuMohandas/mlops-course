@@ -37,9 +37,9 @@ def download_data():
     """
     # Download data
     projects_url = (
-        "https://raw.githubusercontent.com/GokuMohandas/applied-ml/main/datasets/projects.json"
+        "https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/projects.json"
     )
-    tags_url = "https://raw.githubusercontent.com/GokuMohandas/applied-ml/main/datasets/tags.json"
+    tags_url = "https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/tags.json"
     projects = utils.load_json_from_url(url=projects_url)
     tags = utils.load_json_from_url(url=tags_url)
 
@@ -56,6 +56,8 @@ def train_model(
     args_fp: Path = Path(config.CONFIG_DIR, "args.json"),
     experiment_name: Optional[str] = "best",
     run_name: Optional[str] = "model",
+    publish_metrics: Optional[bool] = False,
+    append: Optional[bool] = False,
 ) -> None:
     """Train a model using the specified parameters.
 
@@ -67,25 +69,38 @@ def train_model(
     # Set experiment and start run
     args = Namespace(**utils.load_dict(filepath=args_fp))
 
+    # Ensure experiment doesn't have a preexisting run
+    runs = utils.get_sorted_runs(
+        experiment_name=experiment_name,
+        order_by=["metrics.f1 DESC"],
+        verbose=False,
+    )
+    if len(runs) and not append:
+        raise Exception(
+            f"You already have an existing run for Experiment {experiment_name}.\n"
+            "If you'd like to append a run to this experiment, rerun this command with the --append flag."
+        )
+
     # Start run
     mlflow.set_experiment(experiment_name=experiment_name)
-    with mlflow.start_run(run_name=run_name) as run:  # NOQA: F841 (assigned to but never used)
+    with mlflow.start_run(run_name=run_name):
         # Train
         artifacts = main.run(args=args)
 
         # Set tags
-        tags = {"data_version": artifacts["data_version"]}
+        tags = {}
         mlflow.set_tags(tags)
 
         # Log metrics
         performance = artifacts["performance"]
+        behavioral_report = artifacts["behavioral_report"]
         logger.info(json.dumps(performance["overall"], indent=2))
         metrics = {
             "precision": performance["overall"]["precision"],
             "recall": performance["overall"]["recall"],
             "f1": performance["overall"]["f1"],
             "best_val_loss": artifacts["loss"],
-            "behavioral_score": artifacts["behavioral_report"]["score"],
+            "behavioral_score": behavioral_report["score"],
             "slices_f1": performance["slices"]["f1"],
         }
         mlflow.log_metrics(metrics)
@@ -96,9 +111,14 @@ def train_model(
             artifacts["tokenizer"].save(Path(dp, "tokenizer.json"))
             torch.save(artifacts["model"].state_dict(), Path(dp, "model.pt"))
             utils.save_dict(performance, Path(dp, "performance.json"))
-            utils.save_dict(artifacts["behavioral_report"], Path(dp, "behavioral_report.json"))
+            utils.save_dict(behavioral_report, Path(dp, "behavioral_report.json"))
             mlflow.log_artifacts(dp)
         mlflow.log_params(vars(artifacts["args"]))
+
+        # Publish metrics
+        if publish_metrics:  # pragma: no cover, boolean to publish metrics
+            utils.save_dict(performance, Path(config.METRICS_DIR, "performance.json"))
+            utils.save_dict(behavioral_report, Path(config.METRICS_DIR, "behavioral_report.json"))
 
 
 @app.command()
@@ -194,8 +214,6 @@ def optimize(
 @app.command()
 def behavioral_reevaluation(
     experiment_name: Optional[str] = "best",
-    run_id: Optional[str] = None,
-    all_runs: Optional[bool] = False,
 ):  # pragma: no cover, requires changing existing runs
     """Reevaluate existing runs on current behavioral tests in eval.py.
     This is possible since behavioral tests are inputs applied to black box
@@ -204,8 +222,6 @@ def behavioral_reevaluation(
 
     Args:
         experiment_name (str, optional): Name of the experiment to fetch run from.
-        run_id (Optional[str], optional): ID of run to reevaluate. Defaults to None.
-        all_runs (Optional[bool], optional): Toggle evaluation on all pulled runs. Defaults to False.
 
     Raises:
         ValueError: Run id doesn't exist in experiment.
@@ -222,6 +238,10 @@ def behavioral_reevaluation(
             with tempfile.TemporaryDirectory() as dp:
                 utils.save_dict(behavioral_report, Path(dp, "behavioral_report.json"))
                 mlflow.log_artifacts(dp)
+
+            # Publish metrics
+            utils.save_dict(behavioral_report, Path(config.METRICS_DIR, "behavioral_report.json"))
+
         logger.info(f"Updated behavioral report for run_id {run_id}")
 
     # Get sorted runs
@@ -233,17 +253,8 @@ def behavioral_reevaluation(
     run_ids = [run["run_id"] for run in runs]
 
     # Reevaluate behavioral tests for all runs
-    if all_runs:
-        for run_id in run_ids:
-            update_behavioral_report(run_id=run_id)
-        return
-
-    # Validate run id
-    if run_id not in run_ids:
-        raise ValueError(f"Run_id {run_id} does not exist in experiment {experiment_name}")
-
-    # Update run
-    update_behavioral_report(run_id=run_id)
+    for run_id in run_ids:
+        update_behavioral_report(run_id=run_id)
 
 
 @app.command()
@@ -253,7 +264,7 @@ def get_sorted_runs(experiment_name: Optional[str] = "best"):
 
 
 @app.command()
-def set_artifact_metadata():
+def fix_artifact_metadata():
     """Set the artifact URI for all experiments and runs.
     Used when transferring experiments from other locations (ex. Colab).
 
@@ -261,27 +272,28 @@ def set_artifact_metadata():
         check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb){:target="_blank"} notebook for how to train on Google Colab and transfer to local.
     """
 
-    def set_artifact_location(var, fp):
+    def fix_artifact_location(fp):
         """Set variable's yaml value on file at fp."""
         with open(fp) as f:
             metadata = yaml.load(f)
 
-        # Set new value
-        experiment_id = metadata[var].split("/")[-1]
+        # Set new values
+        experiment_id = str(fp).split("/")[-2]
         artifact_location = Path("file://", config.EXPERIMENTS_DIR, experiment_id)
-        metadata[var] = str(artifact_location)
+        metadata["artifact_location"] = str(artifact_location)
+        metadata["experiment_id"] = experiment_id
 
         with open(fp, "w") as f:
             yaml.dump(metadata, f)
 
-    def set_artifact_uri(var, fp):
+    def fix_artifact_uri(fp):
         """Set variable's yaml value on file at fp."""
         with open(fp) as f:
             metadata = yaml.load(f)
 
         # Set new value
-        experiment_id = metadata[var].split("/")[-3]
-        run_id = metadata[var].split("/")[-2]
+        experiment_id = str(fp).split("/")[-3]
+        run_id = metadata["run_id"]
         artifact_uri = Path(
             "file://",
             config.EXPERIMENTS_DIR,
@@ -289,7 +301,8 @@ def set_artifact_metadata():
             run_id,
             "artifacts",
         )
-        metadata[var] = str(artifact_uri)
+        metadata["experiment_id"] = experiment_id
+        metadata["artifact_uri"] = str(artifact_uri)
 
         with open(fp, "w") as f:
             yaml.dump(metadata, f)
@@ -297,14 +310,14 @@ def set_artifact_metadata():
     # Get artifact location
     experiment_meta_yamls = list(Path(config.EXPERIMENTS_DIR).glob("*/meta.yaml"))
     for meta_yaml in experiment_meta_yamls:
-        set_artifact_location(var="artifact_location", fp=meta_yaml)
-        logger.info(f"Set artfifact location for {meta_yaml}")
+        fix_artifact_location(fp=meta_yaml)
+        logger.info(f"Set artifact location for {meta_yaml}")
 
     # Change artifact URI
     run_meta_yamls = list(Path(config.EXPERIMENTS_DIR).glob("*/*/meta.yaml"))
     for meta_yaml in run_meta_yamls:
-        set_artifact_uri(var="artifact_uri", fp=meta_yaml)
-        logger.info(f"Set artfifact URI for {meta_yaml}")
+        fix_artifact_uri(fp=meta_yaml)
+        logger.info(f"Set artifact URI for {meta_yaml}")
 
 
 @app.command()

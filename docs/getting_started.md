@@ -34,12 +34,19 @@ $ tagifai train-model --help
 <pre>
 Usage: tagifai train-model [OPTIONS]
 Options:
-    --args-fp  PATH [default: config/args.json]
-    --help     Show this message and exit.
+  --args-fp PATH                  [default:
+                                  /Users/goku/Documents/madewithml/applied-
+                                  ml/config/args.json]
+
+  --experiment-name TEXT          [default: best]
+  --run-name TEXT                 [default: model]
+  --publish-metrics / --no-publish-metrics
+                                  [default: False]
+  --help                          Show this message and exit.
 </pre>
 ```bash
 # Train a model
-$ tagifai train-model --args-fp $PATH
+$ tagifai train-model --args-fp config/args.json --experiment-name best --run-name model --publish-metrics
 ```
 <pre>
 🚀 Training...
@@ -50,12 +57,12 @@ Optimize using distributions specified in `tagifai.main.objective`. This also wr
 ```bash
 tagifai optimize --args-fp config/args.json --study-name optimization --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb){:target="_blank"} notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai set-artifact-metadata` to match all metadata as if it were run from your machine.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb){:target="_blank"} notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai fix-artifact-metadata` to match all metadata as if it were run from your machine.
 
 ## Train
 Train a model (and save all it's artifacts) using args from `config/args.json`.
 ```bash
-tagifai train-model --args-fp config/args.json --experiment-name best --run-name model
+tagifai train-model --args-fp config/args.json --experiment-name best --run-name model --publish-metrics
 ```
 
 ## Predict

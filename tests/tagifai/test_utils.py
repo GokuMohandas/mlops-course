@@ -10,7 +10,7 @@ from tagifai import utils
 
 
 def test_load_json_from_url():
-    tags_url = "https://raw.githubusercontent.com/GokuMohandas/applied-ml/main/datasets/tags.json"
+    tags_url = "https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/tags.json"
     tags_dict = utils.list_to_dict(utils.load_json_from_url(url=tags_url), key="tag")
     assert "transformers" in tags_dict
 

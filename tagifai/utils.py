@@ -3,7 +3,6 @@
 
 import json
 import random
-from pathlib import Path
 from typing import Dict, List
 from urllib.request import urlopen
 
@@ -24,15 +23,6 @@ def load_json_from_url(url: str) -> Dict:
     """
     data = json.loads(urlopen(url).read())
     return data
-
-
-def create_dirs(dirpath: str) -> None:
-    """Creates a directory from a specified path.
-
-    Args:
-        dirpath (str): full path of the directory to create.
-    """
-    Path(dirpath).mkdir(exist_ok=True)
 
 
 def load_dict(filepath: str) -> Dict:
@@ -140,9 +130,12 @@ def get_sorted_runs(experiment_name: str, order_by: List, verbose: bool = True) 
         List[Dict]: List of ordered runs with their respective info.
     """
     client = mlflow.tracking.MlflowClient()
-    experiment_id = client.get_experiment_by_name("best").experiment_id
+    experiment = client.get_experiment_by_name(experiment_name)
+    if not experiment:
+        return []
+
     runs_df = mlflow.search_runs(
-        experiment_ids=experiment_id,
+        experiment_ids=experiment.experiment_id,
         order_by=order_by,
     )
 
@@ -155,7 +148,6 @@ def get_sorted_runs(experiment_name: str, order_by: List, verbose: bool = True) 
                     [
                         "run_id",
                         "end_time",
-                        "tags.data_version",
                         "metrics.f1",
                         "metrics.slices_f1",
                         "metrics.behavioral_score",

@@ -1,0 +1,165 @@
+{
+  "score": 1.0,
+  "results": {
+    "passed": [
+      {
+        "input": {
+          "text": "Transformers have revolutionized the ML field.",
+          "tags": [
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "Transformers have revolutionized the ML field.",
+          "preprocessed_text": "transformers revolutionized ml field",
+          "predicted_tags": [
+            "natural-language-processing",
+            "transformers"
+          ]
+        },
+        "type": "INV"
+      },
+      {
+        "input": {
+          "text": "Transformers have disrupted the ML field.",
+          "tags": [
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "Transformers have disrupted the ML field.",
+          "preprocessed_text": "transformers disrupted ml field",
+          "predicted_tags": [
+            "language-modeling",
+            "natural-language-processing",
+            "transformers"
+          ]
+        },
+        "type": "INV"
+      },
+      {
+        "input": {
+          "text": "Transformers have accelerated the ML field.",
+          "tags": [
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "Transformers have accelerated the ML field.",
+          "preprocessed_text": "transformers accelerated ml field",
+          "predicted_tags": [
+            "natural-language-processing",
+            "transformers"
+          ]
+        },
+        "type": "INV"
+      },
+      {
+        "input": {
+          "text": "generative adverseril network are very popular in machine learning projects.",
+          "tags": [
+            "generative-adversarial-networks"
+          ]
+        },
+        "prediction": {
+          "input_text": "generative adverseril network are very popular in machine learning projects.",
+          "preprocessed_text": "generative adverseril network popular machine learning projects",
+          "predicted_tags": [
+            "generative-adversarial-networks"
+          ]
+        },
+        "type": "INV"
+      },
+      {
+        "input": {
+          "text": "generated adversarial networks are very popular in machine learning projects.",
+          "tags": [
+            "generative-adversarial-networks"
+          ]
+        },
+        "prediction": {
+          "input_text": "generated adversarial networks are very popular in machine learning projects.",
+          "preprocessed_text": "generated adversarial networks popular machine learning projects",
+          "predicted_tags": [
+            "generative-adversarial-networks"
+          ]
+        },
+        "type": "INV"
+      },
+      {
+        "input": {
+          "text": "A TensorFlow implementation of transformers.",
+          "tags": [
+            "tensorflow",
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "A TensorFlow implementation of transformers.",
+          "preprocessed_text": "tensorflow implementation transformers",
+          "predicted_tags": [
+            "natural-language-processing",
+            "tensorflow",
+            "transformers"
+          ]
+        },
+        "type": "DIR"
+      },
+      {
+        "input": {
+          "text": "A Huggingface implementation of transformers.",
+          "tags": [
+            "huggingface",
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "A Huggingface implementation of transformers.",
+          "preprocessed_text": "huggingface implementation transformers",
+          "predicted_tags": [
+            "attention",
+            "huggingface",
+            "natural-language-processing",
+            "transformers"
+          ]
+        },
+        "type": "DIR"
+      },
+      {
+        "input": {
+          "text": "transformers have revolutionized machine learning.",
+          "tags": [
+            "transformers"
+          ]
+        },
+        "prediction": {
+          "input_text": "transformers have revolutionized machine learning.",
+          "preprocessed_text": "transformers revolutionized machine learning",
+          "predicted_tags": [
+            "natural-language-processing",
+            "transformers"
+          ]
+        },
+        "type": "MFT"
+      },
+      {
+        "input": {
+          "text": "graph neural networks have revolutionized machine learning.",
+          "tags": [
+            "graph-neural-networks"
+          ]
+        },
+        "prediction": {
+          "input_text": "graph neural networks have revolutionized machine learning.",
+          "preprocessed_text": "graph neural networks revolutionized machine learning",
+          "predicted_tags": [
+            "graph-neural-networks",
+            "graphs"
+          ]
+        },
+        "type": "MFT"
+      }
+    ],
+    "failed": []
+  }
+}

@@ -9,21 +9,20 @@ import mlflow
 import pretty_errors  # NOQA: F401 (imported but unused)
 from rich.logging import RichHandler
 
-from tagifai import utils
-
 # Directories
 BASE_DIR = Path(__file__).parent.parent.absolute()
 CONFIG_DIR = Path(BASE_DIR, "config")
 LOGS_DIR = Path(BASE_DIR, "logs")
-ASSETS_DIR = Path(BASE_DIR, "assets")
-DATA_DIR = Path(ASSETS_DIR, "data")
-EXPERIMENTS_DIR = Path(ASSETS_DIR, "experiments")
+DATA_DIR = Path(BASE_DIR, "data")
+EXPERIMENTS_DIR = Path(BASE_DIR, "experiments")
+METRICS_DIR = Path(BASE_DIR, "metrics")
+DVC_REMOTE_STORAGE = Path(BASE_DIR, "tmp/dvcstore")
 
 # Create dirs
-utils.create_dirs(dirpath=LOGS_DIR)
-utils.create_dirs(dirpath=ASSETS_DIR)
-utils.create_dirs(dirpath=DATA_DIR)
-utils.create_dirs(dirpath=EXPERIMENTS_DIR)
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
+DVC_REMOTE_STORAGE.mkdir(parents=True, exist_ok=True)
 
 # MLFlow
 mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))

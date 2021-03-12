@@ -109,7 +109,7 @@
       "batch_kwargs": {
         "data_asset_name": "projects",
         "datasource": "data",
-        "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../assets/data/projects.json"
+        "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../data/projects.json"
       },
       "created_at": 1614193269.574403,
       "created_by": "BasicSuiteBuilderProfiler"
@@ -119,7 +119,7 @@
         "batch_kwargs": {
           "data_asset_name": "projects",
           "datasource": "data",
-          "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../assets/data/projects.json"
+          "path": "/Users/goku/Documents/madewithml/applied-ml/great_expectations/../data/projects.json"
         },
         "batch_markers": {
           "ge_load_time": "20210224T190109.502736Z",

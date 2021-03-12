@@ -73,12 +73,15 @@ def get_performance(
         performance["slices"] = {}
         for slice_name in slices.dtype.names:
             mask = slices[slice_name].astype(bool)
-            metrics = precision_recall_fscore_support(y_true[mask], y_pred[mask], average="micro")
-            performance["slices"][slice_name] = {}
-            performance["slices"][slice_name]["precision"] = metrics[0]
-            performance["slices"][slice_name]["recall"] = metrics[1]
-            performance["slices"][slice_name]["f1"] = metrics[2]
-            performance["slices"][slice_name]["num_samples"] = len(y_true[mask])
+            if sum(mask):
+                metrics = precision_recall_fscore_support(
+                    y_true[mask], y_pred[mask], average="micro"
+                )
+                performance["slices"][slice_name] = {}
+                performance["slices"][slice_name]["precision"] = metrics[0]
+                performance["slices"][slice_name]["recall"] = metrics[1]
+                performance["slices"][slice_name]["f1"] = metrics[2]
+                performance["slices"][slice_name]["num_samples"] = len(y_true[mask])
 
         # Weighted slice f1
         performance["slices"]["f1"] = np.mean(

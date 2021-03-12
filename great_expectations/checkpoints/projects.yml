@@ -14,7 +14,7 @@ validation_operator_name: action_list_operator
 # Great Expectations in your pipelines easy!
 batches:
   - batch_kwargs:
-      path: /Users/goku/Documents/madewithml/applied-ml/great_expectations/../assets/data/projects.json
+      path: /Users/goku/Documents/madewithml/applied-ml/great_expectations/../data/projects.json
       datasource: data
       data_asset_name: projects
     expectation_suite_names: # one or more suites may validate against a single batch
