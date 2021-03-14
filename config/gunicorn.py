@@ -1,4 +1,5 @@
-# gunicorn config file
+# config/gunicorn.py
+# Gunicorn config file
 import os
 
 #

@@ -1,4 +1,4 @@
-# predict.py
+# tagifai/predict.py
 # Prediction operations.
 
 from distutils.util import strtobool

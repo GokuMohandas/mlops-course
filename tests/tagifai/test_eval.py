@@ -1,4 +1,4 @@
-# test_eval.py
+# tests/tagifai/test_eval.py
 # Test tagifai/eval.py components.
 
 import numpy as np

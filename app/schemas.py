@@ -1,4 +1,4 @@
-# model.py
+# app/model.py
 # FastAPI model schemas
 
 from typing import List

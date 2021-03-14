@@ -1,4 +1,4 @@
-# test_models.py
+# tests/tagifai/test_models.py
 # Test tagifai/models.py components.
 
 from argparse import Namespace

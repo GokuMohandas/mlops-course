@@ -14,10 +14,9 @@ help:
 	@echo "test-non-training  : runs tests that don't involve training."
 	@echo "style              : runs style formatting."
 	@echo "clean              : cleans all unecessary files."
-	@echo "pypi               : package and distribute to PyPI."
-	@echo "checks             : runs all checks (test, style and clean)."
 	@echo "docs               : serve generated documentation."
 
+# Installation
 .PHONY: install
 install:
 	python -m pip install -e .
@@ -38,11 +37,13 @@ venv:
 	make install-dev
 	@echo "Run 'source ${name}/bin/activate'"
 
+# Pull data
 .PHONY: assets
 assets:
-	# Pull from S3 w/ DVC (coming soon)
+	dvc pull
 	tagifai fix-artifact-metadata
 
+# Applications
 .PHONY: app
 app:
 	uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
@@ -51,6 +52,17 @@ app:
 app-prod:
 	gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app
 
+.PHONY: mlflow
+mlflow:
+	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri experiments/
+
+.PHONY: streamlit
+streamlit:
+	streamlit run streamlit/app.py
+
+
+
+# Tests
 .PHONY: great-expectations
 great-expectations:
 	great_expectations checkpoint run projects
@@ -64,12 +76,14 @@ test: great-expectations
 test-non-training: great-expectations
 	pytest -m "not training"
 
+# Styling
 .PHONY: style
 style:
 	black .
 	flake8
 	isort .
 
+# Cleaning
 .PHONY: clean
 clean:
 	tagifai clean-experiments --experiments-to-keep "best"
@@ -79,12 +93,7 @@ clean:
 	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
 	rm -f .coverage
 
-.PHONY: pypi
-pypi:
-	python setup.py sdist
-	python setup.py bdist_wheel --universal
-	twine upload dist/*
-
+# Documentation
 .PHONY: docs
 docs:
 	python -m mkdocs serve

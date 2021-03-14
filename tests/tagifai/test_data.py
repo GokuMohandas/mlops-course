@@ -1,4 +1,4 @@
-# test_data.py
+# tests/tagifai/test_data.py
 # Test tagifai/data.py components.
 
 import itertools

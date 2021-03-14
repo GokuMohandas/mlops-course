@@ -1,4 +1,4 @@
-# eval.py
+# tagifai/eval.py
 # Evaluation components.
 
 import itertools
@@ -84,7 +84,7 @@ def get_metrics(
                 metrics["slices"]["class"][slice_name]["f1"] = slice_metrics[2]
                 metrics["slices"]["class"][slice_name]["num_samples"] = len(y_true[mask])
 
-        # Weighted slice f1
+        # Weighted overall slice metrics
         metrics["slices"]["overall"] = {}
         for metric in ["precision", "recall", "f1"]:
             metrics["slices"]["overall"][metric] = np.mean(

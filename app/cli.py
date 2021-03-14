@@ -1,4 +1,4 @@
-# cli.py
+# app/cli.py
 # Command line interface (CLI) application.
 
 import json
@@ -11,6 +11,7 @@ from typing import Dict, Optional
 
 import mlflow
 import optuna
+import pandas as pd
 import torch
 import typer
 import yaml
@@ -228,7 +229,7 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
         commit_b = "main"
 
     # Get args
-    args = {"a": [], "b": {}}
+    args = {"a": {}, "b": {}}
     for i, commit in enumerate([commit_a, commit_b]):
         if commit == "workspace":
             args[commits[i]] = utils.load_dict(filepath=Path(config.CONFIG_DIR, "args.json"))
@@ -237,6 +238,15 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
             f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/config/args.json"
         )
         args[commits[i]] = utils.load_json_from_url(url=args_url)
+
+    # Argument differences
+    args_diffs = {}
+    for arg in args["a"]:
+        a = args["a"][arg]
+        b = args["b"][arg]
+        if a != b:
+            args_diffs[arg] = {commit_a: a, commit_b: b}
+    logger.info(f"Argument differences:\n{json.dumps(args_diffs, indent=2)}")
 
     # Get metrics
     metrics = {"a": {}, "b": {}}
@@ -249,72 +259,23 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
         metrics_url = f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/metrics/performance.json"
         metrics[commits[i]] = utils.load_json_from_url(url=metrics_url)
 
-    # Differences
-    diffs = {"args": {}}
-    for arg in args["a"]:
-        a = args["a"][arg]
-        b = args["b"][arg]
-        if a != b:
-            diffs["args"][arg] = {commit_a: a, commit_b: b}
-            diffs["args"]["diffs"] = arg
+    # Recursively flatten
+    metrics_a = pd.json_normalize(metrics["a"], sep=".").to_dict(orient="records")[0]
+    metrics_b = pd.json_normalize(metrics["b"], sep=".").to_dict(orient="records")[0]
+    if metrics_a.keys() != metrics_b.keys():
+        raise Exception("Cannot compare these commits because they have different metrics.")
 
-    # Overall metrics
-    _type = "overall"
-    diffs[_type] = {}
-    for metric in metrics["a"][_type]:
-        if a - b:
-            diffs[_type][metric] = {
-                commit_a: a,
-                commit_b: b,
-                "diff": a - b,
-            }
-
-    # Class metrics
-    _type = "class"
-    diffs[_type] = {}
-    for _class in metrics["a"][_type]:
-        diffs[_type][_class] = {}
-        for metric in metrics["a"][_type][_class]:
-            a = metrics["a"][_type][_class][metric]
-            b = metrics["b"][_type][_class][metric]
-            if a - b:
-                diffs[_type][_class][metric] = {
-                    commit_a: a,
-                    commit_b: b,
-                    "diff": a - b,
-                }
-
-    # Overall slice metrics
-    diffs["slices"] = {}
-    _type = "overall"
-    diffs["slices"][_type] = {}
-    for metric in metrics["a"]["slices"][_type]:
-        a = metrics["a"]["slices"][_type][metric]
-        b = metrics["b"]["slices"][_type][metric]
-        if a - b:
-            diffs["slices"][_type][metric] = {
-                commit_a: a,
-                commit_b: b,
-                "diff": a - b,
-            }
-
-    # Slice class metrics
-    _type = "class"
-    diffs["slices"][_type] = {}
-    for _class in metrics["a"]["slices"][_type]:
-        diffs["slices"][_type][_class] = {}
-        for metric in metrics["a"]["slices"][_type][_class]:
-            a = metrics["a"]["slices"][_type][_class][metric]
-            b = metrics["b"]["slices"][_type][_class][metric]
-            if a - b:
-                diffs["slices"][_type][_class][metric] = {
-                    commit_a: a,
-                    commit_b: b,
-                    "diff": a - b,
-                }
-
-    # Log
-    logger.info(json.dumps(diffs, indent=2))
+    # Metric differences
+    metric_diffs = {
+        metric: {
+            commit_a: metrics_a[metric],
+            commit_b: metrics_b[metric],
+            "diff": metrics_a[metric] - metrics_b[metric],
+        }
+        for metric in metrics_a
+        if metric in metrics_b and metrics_a[metric] != metrics_b[metric]
+    }
+    logger.info(f"Metric differences:\n{json.dumps(metric_diffs, indent=2)}")
 
 
 @app.command()

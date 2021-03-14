@@ -1,4 +1,4 @@
-# test_utils.py
+# tests/tagifai/test_utils.py
 # Test tagifai/utils.py components.
 
 import tempfile

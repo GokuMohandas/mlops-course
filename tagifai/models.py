@@ -1,4 +1,4 @@
-# models.py
+# tagifai/models.py
 # Model architectures.
 
 import math

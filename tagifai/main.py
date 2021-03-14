@@ -1,4 +1,4 @@
-# main.py
+# tagifai/main.py
 # Training, optimization, etc.
 
 import itertools

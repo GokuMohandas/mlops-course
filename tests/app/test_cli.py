@@ -1,4 +1,4 @@
-# test_cli.py
+# tests/app/test_cli.py
 # Test app/cli.py components.
 
 import shutil

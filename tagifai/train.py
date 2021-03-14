@@ -1,4 +1,4 @@
-# train.py
+# tagifai/train.py
 # Training operations.
 
 from argparse import Namespace

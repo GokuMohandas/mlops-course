@@ -1,4 +1,4 @@
-# config.py
+# tagifai/config.py
 # Configurations.
 
 import logging

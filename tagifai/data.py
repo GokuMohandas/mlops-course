@@ -1,4 +1,4 @@
-# data.py
+# tagifai/data.py
 # Data processing operations.
 
 import itertools

@@ -13,7 +13,9 @@ scikit-multilearn==0.2.0
 seaborn==0.11.1
 sklearn==0.0
 snorkel==0.9.6
+streamlit==0.78.0
 torch==1.7.0
 typer==0.3.2
 uvicorn[standard]==0.13.3
+watchdog==2.0.2
 wordcloud==1.5.0

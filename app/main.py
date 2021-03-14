@@ -1,4 +1,4 @@
-# main.py
+# app/main.py
 # Check API endpoints.
 
 import json

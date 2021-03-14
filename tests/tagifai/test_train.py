@@ -1,4 +1,4 @@
-# test_train.py
+# tests/tagifai/test_train.py
 # Test tagifai/train.py unit components.
 
 import numpy as np
