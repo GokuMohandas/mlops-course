@@ -91,8 +91,8 @@ def get_metrics(
                 list(
                     itertools.chain.from_iterable(
                         [
-                            [metrics["slices"][slice_name][metric]]
-                            * metrics["slices"][slice_name]["num_samples"]
+                            [metrics["slices"]["class"][slice_name][metric]]
+                            * metrics["slices"]["class"][slice_name]["num_samples"]
                             for slice_name in metrics["slices"]["class"]
                         ]
                     )

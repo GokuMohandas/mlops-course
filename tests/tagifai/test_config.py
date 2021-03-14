@@ -1,4 +1,4 @@
-# test_config.py
+# tests/tagifai/test_config.py
 # Test tagifai/config.py components.
 
 from tagifai import config
