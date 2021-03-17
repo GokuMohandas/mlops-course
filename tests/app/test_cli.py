@@ -43,7 +43,7 @@ def test_train_model():
 
     # Delete experiment
     utils.delete_experiment(experiment_name=experiment_name)
-    shutil.rmtree(Path(config.EXPERIMENTS_DIR, ".trash"))
+    shutil.rmtree(Path(config.MODEL_STORE, ".trash"))
 
 
 def test_predict_tags():
@@ -72,7 +72,7 @@ def test_optimize():
 
     # Delete study
     utils.delete_experiment(experiment_name=study_name)
-    shutil.rmtree(Path(config.EXPERIMENTS_DIR, ".trash"))
+    shutil.rmtree(Path(config.MODEL_STORE, ".trash"))
 
 
 def test_get_sorted_runs():
@@ -85,22 +85,22 @@ def test_fix_artifact_metadata():
     runner.invoke(app, ["fix-artifact-metadata"])
 
     # Check an experiment
-    sample_meta_yaml = list(Path(config.EXPERIMENTS_DIR).glob("*/meta.yaml"))[0]
+    sample_meta_yaml = list(Path(config.MODEL_STORE).glob("*/meta.yaml"))[0]
     with open(sample_meta_yaml) as f:
         metadata = yaml.load(f)
         experiment_id = metadata["artifact_location"].split("/")[-1]
-        expected_artifact_location = Path("file://", config.EXPERIMENTS_DIR, experiment_id)
+        expected_artifact_location = Path("file://", config.MODEL_STORE, experiment_id)
         assert metadata["artifact_location"] == str(expected_artifact_location)
 
     # Check a run
-    sample_meta_yaml = list(Path(config.EXPERIMENTS_DIR).glob("*/*/meta.yaml"))[0]
+    sample_meta_yaml = list(Path(config.MODEL_STORE).glob("*/*/meta.yaml"))[0]
     with open(sample_meta_yaml) as f:
         metadata = yaml.load(f)
         experiment_id = metadata["artifact_uri"].split("/")[-3]
         run_id = metadata["artifact_uri"].split("/")[-2]
         expected_artifact_uri = Path(
             "file://",
-            config.EXPERIMENTS_DIR,
+            config.MODEL_STORE,
             experiment_id,
             run_id,
             "artifacts",

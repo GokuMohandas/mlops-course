@@ -2,6 +2,7 @@
 # Command line interface (CLI) application.
 
 import json
+import numbers
 import shutil
 import tempfile
 import warnings
@@ -222,10 +223,11 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
     Raises:
         ValueError: Invalid commit.
     """
+    diffs = {}
     commits = ["a", "b"]
-    if commit_a in ("head", "current"):
+    if commit_a.lower() in ("head", "current"):
         commit_a = "main"
-    if commit_b in ("head", "current"):
+    if commit_b.lower() in ("head", "current"):
         commit_b = "main"
 
     # Get args
@@ -240,13 +242,13 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
         args[commits[i]] = utils.load_json_from_url(url=args_url)
 
     # Argument differences
-    args_diffs = {}
+    diffs["args"] = {}
     for arg in args["a"]:
         a = args["a"][arg]
         b = args["b"][arg]
         if a != b:
-            args_diffs[arg] = {commit_a: a, commit_b: b}
-    logger.info(f"Argument differences:\n{json.dumps(args_diffs, indent=2)}")
+            diffs["args"][arg] = {commit_a: a, commit_b: b}
+    logger.info(f"Argument differences:\n{json.dumps(diffs['args'], indent=2)}")
 
     # Get metrics
     metrics = {"a": {}, "b": {}}
@@ -266,16 +268,28 @@ def diff(commit_a: str = "workspace", commit_b: str = "head"):
         raise Exception("Cannot compare these commits because they have different metrics.")
 
     # Metric differences
-    metric_diffs = {
-        metric: {
-            commit_a: metrics_a[metric],
-            commit_b: metrics_b[metric],
-            "diff": metrics_a[metric] - metrics_b[metric],
-        }
-        for metric in metrics_a
-        if metric in metrics_b and metrics_a[metric] != metrics_b[metric]
-    }
-    logger.info(f"Metric differences:\n{json.dumps(metric_diffs, indent=2)}")
+    diffs["metrics"] = {}
+    diffs["metrics"]["improvements"] = {}
+    diffs["metrics"]["regressions"] = {}
+    for metric in metrics_a:
+        if (
+            (metric in metrics_b)
+            and (metrics_a[metric] != metrics_b[metric])
+            and (isinstance(metrics_a[metric], numbers.Number))
+            and (metric.split(".")[-1] != "num_samples")
+        ):
+            item = {
+                commit_a: metrics_a[metric],
+                commit_b: metrics_b[metric],
+                "diff": metrics_a[metric] - metrics_b[metric],
+            }
+            if item["diff"] >= 0.0:
+                diffs["metrics"]["improvements"][metric] = item
+            else:
+                diffs["metrics"]["regressions"][metric] = item
+    logger.info(f"Metric differences:\n{json.dumps(diffs['metrics'], indent=2)}")
+
+    return diffs
 
 
 @app.command()
@@ -328,7 +342,8 @@ def behavioral_reevaluation(
 @app.command()
 def get_sorted_runs(experiment_name: Optional[str] = "best"):
     """Get sorted runs for an experiment."""
-    utils.get_sorted_runs(experiment_name=experiment_name, order_by=["metrics.f1 DESC"])
+    runs = utils.get_sorted_runs(experiment_name=experiment_name, order_by=["metrics.f1 DESC"])
+    return runs
 
 
 @app.command()
@@ -347,7 +362,7 @@ def fix_artifact_metadata():
 
         # Set new values
         experiment_id = str(fp).split("/")[-2]
-        artifact_location = Path("file://", config.EXPERIMENTS_DIR, experiment_id)
+        artifact_location = Path("file://", config.MODEL_STORE, experiment_id)
         metadata["artifact_location"] = str(artifact_location)
         metadata["experiment_id"] = experiment_id
 
@@ -364,7 +379,7 @@ def fix_artifact_metadata():
         run_id = metadata["run_id"]
         artifact_uri = Path(
             "file://",
-            config.EXPERIMENTS_DIR,
+            config.MODEL_STORE,
             experiment_id,
             run_id,
             "artifacts",
@@ -376,13 +391,13 @@ def fix_artifact_metadata():
             yaml.dump(metadata, f)
 
     # Get artifact location
-    experiment_meta_yamls = list(Path(config.EXPERIMENTS_DIR).glob("*/meta.yaml"))
+    experiment_meta_yamls = list(Path(config.MODEL_STORE).glob("*/meta.yaml"))
     for meta_yaml in experiment_meta_yamls:
         fix_artifact_location(fp=meta_yaml)
         logger.info(f"Set artifact location for {meta_yaml}")
 
     # Change artifact URI
-    run_meta_yamls = list(Path(config.EXPERIMENTS_DIR).glob("*/*/meta.yaml"))
+    run_meta_yamls = list(Path(config.MODEL_STORE).glob("*/*/meta.yaml"))
     for meta_yaml in run_meta_yamls:
         fix_artifact_uri(fp=meta_yaml)
         logger.info(f"Set artifact URI for {meta_yaml}")
@@ -409,5 +424,5 @@ def clean_experiments(experiments_to_keep: str = "best"):
             client.delete_experiment(experiment_id=experiment.experiment_id)
 
     # Delete MLFlow trash
-    shutil.rmtree(Path(config.EXPERIMENTS_DIR, ".trash"))
+    shutil.rmtree(Path(config.MODEL_STORE, ".trash"))
     logger.info(f"Cleared experiments besides {experiments_to_keep}")

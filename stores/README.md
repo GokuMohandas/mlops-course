@@ -1,0 +1,3 @@
+# Stores
+
+Here we'll be creating and updating our local stores for versioned data (blob storage), features (feature store) and models (model registry). We want to do this locally so we can see all the inner operations within these stores as opposed to viewing them as an isolated and distance service. When you actually deploy an application into production, these will be dynamic services in the cloud (or shared on-prem instances) that will allow your entire team to interact with the assets in the stores. All of these stores are crucial for producing reproducible, retractable (rollbacks) and reliable ML systems.

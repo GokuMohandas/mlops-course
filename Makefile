@@ -7,7 +7,6 @@ help:
 	@echo "install-dev        : installs development requirements."
 	@echo "install-test       : installs test requirements."
 	@echo "venv               : set up the virtual environment for development"
-	@echo "assets             : load and prepare assets."
 	@echo "app                : launches FastAPI app with uvicorn worker"
 	@echo "app-prod           : launches FastAPI app with uvicorn workers managed by guincorn"
 	@echo "test               : runs all tests."
@@ -34,23 +33,18 @@ venv:
 	python3 -m venv ${name}
 	source ${name}/bin/activate && \
 	python -m pip install --upgrade pip setuptools wheel && \
-	make install-dev
+	make install-$(env)
 	@echo "Run 'source ${name}/bin/activate'"
 
-# Pull data
-.PHONY: assets
-assets:
-	dvc pull
-	tagifai fix-artifact-metadata
-
-# Applications
+# Application
 .PHONY: app
+SHELL ::= /bin/bash
 app:
+ifneq (${env}, prod)
 	uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
-
-.PHONY: app-prod
-app-prod:
+else
 	gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app
+endif
 
 .PHONY: mlflow
 mlflow:
@@ -58,9 +52,16 @@ mlflow:
 
 .PHONY: streamlit
 streamlit:
-	streamlit run streamlit/app.py
+	streamlit run streamlit/st_app.py
 
-
+# DVC
+.PHONY: DVC
+dvc:
+	dvc add data/tags.json
+	dvc add data/projects.json
+	tagifai clean-experiments --experiments-to-keep best
+	dvc add experiments
+	dvc push
 
 # Tests
 .PHONY: great-expectations
@@ -86,7 +87,6 @@ style:
 # Cleaning
 .PHONY: clean
 clean:
-	tagifai clean-experiments --experiments-to-keep "best"
 	find . -type f -name "*.DS_Store" -ls -delete
 	find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
 	find . | grep -E ".pytest_cache" | xargs rm -rf

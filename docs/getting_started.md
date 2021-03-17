@@ -1,72 +1,77 @@
-## Environment
-Preparing the development environment.
+## Use existing model
+
+1. Set up environment.
 ```bash
 export venv_name="venv"
-make venv name=${venv_name}
+make venv name=${venv_name} env="prod"
 source ${venv_name}/bin/activate
-make assets
 ```
 
-## Assets
-If you've already created a virtual environment previously, be sure to update your assets such as data, previous runs, etc.
+2. Pull latest model.
 ```bash
-make assets
+dvc pull experiments
+tagifai fix-artifact-metadata
 ```
 
-## CLI app
-View all available options using the CLI application.
+3. Run Application
 ```bash
-# View all CLI commands
-$ tagifai --help
+make app env="dev"
 ```
-<pre>
-Usage: tagifai [OPTIONS] COMMAND [ARGS]
-👉  Commands:
-    download-data  Download data from online to local drive.
-    optimize       Optimize a subset of hyperparameters towards ...
-    train-model    Predict tags for a give input text using a ...
-    predict-tags   Train a model using the specified parameters.
-</pre>
-```bash
-# Help for a specific command
-$ tagifai train-model --help
-```
-<pre>
-Usage: tagifai train-model [OPTIONS]
-Options:
-  --args-fp PATH                  [default:
-                                  /Users/goku/Documents/madewithml/applied-
-                                  ml/config/args.json]
+You can interact with the API directly or explore via the generated documentation at [http://0.0.0.0:5000/docs](http://0.0.0.0:5000/docs).
 
-  --experiment-name TEXT          [default: best]
-  --run-name TEXT                 [default: model]
-  --publish-metrics / --no-publish-metrics
-                                  [default: False]
-  --help                          Show this message and exit.
-</pre>
-```bash
-# Train a model
-$ tagifai train-model --args-fp config/args.json --experiment-name best --run-name model --publish-metrics
-```
-<pre>
-🚀 Training...
-</pre>
+## Update model (CI/CD)
+Coming soon after CI/CD lesson where the entire application will be retrained and deployed when we push new data (or trigger manual reoptimization/training). The deployed model, with performance comparisons to previously deployed versions, will be ready on a PR to push to the main branch.
 
-## Optimize
-Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's args to `config/args.json`.
-```bash
-tagifai optimize --args-fp config/args.json --study-name optimization --num-trials 100
-```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb){:target="_blank"} notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai fix-artifact-metadata` to match all metadata as if it were run from your machine.
+## Update model (manual)
 
-## Train
-Train a model (and save all it's artifacts) using args from `config/args.json`.
+1. Set up the development environment.
 ```bash
-tagifai train-model --args-fp config/args.json --experiment-name best --run-name model --publish-metrics
+export venv_name="venv"
+make venv name=${venv_name} env="dev"
+source ${venv_name}/bin/activate
 ```
 
-## Predict
-Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
+2. Pull versioned data.
 ```bash
-tagifai predict-tags --text "Transfer learning with BERT"
+dvc pull data/tags.json
+dvc pull data/projects.json
+```
+
+3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's args to [config/args.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/args.json)
+```bash
+tagifai optimize \
+    --args-fp config/args.json \
+    --study-name optimization \
+    --num-trials 100
+```
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai fix-artifact-metadata` to match all metadata as if it were run from your machine.
+
+4. Train a model (and save all it's artifacts) using args from [config/args.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/args.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+```bash
+tagifai train-model \
+    --args-fp config/args.json \
+    --experiment-name best \
+    --run-name model \
+    --publish-metrics  # save to metrics/performance.json
+```
+
+5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
+```bash
+tagifai predict-tags --text "Transfer learning with BERT"  # test with CLI app
+make app env="dev"  # run API and test if you want
+```
+
+6. View improvements
+Once you're done training the best model using the current data version, best hyperparameters, etc., we can view performance difference.
+```bash
+tagifai diff --commit-a workspace --commit-b HEAD
+```
+
+7. Commit to git
+This will clean and update versioned assets (data, experiments), run tests, styling, etc.
+```bash
+git add .
+git commit -m ""
+<precommit (dvc, tests, style, clean, etc.) will execute>
+git push origin main
 ```

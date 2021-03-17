@@ -9,7 +9,6 @@
 
 # Data
 logs/
-tmp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -104,4 +103,3 @@ site/
 
 # DVC
 .dvc/
-/experiments

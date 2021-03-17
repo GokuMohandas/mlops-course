@@ -14,18 +14,22 @@ BASE_DIR = Path(__file__).parent.parent.absolute()
 CONFIG_DIR = Path(BASE_DIR, "config")
 LOGS_DIR = Path(BASE_DIR, "logs")
 DATA_DIR = Path(BASE_DIR, "data")
-EXPERIMENTS_DIR = Path(BASE_DIR, "experiments")
 METRICS_DIR = Path(BASE_DIR, "metrics")
-DVC_REMOTE_STORAGE = Path(BASE_DIR, "tmp/dvcstore")
+
+# Local stores
+DATA_STORE = Path(BASE_DIR, "stores/data")
+FEATURE_STORE = Path(BASE_DIR, "stores/feature")
+MODEL_STORE = Path(BASE_DIR, "stores/model")
 
 # Create dirs
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
-DVC_REMOTE_STORAGE.mkdir(parents=True, exist_ok=True)
+DATA_STORE.mkdir(parents=True, exist_ok=True)
+FEATURE_STORE.mkdir(parents=True, exist_ok=True)
+MODEL_STORE.mkdir(parents=True, exist_ok=True)
 
-# MLFlow
-mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))
+# MLFlow model registry
+mlflow.set_tracking_uri("file://" + str(MODEL_STORE.absolute()))
 
 # Logger
 logging_config = {
@@ -74,7 +78,7 @@ logger = logging.getLogger("root")
 logger.handlers[0] = RichHandler(markup=True)
 
 # Exclusion criteria
-EXCLUDE = [
+EXCLUDED_TAGS = [
     "machine-learning",
     "deep-learning",
     "data-science",

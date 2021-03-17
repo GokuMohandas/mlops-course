@@ -59,10 +59,10 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     df = df[: args.num_samples]  # None = all samples
 
     # 4. Clean data
-    df, tags_above_frequency = data.clean(
+    df, tags_above_freq, tags_below_freq = data.prepare(
         df=df,
         include=list(tags_dict.keys()),
-        exclude=config.EXCLUDE,
+        exclude=config.EXCLUDED_TAGS,
         min_tag_freq=args.min_tag_freq,
     )
 
@@ -97,10 +97,8 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     # 9. Create dataloaders
     train_dataset = data.CNNTextDataset(X=X_train, y=y_train, max_filter_size=args.max_filter_size)
     val_dataset = data.CNNTextDataset(X=X_val, y=y_val, max_filter_size=args.max_filter_size)
-    test_dataset = data.CNNTextDataset(X=X_test, y=y_test, max_filter_size=args.max_filter_size)
     train_dataloader = train_dataset.create_dataloader(batch_size=args.batch_size)
     val_dataloader = val_dataset.create_dataloader(batch_size=args.batch_size)
-    test_dataloader = test_dataset.create_dataloader(batch_size=args.batch_size)
 
     # 10. Initialize model
     model = models.initialize_model(
@@ -131,12 +129,7 @@ def run(args: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         "loss": loss,
     }
     device = torch.device("cpu")
-    performance = eval.evaluate(
-        artifacts=artifacts,
-        dataloader=test_dataloader,
-        df=test_df,
-        device=device,
-    )
+    y_true, y_pred, performance = eval.evaluate(df=test_df, artifacts=artifacts)
     artifacts["performance"] = performance
 
     return artifacts

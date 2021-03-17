@@ -43,10 +43,10 @@ def filter_items(items: List, include: List = [], exclude: List = []) -> List:
     return filtered
 
 
-def clean(
+def prepare(
     df: pd.DataFrame, include: List = [], exclude: List = [], min_tag_freq: int = 30
 ) -> Tuple:
-    """Cleaning the raw data.
+    """Prepare the raw data.
 
     Args:
         df (pd.DataFrame): Pandas DataFrame with data.
@@ -66,12 +66,13 @@ def clean(
 
     # Filter tags that have fewer than `min_tag_freq` occurrences
     tags_above_freq = Counter(tag for tag in tags.elements() if tags[tag] >= min_tag_freq)
+    tags_below_freq = Counter(tag for tag in tags.elements() if tags[tag] < min_tag_freq)
     df.tags = df.tags.apply(filter_items, include=list(tags_above_freq.keys()))
 
     # Remove projects with no more remaining relevant tags
     df = df[df.tags.map(len) > 0]
 
-    return df, tags_above_freq
+    return df, tags_above_freq, tags_below_freq
 
 
 class Stemmer(PorterStemmer):

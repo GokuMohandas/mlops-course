@@ -2,15 +2,15 @@
 # Evaluation components.
 
 import itertools
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 import numpy as np
 import pandas as pd
 import torch
 from sklearn.metrics import precision_recall_fscore_support
-from snorkel.slicing import PandasSFApplier, slice_dataframe, slicing_function
+from snorkel.slicing import PandasSFApplier, slicing_function
 
-from tagifai import predict, train
+from tagifai import data, predict, train
 
 
 @slicing_function()
@@ -190,28 +190,33 @@ def get_behavioral_report(artifacts: Dict) -> Dict:
 
 
 def evaluate(
-    artifacts: Dict,
-    dataloader: torch.utils.data.DataLoader,
     df: pd.DataFrame,
-    device: torch.device,
-) -> Dict:
+    artifacts: Dict,
+    device: torch.device = torch.device("cpu"),
+) -> Tuple:
     """Evaluate performance on data.
 
     Args:
+        df (pd.DataFrame): Dataframe (used for slicing).
         artifacts (Dict): Artifacts needed for inference.
-        dataloader (torch.utils.data.DataLoader): Dataloader with the data your want to evaluate.
-        df (pd.DataFrame): dataframe (used for slicing).
         device (torch.device): Device to run model on. Defaults to CPU.
 
     Returns:
-        Evaluation report.
+        Ground truth and predicted labels, performance.
     """
     # Artifacts
     args = artifacts["args"]
     model = artifacts["model"]
+    tokenizer = artifacts["tokenizer"]
     label_encoder = artifacts["label_encoder"]
     model = model.to(device)
     classes = label_encoder.classes
+
+    # Create dataloader
+    X = np.array(tokenizer.texts_to_sequences(df.text.to_numpy()), dtype="object")
+    y = label_encoder.encode(df.tags)
+    dataset = data.CNNTextDataset(X=X, y=y, max_filter_size=int(args.max_filter_size))
+    dataloader = dataset.create_dataloader(batch_size=int(args.batch_size))
 
     # Determine predictions using threshold
     trainer = train.Trainer(model=model, device=device)
@@ -223,103 +228,4 @@ def evaluate(
     performance = get_metrics(df=df, y_true=y_true, y_pred=y_pred, classes=classes)
     performance["behavioral_report"] = get_behavioral_report(artifacts=artifacts)
 
-    return performance
-
-
-if __name__ == "__main__":  # pragma: no cover, playground for eval components
-    import json
-    from argparse import Namespace
-    from pathlib import Path
-
-    import numpy as np
-    import pandas as pd
-
-    from tagifai import config, data, main, utils
-    from tagifai.config import logger
-
-    # Set experiment and start run
-    args_fp = Path(config.CONFIG_DIR, "args.json")
-    args = Namespace(**utils.load_dict(filepath=args_fp))
-
-    # 1. Set seed
-    utils.set_seed(seed=args.seed)
-
-    # 2. Set device
-    device = utils.set_device(cuda=args.cuda)
-
-    # 3. Load data
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    projects = utils.load_dict(filepath=projects_fp)
-    tags_dict = utils.list_to_dict(utils.load_dict(filepath=tags_fp), key="tag")
-    df = pd.DataFrame(projects)
-    if args.shuffle:
-        df = df.sample(frac=1).reset_index(drop=True)
-    df = df[: args.num_samples]  # None = all samples
-
-    # 4. Clean data
-    df, tags_above_frequency = data.clean(
-        df=df,
-        include=list(tags_dict.keys()),
-        exclude=config.EXCLUDE,
-        min_tag_freq=args.min_tag_freq,
-    )
-
-    # 5. Preprocess data
-    df.text = df.text.apply(data.preprocess, lower=args.lower, stem=args.stem)
-
-    # 6. Encode labels
-    labels = df.tags
-    label_encoder = data.MultiLabelLabelEncoder()
-    label_encoder.fit(labels)
-    y = label_encoder.encode(labels)
-
-    # Class weights
-    all_tags = list(itertools.chain.from_iterable(labels.values))
-    counts = np.bincount([label_encoder.class_to_index[class_] for class_ in all_tags])
-    class_weights = {i: 1.0 / count for i, count in enumerate(counts)}
-
-    # 7. Split data
-    utils.set_seed(seed=args.seed)  # needed for skmultilearn
-    X = df.text.to_numpy()
-    X_train, X_, y_train, y_ = data.iterative_train_test_split(X=X, y=y, train_size=args.train_size)
-    X_val, X_test, y_val, y_test = data.iterative_train_test_split(X=X_, y=y_, train_size=0.5)
-
-    # View slices
-    test_df = pd.DataFrame({"text": X_test, "tags": label_encoder.decode(y_test)})
-    cv_transformers_df = slice_dataframe(test_df, cv_transformers)
-    print(f"{len(cv_transformers_df)} projects")
-    print(cv_transformers_df[["text", "tags"]].head())
-    short_text_df = slice_dataframe(test_df, short_text)
-    print(f"{len(short_text_df)} projects")
-    print(short_text_df[["text", "tags"]].head())
-
-    # 8. Tokenize inputs
-    tokenizer = data.Tokenizer(char_level=args.char_level)
-    tokenizer.fit_on_texts(texts=X_train)
-    X_train = np.array(tokenizer.texts_to_sequences(X_train), dtype=object)
-    X_val = np.array(tokenizer.texts_to_sequences(X_val), dtype=object)
-    X_test = np.array(tokenizer.texts_to_sequences(X_test), dtype=object)
-
-    # 9. Create dataloaders
-    train_dataset = data.CNNTextDataset(X=X_train, y=y_train, max_filter_size=args.max_filter_size)
-    val_dataset = data.CNNTextDataset(X=X_val, y=y_val, max_filter_size=args.max_filter_size)
-    test_dataset = data.CNNTextDataset(X=X_test, y=y_test, max_filter_size=args.max_filter_size)
-    train_dataloader = train_dataset.create_dataloader(batch_size=args.batch_size)
-    val_dataloader = val_dataset.create_dataloader(batch_size=args.batch_size)
-    test_dataloader = test_dataset.create_dataloader(batch_size=args.batch_size)
-
-    # Load artifacts
-    runs = utils.get_sorted_runs(experiment_name="best", order_by=["metrics.f1 DESC"])
-    run_ids = [run["run_id"] for run in runs]
-    artifacts = main.load_artifacts(run_id=run_ids[0], device=torch.device("cpu"))
-
-    # Evaluation
-    device = torch.device("cpu")
-    performance = evaluate(
-        artifacts=artifacts,
-        dataloader=test_dataloader,
-        df=test_df,
-        device=device,
-    )
-    logger.info(json.dumps(performance, indent=2))
+    return y_true, y_pred, performance

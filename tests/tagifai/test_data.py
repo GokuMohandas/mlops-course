@@ -60,10 +60,10 @@ def test_filter_items(items, include, filtered):
 
 def test_clean(tags, df):
     min_tag_freq = 30
-    df, tags_above_frequency = data.clean(
+    df, tags_above_freq, tags_below_freq = data.prepare(
         df=df,
         include=tags,
-        exclude=config.EXCLUDE,
+        exclude=config.EXCLUDED_TAGS,
         min_tag_freq=min_tag_freq,
     )
     all_tags = list(itertools.chain.from_iterable(df.tags))
@@ -181,7 +181,7 @@ class TestLabelEncoder(object):
 
 def test_iterative_train_test_split(tags, df):
     # Process
-    df, tags_above_frequency = data.clean(df=df, include=tags, min_tag_freq=1)
+    df, tags_above_freq, tags_below_freq = data.prepare(df=df, include=tags, min_tag_freq=1)
     df.text = df.text.apply(data.preprocess)
 
     # Encode labels

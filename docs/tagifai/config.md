@@ -7,20 +7,20 @@ BASE_DIR = Path(__file__).parent.parent.absolute()
 CONFIG_DIR = Path(BASE_DIR, "config")
 LOGS_DIR = Path(BASE_DIR, "logs")
 DATA_DIR = Path(BASE_DIR, "data")
-EXPERIMENTS_DIR = Path(BASE_DIR, "experiments")
+MODEL_STORE = Path(BASE_DIR, "experiments")
 DVC_REMOTE_STORAGE = Path(BASE_DIR, "tmp/dvcstore")
 
 # Create dirs
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
-EXPERIMENTS_DIR.mkdir(parents=True, exist_ok=True)
+MODEL_STORE.mkdir(parents=True, exist_ok=True)
 DVC_REMOTE_STORAGE.mkdir(parents=True, exist_ok=True)
 ```
 
 Then, we'll set the tracking URI for all MLFlow experiments:
 ```python
 # MLFlow
-mlflow.set_tracking_uri("file://" + str(EXPERIMENTS_DIR.absolute()))
+mlflow.set_tracking_uri("file://" + str(MODEL_STORE.absolute()))
 ```
 
 Finally, we'll establish our logger using the `logging_config` dictionary:
