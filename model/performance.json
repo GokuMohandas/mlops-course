@@ -1,33 +1,33 @@
 {
     "overall": {
-        "precision": 0.8050380552475824,
-        "recall": 0.603411513859275,
-        "f1": 0.6674448998627966,
-        "num_samples": 207.0
+        "precision": 0.843033473244977,
+        "recall": 0.597872340425532,
+        "f1": 0.6821603372348584,
+        "num_samples": 217.0
     },
     "class": {
         "attention": {
-            "precision": 0.6923076923076923,
-            "recall": 0.5,
-            "f1": 0.5806451612903226,
+            "precision": 0.6363636363636364,
+            "recall": 0.3888888888888889,
+            "f1": 0.4827586206896552,
             "num_samples": 18.0
         },
         "autoencoders": {
             "precision": 1.0,
-            "recall": 0.6666666666666666,
-            "f1": 0.8,
+            "recall": 0.5,
+            "f1": 0.6666666666666666,
             "num_samples": 6.0
         },
         "computer-vision": {
-            "precision": 0.6271186440677966,
-            "recall": 0.6379310344827587,
-            "f1": 0.6324786324786326,
+            "precision": 0.7407407407407407,
+            "recall": 0.6896551724137931,
+            "f1": 0.7142857142857143,
             "num_samples": 58.0
         },
         "convolutional-neural-networks": {
-            "precision": 0.5,
-            "recall": 0.25,
-            "f1": 0.3333333333333333,
+            "precision": 0.7142857142857143,
+            "recall": 0.3125,
+            "f1": 0.43478260869565216,
             "num_samples": 16.0
         },
         "data-augmentation": {
@@ -37,82 +37,82 @@
             "num_samples": 6.0
         },
         "embeddings": {
-            "precision": 0.9,
-            "recall": 0.75,
-            "f1": 0.8181818181818182,
-            "num_samples": 12.0
+            "precision": 1.0,
+            "recall": 0.8888888888888888,
+            "f1": 0.9411764705882353,
+            "num_samples": 9.0
         },
         "flask": {
-            "precision": 1.0,
-            "recall": 0.2,
-            "f1": 0.33333333333333337,
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
             "num_samples": 5.0
         },
         "generative-adversarial-networks": {
-            "precision": 1.0,
-            "recall": 0.6363636363636364,
-            "f1": 0.7777777777777778,
+            "precision": 0.7142857142857143,
+            "recall": 0.45454545454545453,
+            "f1": 0.5555555555555556,
             "num_samples": 11.0
         },
         "graph-neural-networks": {
-            "precision": 0.7777777777777778,
+            "precision": 0.875,
             "recall": 1.0,
-            "f1": 0.8750000000000001,
+            "f1": 0.9333333333333333,
             "num_samples": 7.0
         },
         "graphs": {
-            "precision": 0.6666666666666666,
-            "recall": 0.7272727272727273,
-            "f1": 0.6956521739130435,
-            "num_samples": 11.0
+            "precision": 0.75,
+            "recall": 0.75,
+            "f1": 0.75,
+            "num_samples": 12.0
         },
         "huggingface": {
+            "precision": 0.8571428571428571,
+            "recall": 0.6,
+            "f1": 0.7058823529411764,
+            "num_samples": 10.0
+        },
+        "image-classification": {
+            "precision": 0.6666666666666666,
+            "recall": 0.2222222222222222,
+            "f1": 0.3333333333333333,
+            "num_samples": 9.0
+        },
+        "interpretability": {
             "precision": 0.8,
             "recall": 0.5,
             "f1": 0.6153846153846154,
             "num_samples": 8.0
         },
-        "image-classification": {
-            "precision": 1.0,
-            "recall": 0.2857142857142857,
-            "f1": 0.4444444444444445,
-            "num_samples": 7.0
-        },
-        "interpretability": {
-            "precision": 1.0,
-            "recall": 0.6666666666666666,
-            "f1": 0.8,
-            "num_samples": 9.0
-        },
         "keras": {
-            "precision": 1.0,
-            "recall": 0.7857142857142857,
-            "f1": 0.88,
+            "precision": 0.875,
+            "recall": 0.5,
+            "f1": 0.6363636363636364,
             "num_samples": 14.0
         },
         "language-modeling": {
-            "precision": 0.7142857142857143,
-            "recall": 0.7142857142857143,
-            "f1": 0.7142857142857143,
-            "num_samples": 7.0
+            "precision": 1.0,
+            "recall": 0.75,
+            "f1": 0.8571428571428571,
+            "num_samples": 4.0
         },
         "natural-language-processing": {
-            "precision": 0.8,
-            "recall": 0.8,
-            "f1": 0.8000000000000002,
-            "num_samples": 65.0
+            "precision": 0.7966101694915254,
+            "recall": 0.734375,
+            "f1": 0.7642276422764227,
+            "num_samples": 64.0
         },
         "node-classification": {
             "precision": 1.0,
-            "recall": 0.5714285714285714,
-            "f1": 0.7272727272727273,
-            "num_samples": 7.0
+            "recall": 0.6,
+            "f1": 0.7499999999999999,
+            "num_samples": 5.0
         },
         "object-detection": {
-            "precision": 0.8888888888888888,
-            "recall": 0.6666666666666666,
-            "f1": 0.761904761904762,
-            "num_samples": 12.0
+            "precision": 1.0,
+            "recall": 0.7142857142857143,
+            "f1": 0.8333333333333333,
+            "num_samples": 14.0
         },
         "pretraining": {
             "precision": 1.0,
@@ -121,22 +121,22 @@
             "num_samples": 4.0
         },
         "production": {
+            "precision": 0.75,
+            "recall": 0.375,
+            "f1": 0.5,
+            "num_samples": 8.0
+        },
+        "pytorch": {
+            "precision": 0.9393939393939394,
+            "recall": 0.7948717948717948,
+            "f1": 0.8611111111111112,
+            "num_samples": 39.0
+        },
+        "question-answering": {
             "precision": 1.0,
             "recall": 0.25,
             "f1": 0.4,
             "num_samples": 8.0
-        },
-        "pytorch": {
-            "precision": 0.8666666666666667,
-            "recall": 0.6842105263157895,
-            "f1": 0.7647058823529413,
-            "num_samples": 38.0
-        },
-        "question-answering": {
-            "precision": 1.0,
-            "recall": 0.14285714285714285,
-            "f1": 0.25,
-            "num_samples": 7.0
         },
         "regression": {
             "precision": 0.6666666666666666,
@@ -146,45 +146,45 @@
         },
         "reinforcement-learning": {
             "precision": 1.0,
-            "recall": 0.5555555555555556,
-            "f1": 0.7142857142857143,
+            "recall": 0.7777777777777778,
+            "f1": 0.8750000000000001,
             "num_samples": 9.0
         },
         "representation-learning": {
-            "precision": 0.7777777777777778,
-            "recall": 0.6363636363636364,
-            "f1": 0.7000000000000001,
+            "precision": 1.0,
+            "recall": 0.5454545454545454,
+            "f1": 0.7058823529411764,
             "num_samples": 11.0
         },
         "scikit-learn": {
-            "precision": 1.0,
+            "precision": 0.75,
             "recall": 0.3333333333333333,
-            "f1": 0.5,
+            "f1": 0.46153846153846156,
             "num_samples": 9.0
         },
         "segmentation": {
+            "precision": 0.75,
+            "recall": 0.42857142857142855,
+            "f1": 0.5454545454545454,
+            "num_samples": 7.0
+        },
+        "self-supervised-learning": {
             "precision": 1.0,
             "recall": 0.6,
             "f1": 0.7499999999999999,
             "num_samples": 5.0
         },
-        "self-supervised-learning": {
-            "precision": 1.0,
-            "recall": 0.8333333333333334,
-            "f1": 0.9090909090909091,
-            "num_samples": 6.0
-        },
         "tensorflow": {
-            "precision": 0.7692307692307693,
-            "recall": 0.625,
-            "f1": 0.6896551724137931,
+            "precision": 0.92,
+            "recall": 0.71875,
+            "f1": 0.8070175438596492,
             "num_samples": 32.0
         },
         "tensorflow-js": {
             "precision": 1.0,
-            "recall": 0.16666666666666666,
-            "f1": 0.2857142857142857,
-            "num_samples": 6.0
+            "recall": 0.2,
+            "f1": 0.33333333333333337,
+            "num_samples": 5.0
         },
         "time-series": {
             "precision": 1.0,
@@ -193,47 +193,47 @@
             "num_samples": 5.0
         },
         "transfer-learning": {
-            "precision": 0.0,
-            "recall": 0.0,
-            "f1": 0.0,
-            "num_samples": 7.0
+            "precision": 1.0,
+            "recall": 0.25,
+            "f1": 0.4,
+            "num_samples": 8.0
         },
         "transformers": {
-            "precision": 0.782608695652174,
-            "recall": 0.6428571428571429,
-            "f1": 0.7058823529411765,
-            "num_samples": 28.0
+            "precision": 0.95,
+            "recall": 0.6129032258064516,
+            "f1": 0.7450980392156863,
+            "num_samples": 31.0
         },
         "unsupervised-learning": {
-            "precision": 0.8,
-            "recall": 0.5,
-            "f1": 0.6153846153846154,
-            "num_samples": 8.0
+            "precision": 1.0,
+            "recall": 0.3333333333333333,
+            "f1": 0.5,
+            "num_samples": 6.0
         }
     },
     "slices": {
         "class": {
             "cv_transformers": {
                 "precision": 1.0,
-                "recall": 0.5384615384615384,
-                "f1": 0.7000000000000001,
+                "recall": 0.5,
+                "f1": 0.6666666666666666,
                 "num_samples": 3
             },
             "short_text": {
                 "precision": 0.8333333333333334,
-                "recall": 0.7142857142857143,
-                "f1": 0.7692307692307692,
+                "recall": 1.0,
+                "f1": 0.9090909090909091,
                 "num_samples": 4
             }
         },
         "overall": {
-            "precision": 0.9047619047619049,
-            "recall": 0.6389324960753532,
-            "f1": 0.7395604395604396
+            "precision": 0.9047619047619048,
+            "recall": 0.7857142857142857,
+            "f1": 0.8051948051948052
         }
     },
     "behavioral": {
-        "score": 1.0,
+        "score": 0.8888888888888888,
         "results": {
             "passed": [
                 {
@@ -264,7 +264,6 @@
                         "input_text": "Transformers have disrupted the ML field.",
                         "preprocessed_text": "transformers disrupted ml field",
                         "predicted_tags": [
-                            "language-modeling",
                             "natural-language-processing",
                             "transformers"
                         ]
@@ -306,22 +305,6 @@
                 },
                 {
                     "input": {
-                        "text": "generated adversarial networks are very popular in machine learning projects.",
-                        "tags": [
-                            "generative-adversarial-networks"
-                        ]
-                    },
-                    "prediction": {
-                        "input_text": "generated adversarial networks are very popular in machine learning projects.",
-                        "preprocessed_text": "generated adversarial networks popular machine learning projects",
-                        "predicted_tags": [
-                            "generative-adversarial-networks"
-                        ]
-                    },
-                    "type": "INV"
-                },
-                {
-                    "input": {
                         "text": "A TensorFlow implementation of transformers.",
                         "tags": [
                             "tensorflow",
@@ -332,6 +315,7 @@
                         "input_text": "A TensorFlow implementation of transformers.",
                         "preprocessed_text": "tensorflow implementation transformers",
                         "predicted_tags": [
+                            "attention",
                             "natural-language-processing",
                             "tensorflow",
                             "transformers"
@@ -394,7 +378,22 @@
                     "type": "MFT"
                 }
             ],
-            "failed": []
+            "failed": [
+                {
+                    "input": {
+                        "text": "generated adversarial networks are very popular in machine learning projects.",
+                        "tags": [
+                            "generative-adversarial-networks"
+                        ]
+                    },
+                    "prediction": {
+                        "input_text": "generated adversarial networks are very popular in machine learning projects.",
+                        "preprocessed_text": "generated adversarial networks popular machine learning projects",
+                        "predicted_tags": []
+                    },
+                    "type": "INV"
+                }
+            ]
         }
     }
 }
