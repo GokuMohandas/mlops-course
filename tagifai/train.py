@@ -192,7 +192,7 @@ def find_best_threshold(y_true: np.ndarray, y_prob: np.ndarray) -> float:
     ```python
     # Find best threshold
     _, y_true, y_prob = trainer.eval_step(dataloader=train_dataloader)
-    args.threshold = find_best_threshold(y_true=y_true, y_prob=y_prob)
+    params.threshold = find_best_threshold(y_true=y_true, y_prob=y_prob)
     ```
 
     Args:
@@ -208,7 +208,7 @@ def find_best_threshold(y_true: np.ndarray, y_prob: np.ndarray) -> float:
 
 
 def train(
-    args: Namespace,
+    params: Namespace,
     train_dataloader: torch.utils.data.DataLoader,
     val_dataloader: torch.utils.data.DataLoader,
     model: nn.Module,
@@ -219,7 +219,7 @@ def train(
     """Train a model.
 
     Args:
-        args (Namespace): Parameters for data processing and training.
+        params (Namespace): Parameters for data processing and training.
         train_dataloader (torch.utils.data.DataLoader): train data loader.
         val_dataloader (torch.utils.data.DataLoader): val data loader.
         model (nn.Module): Initialize model to train.
@@ -235,7 +235,7 @@ def train(
     loss_fn = nn.BCEWithLogitsLoss(weight=class_weights_tensor)
 
     # Define optimizer & scheduler
-    optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=params.lr)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="min", factor=0.05, patience=5
     )
@@ -252,11 +252,11 @@ def train(
 
     # Train
     best_val_loss, best_model = trainer.train(
-        args.num_epochs, args.patience, train_dataloader, val_dataloader
+        params.num_epochs, params.patience, train_dataloader, val_dataloader
     )
 
     # Find best threshold
     _, y_true, y_prob = trainer.eval_step(dataloader=train_dataloader)
-    args.threshold = find_best_threshold(y_true=y_true, y_prob=y_prob)
+    params.threshold = find_best_threshold(y_true=y_true, y_prob=y_prob)
 
-    return args, best_model, best_val_loss
+    return params, best_model, best_val_loss

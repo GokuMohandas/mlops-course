@@ -74,7 +74,7 @@ def get_metrics(
         metrics["slices"]["class"] = {}
         for slice_name in slices.dtype.names:
             mask = slices[slice_name].astype(bool)
-            if sum(mask):
+            if sum(mask):  # pragma: no cover, test set may not have enough samples for slicing
                 slice_metrics = precision_recall_fscore_support(
                     y_true[mask], y_pred[mask], average="micro"
                 )
@@ -125,9 +125,11 @@ def compare_tags(texts: str, tags: List, artifacts: Dict, test_type: str) -> Lis
             "prediction": predictions[i],
             "type": test_type,
         }
-        if all(tag in prediction["predicted_tags"] for tag in tags[i]):
+        if all(
+            tag in prediction["predicted_tags"] for tag in tags[i]
+        ):  # pragma: no cover, may not have any in test cases
             results["passed"].append(result)
-        else:
+        else:  # pragma: no cover, may not have any in test cases
             results["failed"].append(result)
     return results
 
@@ -205,7 +207,7 @@ def evaluate(
         Ground truth and predicted labels, performance.
     """
     # Artifacts
-    args = artifacts["args"]
+    params = artifacts["params"]
     model = artifacts["model"]
     tokenizer = artifacts["tokenizer"]
     label_encoder = artifacts["label_encoder"]
@@ -215,17 +217,17 @@ def evaluate(
     # Create dataloader
     X = np.array(tokenizer.texts_to_sequences(df.text.to_numpy()), dtype="object")
     y = label_encoder.encode(df.tags)
-    dataset = data.CNNTextDataset(X=X, y=y, max_filter_size=int(args.max_filter_size))
-    dataloader = dataset.create_dataloader(batch_size=int(args.batch_size))
+    dataset = data.CNNTextDataset(X=X, y=y, max_filter_size=int(params.max_filter_size))
+    dataloader = dataset.create_dataloader(batch_size=int(params.batch_size))
 
     # Determine predictions using threshold
     trainer = train.Trainer(model=model, device=device)
     y_true, y_prob = trainer.predict_step(dataloader=dataloader)
-    y_pred = np.array([np.where(prob >= float(args.threshold), 1, 0) for prob in y_prob])
+    y_pred = np.array([np.where(prob >= float(params.threshold), 1, 0) for prob in y_prob])
 
     # Evaluate performance
     performance = {}
     performance = get_metrics(df=df, y_true=y_true, y_pred=y_pred, classes=classes)
-    performance["behavioral_report"] = get_behavioral_report(artifacts=artifacts)
+    performance["behavioral"] = get_behavioral_report(artifacts=artifacts)
 
     return y_true, y_pred, performance

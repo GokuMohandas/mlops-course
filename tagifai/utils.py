@@ -9,7 +9,6 @@ from urllib.request import urlopen
 import mlflow
 import numpy as np
 import torch
-from tabulate import tabulate
 
 
 def load_json_from_url(url: str) -> Dict:
@@ -110,53 +109,3 @@ def delete_experiment(experiment_name: str):
     client = mlflow.tracking.MlflowClient()
     experiment_id = client.get_experiment_by_name(experiment_name).experiment_id
     client.delete_experiment(experiment_id=experiment_id)
-
-
-def get_sorted_runs(experiment_name: str, order_by: List, verbose: bool = True) -> List[Dict]:
-    """Get sorted list of runs from Experiment `experiment_name`.
-
-    Usage:
-
-    ```python
-    runs = get_sorted_runs(experiment_name="best", order_by=["metrics.f1 DESC"])
-    ```
-
-    Args:
-        experiment_name (str): Name of the experiment to fetch runs from.
-        order_by (List): List specification for how to order the runs.
-        verbose (bool, optional): Toggle printing the table with sorted runs.
-
-    Returns:
-        List[Dict]: List of ordered runs with their respective info.
-    """
-    client = mlflow.tracking.MlflowClient()
-    experiment = client.get_experiment_by_name(experiment_name)
-    if not experiment:
-        return []
-
-    runs_df = mlflow.search_runs(
-        experiment_ids=experiment.experiment_id,
-        order_by=order_by,
-    )
-
-    # Convert DataFrame to List[Dict]
-    runs = runs_df.to_dict("records")
-    if verbose:
-        print(
-            tabulate(
-                runs_df[
-                    [
-                        "run_id",
-                        "end_time",
-                        "metrics.f1",
-                        "metrics.slices_f1",
-                        "metrics.behavioral_score",
-                    ]
-                ],
-                headers="keys",
-                tablefmt="psql",
-                showindex=False,
-            )
-        )
-
-    return runs

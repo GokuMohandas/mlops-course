@@ -11,13 +11,13 @@ from tagifai import models, utils
 class TestCNN(object):
     def setup_method(self):
         """Called before every method."""
-        # Args
+        # Params
         self.max_filter_size = 4
         self.embedding_dim = 128
         self.num_filters = 100
         self.hidden_dim = 128
         self.dropout_p = 0.5
-        args = Namespace(
+        params = Namespace(
             max_filter_size=self.max_filter_size,
             embedding_dim=self.embedding_dim,
             num_filters=self.num_filters,
@@ -30,7 +30,7 @@ class TestCNN(object):
         self.num_classes = 10
         utils.set_seed()
         self.cnn = models.initialize_model(
-            args=args, vocab_size=self.vocab_size, num_classes=self.num_classes
+            params=params, vocab_size=self.vocab_size, num_classes=self.num_classes
         )
 
     def teardown_method(self):

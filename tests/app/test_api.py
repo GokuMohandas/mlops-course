@@ -11,97 +11,74 @@ from app.api import app
 client = TestClient(app)
 
 
-def test_load_best_artifacts():
-    api.load_best_artifacts()
-    assert len(api.run_ids)
+def test_load_artifacts():
+    api.load_artifacts()
+    assert len(api.artifacts)
 
 
 def test_index():
     response = client.get("/")
-    assert response.json()["status-code"] == HTTPStatus.OK
+    assert response.status_code == HTTPStatus.OK
     assert response.json()["message"] == HTTPStatus.OK.phrase
 
 
 def test_construct_response():
     response = client.get("/")
-    assert response.json()["status-code"] == HTTPStatus.OK
-    assert response.json()["method"] == "GET"
+    assert response.status_code == HTTPStatus.OK
+    assert response.request.method == "GET"
 
 
-def test_best_predict():
+def test_predict():
     data = {
-        "run_id": "",
         "texts": [
             {"text": "Transfer learning with transformers for self-supervised learning."},
             {"text": "Generative adversarial networks in both PyTorch and TensorFlow."},
         ],
     }
     response = client.post("/predict", json=data)
-    assert response.json()["status-code"] == HTTPStatus.OK
-    assert response.json()["method"] == "POST"
+    assert response.status_code == HTTPStatus.OK
+    assert response.request.method == "POST"
     assert len(response.json()["data"]["predictions"]) == len(data["texts"])
 
 
-def test_runs():
-    # User with statements to get startup and shutdown events
-    # to work when using TestClient
+def test_empty_predict():
+    data = {
+        "texts": [],
+    }
+    response = client.post("/predict", json=data)
+    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+    assert response.request.method == "POST"
+    assert response.json()["detail"][0]["type"] == "value_error"
+
+
+def test_params():
     with TestClient(app) as client:
-        response = client.get("/runs?top=1")
-        assert response.json()["status-code"] == HTTPStatus.OK
-        assert response.json()["method"] == "GET"
-        assert len(response.json()["data"]["runs"]) == 1
+        response = client.get("/params")
+        assert response.status_code == HTTPStatus.OK
+        assert response.request.method == "GET"
+        print(response.json())
+        assert isinstance(response.json()["data"]["params"]["seed"], int)
 
 
-def test_validate_run_id():
+def test_param():
     with TestClient(app) as client:
-        run_id = "invalid_run_id"
-        response = client.get(f"/runs/{run_id}")
-        assert response.json()["status-code"] == HTTPStatus.BAD_REQUEST
-        assert response.json()["method"] == "GET"
-        assert response.json()["message"] == "Invalid run ID"
+        response = client.get("/params/seed")
+        assert response.status_code == HTTPStatus.OK
+        assert response.request.method == "GET"
+        assert isinstance(response.json()["data"]["params"]["seed"], int)
 
 
-def test_run():
+def test_performance():
     with TestClient(app) as client:
-        response = client.get("/runs?top=1")
-        run_id = response.json()["data"]["runs"][0]["run_id"]
-        response = client.get(f"/runs/{run_id}")
-        assert response.json()["status-code"] == HTTPStatus.OK
-        assert response.json()["method"] == "GET"
-        assert response.json()["data"]["run_id"] == run_id
+        response = client.get("/performance")
+        assert response.status_code == HTTPStatus.OK
+        assert response.request.method == "GET"
+        assert isinstance(response.json()["data"]["performance"]["overall"], dict)
 
 
-def test_predict():
+def test_filtered_performance():
     with TestClient(app) as client:
-        # Normal data
-        response = client.get("/runs?top=1")
-        run_id = response.json()["data"]["runs"][0]["run_id"]
-        data = {
-            "run_id": "",
-            "texts": [
-                {"text": "Transfer learning with transformers for self-supervised learning."},
-                {"text": "Generative adversarial networks in both PyTorch and TensorFlow."},
-            ],
-        }
-        response = client.post(f"/runs/{run_id}/predict", json=data)
-        assert response.json()["status-code"] == HTTPStatus.OK
-        assert response.json()["method"] == "POST"
-        assert len(response.json()["data"]["predictions"]) == len(data["texts"])
-
-        # Empty texts
-        data = {
-            "run_id": "",
-            "texts": [],
-        }
-        response = client.post(f"/runs/{run_id}/predict", json=data)
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-        assert response.json()["detail"][0]["type"] == "value_error"
-
-        # Empty text
-        data = {
-            "run_id": "",
-            "texts": [{"text": ""}],
-        }
-        response = client.post(f"/runs/{run_id}/predict", json=data)
-        assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
-        assert response.json()["detail"][0]["type"] == "value_error.any_str.min_length"
+        response = client.get("/performance?filter=overall")
+        assert response.status_code == HTTPStatus.OK
+        assert response.request.method == "GET"
+        assert isinstance(response.json()["data"]["performance"]["overall"], dict)

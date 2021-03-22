@@ -167,19 +167,19 @@ dvc pull data/tags.json
 dvc pull data/projects.json
 ```
 
-3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's args to [config/args.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/args.json)
+3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json)
 ```bash
 tagifai optimize \
-    --args-fp config/args.json \
+    --params-fp config/params.json \
     --study-name optimization \
     --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's arguments and artifacts. Once we have them in our local machine, we can run `tagifai fix-artifact-metadata` to match all metadata as if it were run from your machine.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
 
-4. Train a model (and save all it's artifacts) using args from [config/args.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/args.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
-    --args-fp config/args.json \
+    --params-fp config/params.json \
     --experiment-name best \
     --run-name model \
     --publish-metrics  # save to metrics/performance.json

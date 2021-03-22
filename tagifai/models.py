@@ -31,14 +31,14 @@ class CNN(nn.Module):
 
         ```python
         # Initialize model
-        filter_sizes = list(range(1, int(args.max_filter_size) + 1))
+        filter_sizes = list(range(1, int(params.max_filter_size) + 1))
         model = models.CNN(
-            embedding_dim=int(args.embedding_dim),
+            embedding_dim=int(params.embedding_dim),
             vocab_size=int(vocab_size),
-            num_filters=int(args.num_filters),
+            num_filters=int(params.num_filters),
             filter_sizes=filter_sizes,
-            hidden_dim=int(args.hidden_dim),
-            dropout_p=float(args.dropout_p),
+            hidden_dim=int(params.hidden_dim),
+            dropout_p=float(params.dropout_p),
             num_classes=int(num_classes),
         )
         model = model.to(device)
@@ -137,7 +137,7 @@ class CNN(nn.Module):
 
 
 def initialize_model(
-    args: Namespace,
+    params: Namespace,
     vocab_size: int,
     num_classes: int,
     device: torch.device = torch.device("cpu"),
@@ -145,7 +145,7 @@ def initialize_model(
     """Initialize a model using parameters (converted to appropriate data types).
 
     Args:
-        args (Namespace): Parameters for data processing and training.
+        params (Namespace): Parameters for data processing and training.
         vocab_size (int): Size of the vocabulary.
         num_classes (int): Number on unique classes.
         device (torch.device): Device to run model on. Defaults to CPU.
@@ -154,14 +154,14 @@ def initialize_model(
         Initialize torch model instance.
     """
     # Initialize model
-    filter_sizes = list(range(1, int(args.max_filter_size) + 1))
+    filter_sizes = list(range(1, int(params.max_filter_size) + 1))
     model = CNN(
-        embedding_dim=int(args.embedding_dim),
+        embedding_dim=int(params.embedding_dim),
         vocab_size=int(vocab_size),
-        num_filters=int(args.num_filters),
+        num_filters=int(params.num_filters),
         filter_sizes=filter_sizes,
-        hidden_dim=int(args.hidden_dim),
-        dropout_p=float(args.dropout_p),
+        hidden_dim=int(params.hidden_dim),
+        dropout_p=float(params.dropout_p),
         num_classes=int(num_classes),
     )
     model = model.to(device)

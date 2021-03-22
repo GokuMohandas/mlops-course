@@ -233,7 +233,7 @@
             "f1": 0.7395604395604396
         }
     },
-    "behavioral_report": {
+    "behavioral": {
         "score": 1.0,
         "results": {
             "passed": [

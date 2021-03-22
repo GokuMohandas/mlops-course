@@ -4,9 +4,7 @@
 import shutil
 from pathlib import Path
 
-import mlflow
 import pytest
-import yaml
 from typer.testing import CliRunner
 
 from app.cli import app
@@ -22,15 +20,42 @@ def test_download_data():
 
 
 @pytest.mark.training
+def test_optimize():
+    study_name = "test_optimization"
+    result = runner.invoke(
+        app,
+        [
+            "optimize",
+            "--params-fp",
+            f"{Path(config.CONFIG_DIR, 'test_params.json')}",
+            "--study-name",
+            f"{study_name}",
+            "--num-trials",
+            1,
+        ],
+    )
+    assert result.exit_code == 0
+    assert "Trial 0" in result.stdout
+
+    # Delete study
+    utils.delete_experiment(experiment_name=study_name)
+    shutil.rmtree(Path(config.MODEL_REGISTRY, ".trash"))
+
+
+@pytest.mark.training
 def test_train_model():
     experiment_name = "test_experiment"
     run_name = "test_run"
+    tmp_dir = Path(config.BASE_DIR, "tmp")
+    tmp_dir.mkdir(parents=True, exist_ok=True)
     result = runner.invoke(
         app,
         [
             "train-model",
-            "--args-fp",
-            f"{Path(config.CONFIG_DIR, 'test_args.json')}",
+            "--params-fp",
+            f"{Path(config.CONFIG_DIR, 'test_params.json')}",
+            "--model-dir",
+            f"{tmp_dir}",
             "--experiment-name",
             f"{experiment_name}",
             "--run-name",
@@ -43,82 +68,11 @@ def test_train_model():
 
     # Delete experiment
     utils.delete_experiment(experiment_name=experiment_name)
-    shutil.rmtree(Path(config.MODEL_STORE, ".trash"))
+    shutil.rmtree(Path(config.MODEL_REGISTRY, ".trash"))
+    shutil.rmtree(tmp_dir)
 
 
 def test_predict_tags():
     result = runner.invoke(app, ["predict-tags", "--text", "Transfer learning with BERT."])
     assert result.exit_code == 0
     assert "predicted_tags" in result.stdout
-
-
-@pytest.mark.training
-def test_optimize():
-    study_name = "test_optimization"
-    result = runner.invoke(
-        app,
-        [
-            "optimize",
-            "--args-fp",
-            f"{Path(config.CONFIG_DIR, 'test_args.json')}",
-            "--study-name",
-            f"{study_name}",
-            "--num-trials",
-            1,
-        ],
-    )
-    assert result.exit_code == 0
-    assert "Trial 0" in result.stdout
-
-    # Delete study
-    utils.delete_experiment(experiment_name=study_name)
-    shutil.rmtree(Path(config.MODEL_STORE, ".trash"))
-
-
-def test_get_sorted_runs():
-    result = runner.invoke(app, ["get-sorted-runs"])
-    assert result.exit_code == 0
-    assert "run_id" in result.stdout
-
-
-def test_fix_artifact_metadata():
-    runner.invoke(app, ["fix-artifact-metadata"])
-
-    # Check an experiment
-    sample_meta_yaml = list(Path(config.MODEL_STORE).glob("*/meta.yaml"))[0]
-    with open(sample_meta_yaml) as f:
-        metadata = yaml.load(f)
-        experiment_id = metadata["artifact_location"].split("/")[-1]
-        expected_artifact_location = Path("file://", config.MODEL_STORE, experiment_id)
-        assert metadata["artifact_location"] == str(expected_artifact_location)
-
-    # Check a run
-    sample_meta_yaml = list(Path(config.MODEL_STORE).glob("*/*/meta.yaml"))[0]
-    with open(sample_meta_yaml) as f:
-        metadata = yaml.load(f)
-        experiment_id = metadata["artifact_uri"].split("/")[-3]
-        run_id = metadata["artifact_uri"].split("/")[-2]
-        expected_artifact_uri = Path(
-            "file://",
-            config.MODEL_STORE,
-            experiment_id,
-            run_id,
-            "artifacts",
-        )
-        assert metadata["artifact_uri"] == str(expected_artifact_uri)
-
-
-def test_clean_experiments():
-    # Keep `best` experiment (default)
-    result = runner.invoke(app, ["clean-experiments", "--experiments-to-keep", "best"])
-    assert result.exit_code == 0
-    client = mlflow.tracking.MlflowClient()
-    experiments = client.list_experiments()
-    assert len(experiments) == 1
-    assert experiments[0].name == "best"
-
-    # Must keep at least one experiment
-    with pytest.raises(ValueError):
-        result = runner.invoke(app, ["clean-experiments", "--experiments-to-keep", ""])
-        assert result.exit_code == 1
-        raise result.exc_info[1]
