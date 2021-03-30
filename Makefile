@@ -1,5 +1,4 @@
 # Makefile
-
 .PHONY: help
 help:
 	@echo "Commands:"
@@ -18,49 +17,58 @@ help:
 # Installation
 .PHONY: install
 install:
-	python -m pip install -e .
+	python -m pip install -e . --no-cache-dir
 
 .PHONY: install-dev
 install-dev:
-	python -m pip install -e ".[dev]"
+	python -m pip install -e ".[dev]" --no-cache-dir
 	pre-commit install
+	pre-commit autoupdate
 
 .PHONY: install-test
 install-test:
-	python -m pip install -e ".[test]"
+	python -m pip install -e ".[test]" --no-cache-dir
 
 venv:
 	python3 -m venv ${name}
 	source ${name}/bin/activate && \
 	python -m pip install --upgrade pip setuptools wheel && \
 	make install-$(env)
-	@echo "Run 'source ${name}/bin/activate'"
+
+# Docker
+.PHONY: docker
+docker:
+	docker build -t tagifai:latest -f Dockerfile .
+	docker run -p 5000:5000 -p 8000:8000 -p 8501:8501 --name tagifai tagifai:latest
 
 # Application
 .PHONY: app
 SHELL ::= /bin/bash
 app:
-ifneq (${env}, prod)
-	uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
-else
+ifeq (${env}, prod)
 	gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app
+else
+	uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
 endif
 
+# MLFlow
 .PHONY: mlflow
 mlflow:
 	mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri experiments/
 
+# Streamlit dashboard
 .PHONY: streamlit
 streamlit:
 	streamlit run streamlit/st_app.py
 
 # DVC
-.PHONY: DVC
+.PHONY: dvc
 dvc:
-	dvc add data/tags.json
 	dvc add data/projects.json
-	tagifai clean-experiments --experiments-to-keep best
-	dvc add experiments
+	dvc add data/tags.json
+	dvc add model/label_encoder.json
+	dvc add model/tokenizer.json
+	dvc add model/model.pt
 	dvc push
 
 # Tests

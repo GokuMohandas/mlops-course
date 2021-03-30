@@ -33,7 +33,7 @@ def load_dict(filepath: str) -> Dict:
     Returns:
         A dictionary with the data loaded.
     """
-    with open(filepath, "r") as fp:
+    with open(filepath) as fp:
         d = json.load(fp)
     return d
 

@@ -95,7 +95,7 @@ def test_preprocess(text, lower, stem, filters, stopwords, preprocessed_text):
     )
 
 
-class TestLabelEncoder(object):
+class TestLabelEncoder:
     @classmethod
     def setup_class(cls):
         """Called before every class initialization."""
@@ -203,7 +203,7 @@ def test_iterative_train_test_split(tags, df):
     assert len(X_test) / float(len(X)) == pytest.approx(0.15, abs=0.05)  # 0.15 ± 0.05
 
 
-class TestTokenizer(object):
+class TestTokenizer:
     def setup_method(self):
         """Called before every method."""
         self.tokenizer = data.Tokenizer(char_level=True, num_tokens=None)
@@ -297,7 +297,7 @@ def test_pad_sequences():
     assert np.array_equal(padded_seq, np.array([[1, 2, 3], [1, 2, 0]]))
 
 
-class TestCNNTextDataset(object):
+class TestCNNTextDataset:
     def setup_method(self):
         """Called before every method."""
         self.X = [[4, 2, 3, 0], [2, 4, 3, 3], [2, 3, 0, 0]]

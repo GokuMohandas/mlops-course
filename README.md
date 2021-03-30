@@ -77,7 +77,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 <table>
     <tr>
-        <td align="center"><b>⏰&nbsp; Version control</b></td>
+        <td align="center"><b>♻️&nbsp; Reproducability</b></td>
         <td align="center"><b>🚀&nbsp; Production</b></td>
         <td align="center"><b>(cont.)</b></td>
     </tr>
@@ -87,19 +87,14 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td>Feature stores</td>
     </tr>
     <tr>
-        <td>Precommit</td>
-        <td>Docker</td>
+        <td>Versioning</td>
+        <td>CI/CD</td>
         <td>Workflows</td>
     </tr>
     <tr>
-        <td>Versioning</td>
-        <td>CI/CD</td>
-        <td>Active learning</td>
-    </tr>
-    <tr>
-        <td></td>
+        <td>Docker</td>
         <td>Monitoring</td>
-        <td></td>
+        <td>Active learning</td>
     </tr>
 </table>
 
@@ -133,14 +128,13 @@ tagifai/
 1. Set up environment.
 ```bash
 export venv_name="venv"
-make venv name=${venv_name} env="prod"
+make venv name=${venv_name} env="dev"
 source ${venv_name}/bin/activate
 ```
 
 2. Pull latest model.
 ```bash
-dvc pull experiments
-tagifai fix-artifact-metadata
+dvc pull
 ```
 
 3. Run Application
@@ -161,10 +155,9 @@ make venv name=${venv_name} env="dev"
 source ${venv_name}/bin/activate
 ```
 
-2. Pull versioned data.
+2. Pull versioned data and model artifacts.
 ```bash
-dvc pull data/tags.json
-dvc pull data/projects.json
+dvc pull
 ```
 
 3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json)
@@ -176,19 +169,19 @@ tagifai optimize \
 ```
 > We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
 
-4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
     --params-fp config/params.json \
+    -- model-dir model \
     --experiment-name best \
-    --run-name model \
-    --publish-metrics  # save to metrics/performance.json
+    --run-name model
 ```
 
 5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
 ```bash
 tagifai predict-tags --text "Transfer learning with BERT"  # test with CLI app
-make app env="dev"  # run API and test if you want
+make app env="dev"  # run API and test as well
 ```
 
 6. View improvements
@@ -197,16 +190,26 @@ Once you're done training the best model using the current data version, best hy
 tagifai diff --commit-a workspace --commit-b HEAD
 ```
 
-7. Commit to git
+7. Push versioned data and model artifacts.
+```
+make dvc
+```
+
+8. Commit to git
 This will clean and update versioned assets (data, experiments), run tests, styling, etc.
 ```bash
 git add .
 git commit -m ""
-<precommit (dvc, tests, style, clean, etc.) will execute>
 git push origin main
 ```
 
 ## Commands
+
+### Docker
+```bash
+make docker  # docker build -t tagifai:latest -f Dockerfile .
+             # docker run -p 5000:5000 -p 8000:8000 -p 8501:8501 --name tagifai tagifai:latest
+```
 
 ### Application
 ```bash
@@ -221,7 +224,7 @@ make streamlit  # streamlit run streamlit/app.py
 
 ### MLFlow
 ```bash
-make mlflow  # mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri experiments/
+make mlflow  # mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri stores/model/
 ```
 
 ### Mkdocs
@@ -244,7 +247,6 @@ jupyter labextension install @jupyterlab/toc
 jupyter lab
 ```
 > You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/tagifai.ipynb).
-
 
 ## FAQ
 

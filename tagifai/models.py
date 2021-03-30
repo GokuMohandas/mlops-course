@@ -54,7 +54,7 @@ class CNN(nn.Module):
             num_classes (int): Number of unique classes to classify into.
             padding_idx (int, optional): Index representing the `<PAD>` token. Defaults to 0.
         """
-        super(CNN, self).__init__()
+        super().__init__()
 
         # Initialize embeddings
         self.embeddings = nn.Embedding(

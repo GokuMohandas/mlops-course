@@ -1,4 +1,4 @@
-dvc[s3]==2.0.5
+dvc==2.0.6
 fastapi==0.63.0
 matplotlib==3.2.2
 mlflow==1.13.1

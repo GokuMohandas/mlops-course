@@ -8,7 +8,7 @@ from setuptools import setup
 BASE_DIR = Path(__file__).parent
 
 # Load packages from requirements.txt
-with open(Path(BASE_DIR, "requirements.txt"), "r") as file:
+with open(Path(BASE_DIR, "requirements.txt")) as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
 test_packages = [
@@ -22,7 +22,7 @@ dev_packages = [
     "flake8==3.8.3",
     "isort==5.5.3",
     "jupyterlab==2.2.8",
-    "pre-commit==2.7.1",
+    "pre-commit==2.11.1",
 ]
 
 docs_packages = [

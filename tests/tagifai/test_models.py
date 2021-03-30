@@ -8,7 +8,7 @@ import torch
 from tagifai import models, utils
 
 
-class TestCNN(object):
+class TestCNN:
     def setup_method(self):
         """Called before every method."""
         # Params

@@ -334,7 +334,7 @@ def preprocess(
     return text
 
 
-class LabelEncoder(object):
+class LabelEncoder:
     """Encode labels into unique indices.
 
     Usage:
@@ -363,7 +363,7 @@ class LabelEncoder(object):
 
     @classmethod
     def load(cls, fp: str):
-        with open(fp, "r") as fp:
+        with open(fp) as fp:
             kwargs = json.load(fp=fp)
         return cls(**kwargs)
 
@@ -497,7 +497,7 @@ def iterative_train_test_split(X: pd.Series, y: np.ndarray, train_size: float = 
     return X_train, X_test, y_train, y_test
 
 
-class Tokenizer(object):
+class Tokenizer:
     """Tokenize a feature using a built vocabulary.
 
     Usage:
@@ -600,7 +600,7 @@ class Tokenizer(object):
 
     @classmethod
     def load(cls, fp: str):
-        with open(fp, "r") as fp:
+        with open(fp) as fp:
             kwargs = json.load(fp=fp)
         return cls(**kwargs)
 

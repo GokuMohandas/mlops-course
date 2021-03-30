@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
+    rev: v3.4.0
     hooks:
     -   id: trailing-whitespace
     -   id: check-yaml
@@ -12,7 +12,8 @@ repos:
     -   id: check-ast
     -   id: check-json
     -   id: check-merge-conflict
-    -   id: check-json
+    -   id: detect-aws-credentials
+    -   id: detect-private-key
 -   repo: https://github.com/psf/black
     rev: 20.8b1
     hooks:
@@ -20,15 +21,20 @@ repos:
         args: []
         files: .
 -   repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.8.3
+    rev: 3.9.0
     hooks:
     -   id: flake8
 -   repo: https://github.com/PyCQA/isort
-    rev: 5.5.3
+    rev: 5.8.0
     hooks:
     -   id: isort
         args: []
         files: .
+-   repo: https://github.com/asottile/pyupgrade  # update python syntax
+    rev: v2.11.0
+    hooks:
+    -   id: pyupgrade
+        args: [--py36-plus]
 - repo: local
   hooks:
     - id: test-non-training
@@ -36,12 +42,10 @@ repos:
       entry: make
       args: ["test-non-training"]
       language: system
-      types: [python]
       pass_filenames: false
     - id: clean
       name: clean
       entry: make
       args: ["clean"]
       language: system
-      types: [python]
       pass_filenames: false

@@ -1,4 +1,3 @@
-# model
-label_encoder.json
-model.pt
-tokenizer.json
+/label_encoder.json
+/tokenizer.json
+/model.pt

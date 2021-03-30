@@ -13,7 +13,7 @@ from sklearn.metrics import precision_recall_curve
 from tagifai.config import logger
 
 
-class Trainer(object):
+class Trainer:
     """Object used to facilitate training."""
 
     def __init__(
