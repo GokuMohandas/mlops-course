@@ -39,7 +39,7 @@ venv:
 .PHONY: docker
 docker:
 	docker build -t tagifai:latest -f Dockerfile .
-	docker run -p 5000:5000 -p 8000:8000 -p 8501:8501 --name tagifai tagifai:latest
+	docker run -p 5000:5000 --name tagifai tagifai:latest
 
 # Application
 .PHONY: app

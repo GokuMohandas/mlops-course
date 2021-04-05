@@ -76,3 +76,15 @@ def test_predict_tags():
     result = runner.invoke(app, ["predict-tags", "--text", "Transfer learning with BERT."])
     assert result.exit_code == 0
     assert "predicted_tags" in result.stdout
+
+
+def test_params():
+    result = runner.invoke(app, ["params"])
+    assert result.exit_code == 0
+    assert "seed" in result.stdout
+
+
+def test_performance():
+    result = runner.invoke(app, ["performance"])
+    assert result.exit_code == 0
+    assert "overall" in result.stdout

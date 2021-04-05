@@ -9,6 +9,10 @@ import mlflow
 import pretty_errors  # NOQA: F401 (imported but unused)
 from rich.logging import RichHandler
 
+# Repository
+AUTHOR = "GokuMohandas"
+REPO = "mlops"
+
 # Directories
 BASE_DIR = Path(__file__).parent.parent.absolute()
 CONFIG_DIR = Path(BASE_DIR, "config")

@@ -1,3 +1,4 @@
+# Base image
 FROM python:3.7-slim
 
 # Install dependencies
@@ -15,7 +16,6 @@ COPY tagifai tagifai
 COPY app app
 COPY data data
 COPY model model
-COPY streamlit streamlit
 COPY config config
 COPY stores stores
 
@@ -25,7 +25,7 @@ RUN dvc remote add -d storage stores/blob
 RUN dvc pull
 
 # Export ports
-EXPOSE 5000 8000 8501
+EXPOSE 5000
 
 # Start app
 ENTRYPOINT ["gunicorn", "-c", "config/gunicorn.py", "-k", "uvicorn.workers.UvicornWorker", "app.api:app"]

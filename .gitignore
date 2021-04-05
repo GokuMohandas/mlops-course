@@ -100,6 +100,3 @@ venv.bak/
 
 # mkdocs
 site/
-
-# DVC
-.dvc/

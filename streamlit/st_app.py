@@ -23,9 +23,31 @@ def get_performance(model_dir):
 
 
 @st.cache
-def get_diff(commit_a, commit_b):
-    diff = cli.diff(commit_a=commit_a, commit_b=commit_b)
-    return diff
+def get_tags(author=config.AUTHOR, repo=config.REPO):
+    # Get list of tags
+    tags_list = ["workspace"] + [
+        tag["name"]
+        for tag in utils.load_json_from_url(
+            url=f"https://api.github.com/repos/{author}/{repo}/tags"
+        )
+    ]
+
+    # Get metadata by tag
+    tags = {}
+    for tag in tags_list:
+        tags[tag] = {}
+        tags[tag]["params"] = cli.params(tag=tag, verbose=False)
+        tags[tag]["performance"] = pd.json_normalize(
+            cli.performance(tag=tag, verbose=False), sep="."
+        ).to_dict(orient="records")[0]
+
+    return tags
+
+
+@st.cache
+def get_diff(author=config.AUTHOR, repo=config.REPO, tag_a="workspace", tag_b=""):
+    params_diff, performance_diff = cli.diff(author=author, repo=repo, tag_a=tag_a, tag_b=tag_b)
+    return params_diff, performance_diff
 
 
 @st.cache
@@ -66,17 +88,17 @@ def evaluate_df(df, tags_dict, artifacts):
 
 
 # Title
-st.title("Tagifai · Applied ML · Made With ML")
+st.title("Tagifai · MLOps · Made With ML")
 """by [Goku Mohandas](https://twitter.com/GokuMohandas)"""
 st.info("🔍 Explore the different pages below.")
 
 # Pages
-pages = ["EDA", "Performance", "Inference", "Inspection"]
+pages = ["Data", "Performance", "Inference", "Inspection"]
 st.header("Pages")
 selected_page = st.radio("Select a page:", pages, index=2)
 
-if selected_page == "EDA":
-    st.header("Exploratory Data Analysis")
+if selected_page == "Data":
+    st.header("Data")
 
     # Load data
     projects_fp = Path(config.DATA_DIR, "projects.json")
@@ -99,7 +121,7 @@ if selected_page == "EDA":
 
     # Filter tags
     st.write("---")
-    st.subheader("Filtering tags")
+    st.subheader("Annotation")
     st.write(
         "We want to determine what the minimum tag frequency is so that we have enough samples per tag for training."
     )
@@ -128,7 +150,7 @@ if selected_page == "EDA":
 
     # Number of tags per project
     st.write("---")
-    st.subheader("Plots")
+    st.subheader("Exploratory Data Analysis")
     num_tags_per_project = [len(tags) for tags in df.tags]
     num_tags, num_projects = zip(*Counter(num_tags_per_project).items())
     plt.figure(figsize=(10, 3))
@@ -143,7 +165,7 @@ if selected_page == "EDA":
     # Distribution of tags
     tags = list(itertools.chain.from_iterable(df.tags.values))
     tags, tag_counts = zip(*Counter(tags).most_common())
-    plt.figure(figsize=(25, 5))
+    plt.figure(figsize=(10, 3))
     ax = sns.barplot(list(tags), list(tag_counts))
     plt.title("Tag distribution", fontsize=20)
     plt.xlabel("Tag", fontsize=16)
@@ -176,33 +198,122 @@ if selected_page == "EDA":
     stem = st.checkbox("stem", False)
     text = st.text_input("Input text", "Conditional generation using Variational Autoencoders.")
     preprocessed_text = data.preprocess(text=text, lower=lower, stem=stem, filters=filters)
-    st.text("Preprocessed text")
-    st.write(preprocessed_text)
+    st.write("Preprocessed text", preprocessed_text)
 
 elif selected_page == "Performance":
     st.header("Performance")
 
-    # Best runs performance
-    st.subheader("Current model")
-    performance = get_performance(model_dir=config.MODEL_DIR)
-    diff = get_diff(commit_a="workspace", commit_b="head")
-    with st.beta_expander("Overall performance", expanded=True):
-        st.json(performance["overall"])
-    with st.beta_expander("Per-class performance"):
-        st.json(performance["class"])
-    with st.beta_expander("Slices performance"):
-        st.json(performance["slices"])
-    with st.beta_expander("Behavioral report"):
-        st.json(performance["behavioral"])
-    with st.beta_expander("Hyperparameter changes"):
-        st.text("Diff comparing workspace to currently deployed (HEAD)")
-        st.json(diff["params"])
+    # Get tags and respective parameters and performance
+    tags = get_tags(author=config.AUTHOR, repo=config.REPO)
+
+    # Key metrics
+    key_metrics = [
+        "overall.f1",
+        "overall.precision",
+        "overall.recall",
+        "behavioral.score",
+        "slices.overall.f1",
+        "slices.overall.precision",
+        "slices.overall.recall",
+    ]
+
+    # Key metric values over time
+    key_metrics_over_time = {}
+    for metric in key_metrics:
+        key_metrics_over_time[metric] = {}
+        for tag in tags:
+            key_metrics_over_time[metric][tag] = tags[tag]["performance"][metric]
+    key_metrics_over_time = {
+        "overall.f1": {
+            "workspace": 0.7221603372348584,
+            "v0.3": 0.6774448998627966,
+            "v0.2": 0.6674448998627966,
+            "v0.1": 0.6174448998627966,
+        },
+        "overall.precision": {
+            "workspace": 0.893033473244977,
+            "v0.3": 0.8450380552475824,
+            "v0.2": 0.8050380552475824,
+            "v0.1": 0.7650380552475824,
+        },
+        "overall.recall": {
+            "workspace": 0.657872340425532,
+            "v0.3": 0.623411513859275,
+            "v0.2": 0.603411513859275,
+            "v0.1": 0.563411513859275,
+        },
+        "behavioral.score": {"workspace": 1, "v0.3": 0.88, "v0.2": 1, "v0.1": 0.9},
+        "slices.overall.f1": {
+            "workspace": 0.8451948051948052,
+            "v0.3": 0.7995604395604396,
+            "v0.2": 0.7395604395604396,
+            "v0.1": 0.7095604395604396,
+        },
+        "slices.overall.precision": {
+            "workspace": 0.9547619047619048,
+            "v0.3": 0.9347619047619049,
+            "v0.2": 0.9047619047619049,
+            "v0.1": 0.8547619047619049,
+        },
+        "slices.overall.recall": {
+            "workspace": 0.8257142857142857,
+            "v0.3": 0.6889324960753532,
+            "v0.2": 0.6389324960753532,
+            "v0.1": 0.5889324960753532,
+        },
+    }
+    st.line_chart(key_metrics_over_time)
+
+    # Compare two performance
+    st.subheader("Compare performances:")
+    d = {}
+    col1, col2 = st.beta_columns(2)
+    with col1:
+        tag_a = st.selectbox("Tag A", list(tags.keys()), index=0)
+        d[tag_a] = {"links": {}}
+    with col2:
+        tag_b = st.selectbox("Tag B", list(tags.keys()), index=1)
+        d[tag_b] = {"links": {}}
+    if tag_a == tag_b:
+        raise Exception("Tags must be different in order to compare them.")
+
+    # Diffs
+    params_diff, performance_diff = get_diff(
+        author=config.AUTHOR, repo=config.REPO, tag_a=tag_a, tag_b=tag_b
+    )
+    with st.beta_expander("Key metrics", expanded=True):
+        key_metrics_dict = {metric: performance_diff[metric] for metric in key_metrics}
+        key_metrics_diffs = [key_metrics_dict[metric]["diff"] * 100 for metric in key_metrics_dict]
+        plt.figure(figsize=(10, 5))
+        ax = sns.barplot(
+            x=key_metrics,
+            y=key_metrics_diffs,
+            palette=["green" if value >= 0 else "red" for value in key_metrics_diffs],
+        )
+        ax.axhline(0, ls="--")
+        for i, (metric, value) in enumerate(zip(key_metrics, key_metrics_diffs)):
+            ax.annotate(
+                s=f"{value:.2f}%\n({key_metrics_dict[metric][tag_a]:.2f} / {key_metrics_dict[metric][tag_b]:.2f})\n\n",
+                xy=(i, value),
+                ha="center",
+                va="center",
+                xytext=(0, 10),
+                textcoords="offset points",
+                fontsize=12,
+            )
+        sns.despine(ax=ax, bottom=False, left=False)
+        plt.xlabel("Metric", fontsize=16)
+        ax.set_xticklabels(key_metrics, rotation=90, fontsize=14)
+        plt.ylabel("Diff (%)", fontsize=16)
+        plt.show()
+        st.pyplot(plt)
+
+    with st.beta_expander("Hyperparameters"):
+        st.json(params_diff)
     with st.beta_expander("Improvements"):
-        st.text("Improvements comparing workspace to currently deployed (HEAD)")
-        st.json(diff["metrics"]["improvements"])
+        st.json({metric: value for metric, value in performance_diff.items() if value["diff"] >= 0})
     with st.beta_expander("Regressions"):
-        st.text("Regressions comparing workspace to currently deployed (HEAD)")
-        st.json(diff["metrics"]["regressions"])
+        st.json({metric: value for metric, value in performance_diff.items() if value["diff"] < 0})
 
 elif selected_page == "Inference":
     st.header("Inference")
@@ -293,7 +404,7 @@ st.write("---")
 ## Resources
 
 - 🎓 Lessons: https://madewithml.com/
-- 🐙 Repository: https://github.com/GokuMohandas/applied-ml
-- 📘 Documentation: https://gokumohandas.github.io/applied-ml/
+- 🐙 Repository: https://github.com/GokuMohandas/mlops
+- 📘 Documentation: https://gokumohandas.github.io/mlops/
 - 📬 Subscribe: https://newsletter.madewithml.com
 """

@@ -2,12 +2,14 @@
 # Utility functions.
 
 import json
+import numbers
 import random
 from typing import Dict, List
 from urllib.request import urlopen
 
 import mlflow
 import numpy as np
+import pandas as pd
 import torch
 
 
@@ -98,6 +100,33 @@ def set_device(cuda: bool) -> torch.device:
     if device.type == "cuda":  # pragma: no cover, simple tensor type setting
         torch.set_default_tensor_type("torch.cuda.FloatTensor")
     return device
+
+
+def dict_diff(d_a: Dict, d_b: Dict, d_a_name="a", d_b_name="b") -> Dict:
+    """Differences between two dictionaries with numerical values.
+
+    Args:
+        d_a (Dict): Dictionary with data.
+        d_b (Dict): Dictionary to compare to.
+        d_a_name (str): Name of dict a.
+        d_b_name (str): Name of dict b.
+
+    Returns:
+        Dict: Differences between keys with numerical values.
+    """
+    # Recursively flatten
+    d_a = pd.json_normalize(d_a, sep=".").to_dict(orient="records")[0]
+    d_b = pd.json_normalize(d_b, sep=".").to_dict(orient="records")[0]
+    if d_a.keys() != d_b.keys():
+        raise Exception("Cannot compare these dictionaries because they have different keys.")
+
+    # Compare
+    diff = {}
+    for key in d_a:
+        if isinstance(d_a[key], numbers.Number):
+            diff[key] = {d_a_name: d_a[key], d_b_name: d_b[key], "diff": d_a[key] - d_b[key]}
+
+    return diff
 
 
 def delete_experiment(experiment_name: str):

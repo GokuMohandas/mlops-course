@@ -2,7 +2,7 @@
 <h1><img width="30" src="https://madewithml.com/static/images/rounded_logo.png">&nbsp;<a href="https://madewithml.com/">Made With ML</a></h1>
 Applied ML · MLOps · Production
 <br>
-Join 20K+ developers in learning how to responsibly <a href="https://madewithml.com/about/">deliver value</a> with applied ML.
+Join 20K+ developers in learning how to responsibly <a href="https://madewithml.com/about/">deliver value</a> with ML.
 </div>
 
 <br>
@@ -27,23 +27,23 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td align="center"><b>📈&nbsp; Modeling</b></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/objective/">Objective</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/annotation/">Annotation</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/baselines/">Baselines</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/objective/">Objective</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/annotation/">Annotation</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/baselines/">Baselines</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/solution/">Solution</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/exploratory-data-analysis/">Exploratory data analysis</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/experiment-tracking/">Experiment tracking</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/solution/">Solution</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/exploratory-data-analysis/">Exploratory data analysis</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/evaluation/">Evaluation</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/splitting/">Splitting</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/optimization/">Optimization</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/splitting/">Splitting</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/iteration/">Iteration</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/preprocessing/">Preprocessing</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/iteration/">Iteration</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/preprocessing/">Preprocessing</a></td>
         <td></td>
     </tr>
 </table>
@@ -56,22 +56,22 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td align="center"><b>✅&nbsp; Testing</b></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/organization/">Organization</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/styling/">Styling</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/cli/">CLI</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/testing/">Code</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/organization/">Organization</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/styling/">Styling</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/cli/">CLI</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/packaging/">Packaging</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/makefile/">Makefile</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/api/">API</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/testing/#data">Data</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/packaging/">Packaging</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/makefile/">Makefile</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/api/">API</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/applied-ml/documentation/">Documentation</a></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/logging/">Logging</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/documentation/">Documentation</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/logging/">Logging</a></td>
         <td></td>
-        <td><a href="https://madewithml.com/courses/applied-ml/testing/#models">Models</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/#models">Models</a></td>
     </tr>
 </table>
 
@@ -82,23 +82,28 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td align="center"><b>(cont.)</b></td>
     </tr>
     <tr>
-        <td>Git</td>
+        <td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
         <td>Dashboard</td>
         <td>Feature stores</td>
     </tr>
     <tr>
-        <td>Versioning</td>
+        <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
         <td>CI/CD</td>
         <td>Workflows</td>
     </tr>
     <tr>
-        <td>Docker</td>
+        <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
         <td>Monitoring</td>
-        <td>Active learning</td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/docker/">Docker</a></td>
+        <td></td>
+        <td></td>
     </tr>
 </table>
 
-📆&nbsp; new lesson every week!<br>
+📆&nbsp; New lessons every month!<br>
 <a href="https://newsletter.madewithml.com" target="_blank">Subscribe</a> for our monthly updates on new content.
 
 <br>
@@ -119,7 +124,7 @@ tagifai/
 ├── train.py      - training components
 └── utils.py      - supplementary utilities
 ```
-> Documentation for this application can be found [here](https://gokumohandas.github.io/applied-ml/).
+> Documentation for this application can be found [here](https://gokumohandas.github.io/mlops/).
 
 ## Workflows
 
@@ -160,16 +165,16 @@ source ${venv_name}/bin/activate
 dvc pull
 ```
 
-3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json)
+3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json)
 ```bash
 tagifai optimize \
     --params-fp config/params.json \
     --study-name optimization \
     --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/mlops/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
 
-4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/applied-ml/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/applied-ml/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/mlops/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
     --params-fp config/params.json \
@@ -208,7 +213,7 @@ git push origin main
 ### Docker
 ```bash
 make docker  # docker build -t tagifai:latest -f Dockerfile .
-             # docker run -p 5000:5000 -p 8000:8000 -p 8501:8501 --name tagifai tagifai:latest
+             # docker run -p 5000:5000 --name tagifai tagifai:latest
 ```
 
 ### Application
@@ -246,7 +251,7 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install @jupyterlab/toc
 jupyter lab
 ```
-> You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/applied-ml/blob/main/notebooks/tagifai.ipynb).
+> You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/mlops/blob/main/notebooks/tagifai.ipynb).
 
 ## FAQ
 
@@ -266,7 +271,7 @@ To cite this course, please use:
 @article{madewithml,
     title  = "Applied ML - Made With ML",
     author = "Goku Mohandas",
-    url    = "https://madewithml.com/courses/applied-ml/"
+    url    = "https://madewithml.com/courses/mlops/"
     year   = "2021",
 }
 ```

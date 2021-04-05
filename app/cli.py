@@ -2,7 +2,6 @@
 # Command line interface (CLI) application.
 
 import json
-import numbers
 import tempfile
 import warnings
 from argparse import Namespace
@@ -11,7 +10,6 @@ from typing import Dict, Optional
 
 import mlflow
 import optuna
-import pandas as pd
 import torch
 import typer
 from numpyencoder import NumpyEncoder
@@ -183,85 +181,67 @@ def predict_tags(
 
 
 @app.command()
-def diff(commit_a: str = "workspace", commit_b: str = "head"):  # pragma: no cover
-    """Compare relevant differences (params, metrics) between commits.
-    Inspired by DVC's `dvc metrics diff`but repurposed to
-    display diffs pertinent to our experiments.
+def params(
+    author: str = config.AUTHOR,
+    repo: str = config.REPO,
+    tag: str = "workspace",
+    verbose: bool = True,
+):
+    if tag == "workspace":
+        params = utils.load_dict(filepath=Path(config.MODEL_DIR, "params.json"))
+    else:
+        url = f"https://raw.githubusercontent.com/{author}/{repo}/{tag}/model/params.json"
+        params = utils.load_json_from_url(url=url)
+    if verbose:
+        logger.info(json.dumps(params, indent=2))
+    return params
 
-    Args:
-        commit_a (str, optional): Primary commit. Defaults to "workspace".
-        commit_b (str, optional): Commit to compare to. Defaults to "head".
 
-    Raises:
-        ValueError: Invalid commit.
-    """
-    diffs = {}
-    commits = ["a", "b"]
-    if commit_a.lower() in ("head", "current"):
-        commit_a = "main"
-    if commit_b.lower() in ("head", "current"):
-        commit_b = "main"
+@app.command()
+def performance(
+    author: str = config.AUTHOR,
+    repo: str = config.REPO,
+    tag: str = "workspace",
+    verbose: bool = True,
+):
+    if tag == "workspace":
+        performance = utils.load_dict(filepath=Path(config.MODEL_DIR, "performance.json"))
+    else:
+        url = f"https://raw.githubusercontent.com/{author}/{repo}/{tag}/model/performance.json"
+        performance = utils.load_json_from_url(url=url)
+    if verbose:
+        logger.info(json.dumps(performance, indent=2))
+    return performance
 
-    # Get params
-    params = {"a": {}, "b": {}}
-    for i, commit in enumerate([commit_a, commit_b]):
-        if commit == "workspace":
-            params[commits[i]] = utils.load_dict(filepath=Path(config.CONFIG_DIR, "params.json"))
-            continue
-        params_url = (
-            f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/model/params.json"
-        )
-        params[commits[i]] = utils.load_json_from_url(url=params_url)
 
-    # Parameter differences
-    diffs["params"] = {}
-    for arg in params["a"]:
-        a = params["a"][arg]
-        b = params["b"][arg]
-        if a != b:
-            diffs["params"][arg] = {commit_a: a, commit_b: b}
-    logger.info(f"Parameter differences:\n{json.dumps(diffs['params'], indent=2)}")
+@app.command()
+def diff(
+    author: str = config.AUTHOR,
+    repo: str = config.REPO,
+    tag_a: str = "workspace",
+    tag_b: str = "",
+):  # pragma: no cover, can't be certain what diffs will exist
+    # Tag b
+    if tag_b == "":
+        tags_url = f"https://api.github.com/repos/{author}/{repo}/tags"
+        tag_b = utils.load_json_from_url(url=tags_url)[0]["name"]
+    logger.info(f"Comparing {tag_a} with {tag_b}:")
 
-    # Get metrics
-    metrics = {"a": {}, "b": {}}
-    for i, commit in enumerate([commit_a, commit_b]):
-        if commit == "workspace":
-            metrics[commits[i]] = utils.load_dict(
-                filepath=Path(config.MODEL_DIR, "performance.json")
-            )
-            continue
-        metrics_url = f"https://raw.githubusercontent.com/GokuMohandas/applied-ml/{commit}/model/performance.json"
-        metrics[commits[i]] = utils.load_json_from_url(url=metrics_url)
+    # Params
+    params_a = params(author=author, repo=repo, tag=tag_a, verbose=False)
+    params_b = params(author=author, repo=repo, tag=tag_b, verbose=False)
+    params_diff = utils.dict_diff(d_a=params_a, d_b=params_b, d_a_name=tag_a, d_b_name=tag_b)
+    logger.info(f"Parameter differences: {json.dumps(params_diff, indent=2)}")
 
-    # Recursively flatten
-    metrics_a = pd.json_normalize(metrics["a"], sep=".").to_dict(orient="records")[0]
-    metrics_b = pd.json_normalize(metrics["b"], sep=".").to_dict(orient="records")[0]
-    if metrics_a.keys() != metrics_b.keys():
-        raise Exception("Cannot compare these commits because they have different metrics.")
+    # Performance
+    performance_a = performance(author=author, repo=repo, tag=tag_a, verbose=False)
+    performance_b = performance(author=author, repo=repo, tag=tag_b, verbose=False)
+    performance_diff = utils.dict_diff(
+        d_a=performance_a, d_b=performance_b, d_a_name=tag_a, d_b_name=tag_b
+    )
+    logger.info(f"Performance differences: {json.dumps(performance_diff, indent=2)}")
 
-    # Metric differences
-    diffs["metrics"] = {}
-    diffs["metrics"]["improvements"] = {}
-    diffs["metrics"]["regressions"] = {}
-    for metric in metrics_a:
-        if (
-            (metric in metrics_b)
-            and (metrics_a[metric] != metrics_b[metric])
-            and (isinstance(metrics_a[metric], numbers.Number))
-            and (metric.split(".")[-1] != "num_samples")
-        ):
-            item = {
-                commit_a: metrics_a[metric],
-                commit_b: metrics_b[metric],
-                "diff": metrics_a[metric] - metrics_b[metric],
-            }
-            if item["diff"] >= 0.0:
-                diffs["metrics"]["improvements"][metric] = item
-            else:
-                diffs["metrics"]["regressions"][metric] = item
-    logger.info(f"Metric differences:\n{json.dumps(diffs['metrics'], indent=2)}")
-
-    return diffs
+    return params_diff, performance_diff
 
 
 @app.command()

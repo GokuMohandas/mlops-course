@@ -5,6 +5,7 @@ import tempfile
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from tagifai import utils
 
@@ -43,3 +44,33 @@ def test_set_seed():
     y = np.random.randn(2, 3)
     assert np.array_equal(a, x)
     assert np.array_equal(b, y)
+
+
+@pytest.mark.parametrize(
+    "d_a, d_b, diff",
+    [
+        (
+            {"v1": 1, "v2": 1},
+            {"v1": 1, "v2": 1},
+            {"v1": {"a": 1, "b": 1, "diff": 0}, "v2": {"a": 1, "b": 1, "diff": 0}},
+        ),  # no diff
+        (
+            {"v1": 3, "v2": 3},
+            {"v1": 1, "v2": 1},
+            {"v1": {"a": 3, "b": 1, "diff": 2}, "v2": {"a": 3, "b": 1, "diff": 2}},
+        ),  # diff
+        (
+            {"v1": 3, "v2": "word"},
+            {"v1": 1, "v2": "word"},
+            {"v1": {"a": 3, "b": 1, "diff": 2}},
+        ),  # one numerical
+        ({"v1": "word", "v2": "word"}, {"v1": "word", "v2": "word"}, {}),  # no numerical
+        (
+            {"v1": {"v2": 3}, "v3": 3},
+            {"v1": {"v2": 1}, "v3": 1},
+            {"v1.v2": {"a": 3, "b": 1, "diff": 2}, "v3": {"a": 3, "b": 1, "diff": 2}},
+        ),  # nested
+    ],
+)
+def test_dict_diff(d_a, d_b, diff):
+    assert utils.dict_diff(d_a=d_a, d_b=d_b) == diff

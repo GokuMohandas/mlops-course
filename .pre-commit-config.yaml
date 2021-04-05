@@ -37,6 +37,12 @@ repos:
         args: [--py36-plus]
 - repo: local
   hooks:
+    - id: dvc
+      name: dvc
+      entry: make
+      args: ["dvc"]
+      language: system
+      pass_filenames: false
     - id: test-non-training
       name: test-non-training
       entry: make

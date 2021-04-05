@@ -1,12 +1,12 @@
 # Project information
 site_name: TagifAI
-site_url: https://madewithml.com/#applied-ml
+site_url: https://madewithml.com/#mlops
 site_description: Tag suggestions for projects on Made With ML.
 site_author: Goku Mohandas
 
 # Repository
-repo_url: https://github.com/GokuMohandas/applied-ml
-repo_name: GokuMohandas/applied-ml
+repo_url: https://github.com/GokuMohandas/mlops
+repo_name: GokuMohandas/mlops
 edit_uri: "" #disables edit button
 
 # Copyright
@@ -101,6 +101,8 @@ nav:
       - TagIfAI: index.md
   - Getting started: getting_started.md
   - Reference:
+    - API: app/api.md
+    - CLI: app/cli.md
     - Config: tagifai/config.md
     - Data: tagifai/data.md
     - Models: tagifai/models.md
