@@ -2,7 +2,7 @@
   "seed": 1234,
   "cuda": true,
   "shuffle": true,
-  "num_samples": 512,
+  "subset": 512,
   "min_tag_freq": 60,
   "lower": true,
   "stem": false,
@@ -10,12 +10,13 @@
   "char_level": true,
   "max_filter_size": 3,
   "batch_size": 128,
-  "embedding_dim": 362,
-  "num_filters": 140,
-  "hidden_dim": 199,
-  "dropout_p": 0.48241376059769536,
-  "lr": 0.0003158808006137554,
+  "embedding_dim": 299,
+  "num_filters": 352,
+  "hidden_dim": 188,
+  "dropout_p": 0.5381950149443382,
+  "lr": 0.00041651420265355566,
   "num_epochs": 1,
   "patience": 10,
-  "threshold": 0.09766361862421036
+  "threshold": 0.016858944669365883,
+  "num_samples": 236
 }

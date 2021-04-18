@@ -77,13 +77,13 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 <table>
     <tr>
-        <td align="center"><b>♻️&nbsp; Reproducability</b></td>
+        <td align="center"><b>♻️&nbsp; Reproducibility</b></td>
         <td align="center"><b>🚀&nbsp; Production</b></td>
         <td align="center"><b>(cont.)</b></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
-        <td>Dashboard</td>
+        <td><a href="https://madewithml.com/courses/mlops/dashboard/">Dashboard</a></td>
         <td>Feature stores</td>
     </tr>
     <tr>
@@ -178,7 +178,7 @@ tagifai optimize \
 ```bash
 tagifai train-model \
     --params-fp config/params.json \
-    -- model-dir model \
+    --model-dir model \
     --experiment-name best \
     --run-name model
 ```
@@ -192,20 +192,16 @@ make app env="dev"  # run API and test as well
 6. View improvements
 Once you're done training the best model using the current data version, best hyperparameters, etc., we can view performance difference.
 ```bash
-tagifai diff --commit-a workspace --commit-b HEAD
+tagifai diff
 ```
 
-7. Push versioned data and model artifacts.
-```
-make dvc
-```
-
-8. Commit to git
+7. Commit to git
 This will clean and update versioned assets (data, experiments), run tests, styling, etc.
 ```bash
 git add .
 git commit -m ""
-git push origin main
+git tag -a <TAG_NAME> -m ""
+git push origin <BRANCH_NAME>
 ```
 
 ## Commands

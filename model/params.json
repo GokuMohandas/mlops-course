@@ -2,7 +2,7 @@
     "seed": 1234,
     "cuda": true,
     "shuffle": true,
-    "num_samples": null,
+    "subset": null,
     "min_tag_freq": 30,
     "lower": true,
     "stem": false,
@@ -17,5 +17,6 @@
     "lr": 0.0004479615733949203,
     "num_epochs": 200,
     "patience": 10,
-    "threshold": 0.32731616497039795
+    "threshold": 0.32731616497039795,
+    "num_samples": 2032
 }

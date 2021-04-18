@@ -5,6 +5,7 @@ help:
 	@echo "install            : installs requirements."
 	@echo "install-dev        : installs development requirements."
 	@echo "install-test       : installs test requirements."
+	@echo "install-docs       : installs docs requirements."
 	@echo "venv               : set up the virtual environment for development"
 	@echo "app                : launches FastAPI app with uvicorn worker"
 	@echo "app-prod           : launches FastAPI app with uvicorn workers managed by guincorn"
@@ -28,6 +29,10 @@ install-dev:
 .PHONY: install-test
 install-test:
 	python -m pip install -e ".[test]" --no-cache-dir
+
+.PHONY: install-docs
+install-docs:
+	python -m pip install -e ".[docs]" --no-cache-dir
 
 venv:
 	python3 -m venv ${name}
@@ -66,9 +71,6 @@ streamlit:
 dvc:
 	dvc add data/projects.json
 	dvc add data/tags.json
-	dvc add model/label_encoder.json
-	dvc add model/tokenizer.json
-	dvc add model/model.pt
 	dvc push
 
 # Tests
@@ -94,7 +96,7 @@ style:
 
 # Cleaning
 .PHONY: clean
-clean:
+clean: style
 	find . -type f -name "*.DS_Store" -ls -delete
 	find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
 	find . | grep -E ".pytest_cache" | xargs rm -rf

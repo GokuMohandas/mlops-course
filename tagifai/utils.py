@@ -40,7 +40,7 @@ def load_dict(filepath: str) -> Dict:
     return d
 
 
-def save_dict(d: Dict, filepath: str) -> None:
+def save_dict(d: Dict, filepath: str, cls=None, sortkeys: bool = False) -> None:
     """Save a dictionary to a specific location.
 
     Warning:
@@ -49,9 +49,11 @@ def save_dict(d: Dict, filepath: str) -> None:
     Args:
         d (Dict): dictionary to save.
         filepath (str): location to save the dictionary to as a JSON file.
+        cls (optional): encoder to use on dict data. Defaults to None.
+        sortkeys (bool, optional): sort keys in dict alphabetically. Defaults to False.
     """
     with open(filepath, "w") as fp:
-        json.dump(d, indent=2, sort_keys=False, fp=fp)
+        json.dump(d, indent=2, fp=fp, cls=cls, sort_keys=sortkeys)
 
 
 def list_to_dict(list_of_dicts: List, key: str) -> Dict:
@@ -73,7 +75,7 @@ def list_to_dict(list_of_dicts: List, key: str) -> Dict:
 
 
 def set_seed(seed: int = 1234) -> None:
-    """Set seed for reproducability.
+    """Set seed for reproducibility.
 
     Args:
         seed (int, optional): number to use as the seed. Defaults to 1234.
@@ -123,7 +125,7 @@ def dict_diff(d_a: Dict, d_b: Dict, d_a_name="a", d_b_name="b") -> Dict:
     # Compare
     diff = {}
     for key in d_a:
-        if isinstance(d_a[key], numbers.Number):
+        if isinstance(d_a[key], numbers.Number) and isinstance(d_b[key], numbers.Number):
             diff[key] = {d_a_name: d_a[key], d_b_name: d_b[key], "diff": d_a[key] - d_b[key]}
 
     return diff

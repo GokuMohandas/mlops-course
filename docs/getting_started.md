@@ -58,13 +58,13 @@ tagifai train-model \
 5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
 ```bash
 tagifai predict-tags --text "Transfer learning with BERT"  # test with CLI app
-make app env="dev"  # run API and test if you want
+make app env="dev"  # run API and test as well
 ```
 
 6. View improvements
 Once you're done training the best model using the current data version, best hyperparameters, etc., we can view performance difference.
 ```bash
-tagifai diff --commit-a workspace --commit-b HEAD
+tagifai diff
 ```
 
 7. Commit to git
@@ -72,6 +72,6 @@ This will clean and update versioned assets (data, experiments), run tests, styl
 ```bash
 git add .
 git commit -m ""
-<precommit (dvc, tests, style, clean, etc.) will execute>
-git push origin main
+git tag -a <TAG_NAME> -m ""
+git push origin <BRANCH_NAME>
 ```
