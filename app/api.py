@@ -5,6 +5,7 @@
 from datetime import datetime
 from functools import wraps
 from http import HTTPStatus
+from pathlib import Path
 from typing import Dict, Optional
 
 from fastapi import FastAPI, Request
@@ -24,7 +25,8 @@ app = FastAPI(
 @app.on_event("startup")
 def load_artifacts():
     global artifacts
-    artifacts = main.load_artifacts(model_dir=config.MODEL_DIR)
+    run_id = open(Path(config.MODEL_DIR, "run_id.txt")).read()
+    artifacts = main.load_artifacts(run_id=run_id)
     logger.info("Ready for inference!")
 
 

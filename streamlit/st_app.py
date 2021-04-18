@@ -51,8 +51,8 @@ def get_diff(author=config.AUTHOR, repo=config.REPO, tag_a="workspace", tag_b=""
 
 
 @st.cache
-def get_artifacts(model_dir):
-    artifacts = main.load_artifacts(model_dir=model_dir)
+def get_artifacts(run_id):
+    artifacts = main.load_artifacts(run_id=run_id)
     return artifacts
 
 
@@ -193,12 +193,13 @@ if selected_page == "Data":
     # Preprocessing
     st.write("---")
     st.subheader("Preprocessing")
+    text = st.text_input("Input text", "Conditional generation using Variational Autoencoders.")
     filters = st.text_input("filters", "[!\"'#$%&()*+,-./:;<=>?@\\[]^_`{|}~]")
     lower = st.checkbox("lower", True)
     stem = st.checkbox("stem", False)
-    text = st.text_input("Input text", "Conditional generation using Variational Autoencoders.")
     preprocessed_text = data.preprocess(text=text, lower=lower, stem=stem, filters=filters)
-    st.write("Preprocessed text", preprocessed_text)
+    st.text("Preprocessed text:")
+    st.write(preprocessed_text)
 
 elif selected_page == "Performance":
     st.header("Performance")
@@ -223,45 +224,6 @@ elif selected_page == "Performance":
         key_metrics_over_time[metric] = {}
         for tag in tags:
             key_metrics_over_time[metric][tag] = tags[tag]["performance"][metric]
-    key_metrics_over_time = {
-        "overall.f1": {
-            "workspace": 0.7221603372348584,
-            "v0.3": 0.6774448998627966,
-            "v0.2": 0.6674448998627966,
-            "v0.1": 0.6174448998627966,
-        },
-        "overall.precision": {
-            "workspace": 0.893033473244977,
-            "v0.3": 0.8450380552475824,
-            "v0.2": 0.8050380552475824,
-            "v0.1": 0.7650380552475824,
-        },
-        "overall.recall": {
-            "workspace": 0.657872340425532,
-            "v0.3": 0.623411513859275,
-            "v0.2": 0.603411513859275,
-            "v0.1": 0.563411513859275,
-        },
-        "behavioral.score": {"workspace": 1, "v0.3": 0.88, "v0.2": 1, "v0.1": 0.9},
-        "slices.overall.f1": {
-            "workspace": 0.8451948051948052,
-            "v0.3": 0.7995604395604396,
-            "v0.2": 0.7395604395604396,
-            "v0.1": 0.7095604395604396,
-        },
-        "slices.overall.precision": {
-            "workspace": 0.9547619047619048,
-            "v0.3": 0.9347619047619049,
-            "v0.2": 0.9047619047619049,
-            "v0.1": 0.8547619047619049,
-        },
-        "slices.overall.recall": {
-            "workspace": 0.8257142857142857,
-            "v0.3": 0.6889324960753532,
-            "v0.2": 0.6389324960753532,
-            "v0.1": 0.5889324960753532,
-        },
-    }
     st.line_chart(key_metrics_over_time)
 
     # Compare two performance
@@ -303,7 +265,7 @@ elif selected_page == "Performance":
             )
         sns.despine(ax=ax, bottom=False, left=False)
         plt.xlabel("Metric", fontsize=16)
-        ax.set_xticklabels(key_metrics, rotation=90, fontsize=14)
+        ax.set_xticklabels(key_metrics, rotation=30, fontsize=10)
         plt.ylabel("Diff (%)", fontsize=16)
         plt.show()
         st.pyplot(plt)
@@ -330,9 +292,6 @@ elif selected_page == "Inspection":
     st.write(
         "We're going to inspect the TP, FP and FN samples across our different tags. It's a great way to catch issues with labeling (FP), weaknesses (FN), etc."
     )
-    st.info(
-        "Ideally we would connect an inspection system like this with our annotation pipelines so any changes can be reviewed and incorporated."
-    )
 
     # Load data
     projects_fp = Path(config.DATA_DIR, "projects.json")
@@ -342,7 +301,8 @@ elif selected_page == "Inspection":
     df = pd.DataFrame(projects)
 
     # Get performance
-    artifacts = get_artifacts(model_dir=config.MODEL_DIR)
+    run_id = open(Path(config.MODEL_DIR, "run_id.txt")).read()
+    artifacts = get_artifacts(run_id=run_id)
     label_encoder = artifacts["label_encoder"]
     y_true, y_pred, performance, sorted_tags, df = evaluate_df(
         df=df,
@@ -392,7 +352,18 @@ elif selected_page == "Inspection":
                 st.text("Predicted")
                 st.write(label_encoder.decode([y_pred[i]])[0])
     st.write("\n")
-    st.warning("Looking at false positives is a great way to find mislabeled data.")
+    st.warning(
+        "Be careful not to make decisions based on predicted probabilities before [calibrating](https://arxiv.org/abs/1706.04599) them to reliably use as measures of confidence."
+    )
+    """
+    ### Extensions
+
+    - Use false positives to identify potentially mislabeled data.
+    - Connect inspection pipelines with annotation systems so that changes to the data can be reviewed and incorporated.
+    - Inspect FP / FN samples by [estimating training data influences (TracIn)](https://arxiv.org/abs/2002.08484) on their predictions.
+    - Inspect the trained model's behavior under various conditions using the [WhatIf](https://pair-code.github.io/what-if-tool/) tool.
+    """
+
 
 else:
     st.text("Please select a valid page option from above...")

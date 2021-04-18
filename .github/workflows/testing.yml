@@ -1,15 +1,13 @@
-name: documentation
+name: testing
 on:
   push:
     branches:
-    - master
     - main
   pull_request:
     branches:
-    - master
     - main
 jobs:
-  build-docs:
+  test-code:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -26,6 +24,6 @@ jobs:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
       - name: Install dependencies
-        run: make install-docs
-      - name: Deploy documentation
-        run: mkdocs gh-deploy --force
+        run: make install-test
+      - name: Execute tests
+        run: pytest tests/tagifai --cov tagifai --cov-report html

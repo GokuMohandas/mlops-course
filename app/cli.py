@@ -87,8 +87,7 @@ def optimize(
     logger.info(f"Best value (f1): {study.best_trial.value}")
     params = {**params.__dict__, **study.best_trial.params}
     params["threshold"] = study.best_trial.user_attrs["threshold"]
-    with open(params_fp, "w") as fp:
-        json.dump(params, fp=fp, indent=2, cls=NumpyEncoder)
+    utils.save_dict(params, params_fp, cls=NumpyEncoder)
     logger.info(json.dumps(params, indent=2, cls=NumpyEncoder))
 
 
@@ -113,6 +112,8 @@ def train_model(
     # Start run
     mlflow.set_experiment(experiment_name=experiment_name)
     with mlflow.start_run(run_name=run_name):
+        run_id = mlflow.active_run().info.run_id
+
         # Train
         artifacts = main.run(params=params)
 
@@ -135,26 +136,24 @@ def train_model(
 
         # Log artifacts
         with tempfile.TemporaryDirectory() as dp:
+            utils.save_dict(vars(artifacts["params"]), Path(dp, "params.json"), cls=NumpyEncoder)
+            utils.save_dict(performance, Path(dp, "performance.json"))
             artifacts["label_encoder"].save(Path(dp, "label_encoder.json"))
             artifacts["tokenizer"].save(Path(dp, "tokenizer.json"))
             torch.save(artifacts["model"].state_dict(), Path(dp, "model.pt"))
-            utils.save_dict(performance, Path(dp, "performance.json"))
             mlflow.log_artifacts(dp)
         mlflow.log_params(vars(artifacts["params"]))
 
     # Save for repo
-    with open(Path(model_dir, "params.json"), "w") as fp:
-        json.dump(vars(params), fp=fp, indent=2, cls=NumpyEncoder)
-    artifacts["label_encoder"].save(Path(model_dir, "label_encoder.json"))
-    artifacts["tokenizer"].save(Path(model_dir, "tokenizer.json"))
-    torch.save(artifacts["model"].state_dict(), Path(model_dir, "model.pt"))
+    open(Path(model_dir, "run_id.txt"), "w").write(run_id)
+    utils.save_dict(vars(params), Path(model_dir, "params.json"), cls=NumpyEncoder)
     utils.save_dict(performance, Path(model_dir, "performance.json"))
 
 
 @app.command()
 def predict_tags(
     text: Optional[str] = "Transfer learning with BERT for self-supervised learning",
-    model_dir: Path = config.MODEL_DIR,
+    run_id: str = open(Path(config.MODEL_DIR, "run_id.txt")).read(),
 ) -> Dict:
     """Predict tags for a give input text using a trained model.
 
@@ -164,7 +163,7 @@ def predict_tags(
     Args:
         text (str, optional): Input text to predict tags for.
                               Defaults to "Transfer learning with BERT for self-supervised learning".
-        model_dir (Path): location of model artifacts. Defaults to config.MODEL_DIR.
+        run_id (str): ID of the model run to load artifacts. Defaults to run ID in config.MODEL_DIR.
 
     Raises:
         ValueError: Run id doesn't exist in experiment.
@@ -173,7 +172,7 @@ def predict_tags(
         Predicted tags for input text.
     """
     # Predict
-    artifacts = main.load_artifacts(model_dir=model_dir)
+    artifacts = main.load_artifacts(run_id=run_id)
     prediction = predict.predict(texts=[text], artifacts=artifacts)
     logger.info(json.dumps(prediction, indent=2))
 

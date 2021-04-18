@@ -15,16 +15,18 @@ from tagifai import config, data, utils
 
 @pytest.fixture
 def tags():
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    tags_dict = utils.list_to_dict(utils.load_dict(filepath=tags_fp), key="tag")
-    tags = list(tags_dict.keys())
+    tags_list = utils.load_json_from_url(
+        url="https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/tags.json"
+    )
+    tags = [item["tag"] for item in tags_list]
     return tags
 
 
 @pytest.fixture
 def df():
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    projects_dict = utils.load_dict(filepath=projects_fp)
+    projects_dict = utils.load_json_from_url(
+        url="https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/projects.json"
+    )
     df = pd.DataFrame(projects_dict)
     return df
 

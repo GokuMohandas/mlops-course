@@ -7,6 +7,7 @@ from argparse import Namespace
 from pathlib import Path
 from typing import Dict
 
+import mlflow
 import numpy as np
 import optuna
 import pandas as pd
@@ -41,7 +42,7 @@ def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     df = pd.DataFrame(projects)
     if params.shuffle:
         df = df.sample(frac=1).reset_index(drop=True)
-    df = df[: params.num_samples]  # None = all samples
+    df = df[: params.subset]  # None = all samples
 
     # 4. Clean data
     df, tags_above_freq, tags_below_freq = data.prepare(
@@ -50,6 +51,7 @@ def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         exclude=config.EXCLUDED_TAGS,
         min_tag_freq=params.min_tag_freq,
     )
+    params.num_samples = len(df)
 
     # 5. Preprocess data
     df.text = df.text.apply(data.preprocess, lower=params.lower, stem=params.stem)
@@ -158,24 +160,23 @@ def objective(params: Namespace, trial: optuna.trial._trial.Trial) -> float:
     return performance["overall"]["f1"]
 
 
-def load_artifacts(
-    model_dir: Path = config.MODEL_DIR, device: torch.device = torch.device("cpu")
-) -> Dict:
+def load_artifacts(run_id: str, device: torch.device = torch.device("cpu")) -> Dict:
     """Load artifacts for current model.
 
     Args:
-        model_dir (Path): location of model artifacts. Defaults to config.MODEL_DIR.
+        run_id (str): ID of the model run to load artifacts. Defaults to run ID in config.MODEL_DIR.
         device (torch.device): Device to run model on. Defaults to CPU.
 
     Returns:
         Artifacts needed for inference.
     """
     # Load artifacts
-    params = Namespace(**utils.load_dict(filepath=Path(model_dir, "params.json")))
-    label_encoder = data.MultiLabelLabelEncoder.load(fp=Path(model_dir, "label_encoder.json"))
-    tokenizer = data.Tokenizer.load(fp=Path(model_dir, "tokenizer.json"))
-    model_state = torch.load(Path(model_dir, "model.pt"), map_location=device)
-    performance = utils.load_dict(filepath=Path(model_dir, "performance.json"))
+    artifact_uri = mlflow.get_run(run_id=run_id).info.artifact_uri.split("file://")[-1]
+    params = Namespace(**utils.load_dict(filepath=Path(artifact_uri, "params.json")))
+    label_encoder = data.MultiLabelLabelEncoder.load(fp=Path(artifact_uri, "label_encoder.json"))
+    tokenizer = data.Tokenizer.load(fp=Path(artifact_uri, "tokenizer.json"))
+    model_state = torch.load(Path(artifact_uri, "model.pt"), map_location=device)
+    performance = utils.load_dict(filepath=Path(artifact_uri, "performance.json"))
 
     # Initialize model
     model = models.initialize_model(
