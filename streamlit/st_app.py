@@ -375,7 +375,7 @@ st.write("---")
 ## Resources
 
 - 🎓 Lessons: https://madewithml.com/
-- 🐙 Repository: https://github.com/GokuMohandas/mlops
+- 🐙 Repository: https://github.com/GokuMohandas/MLOps
 - 📘 Documentation: https://gokumohandas.github.io/mlops/
 - 📬 Subscribe: https://newsletter.madewithml.com
 """

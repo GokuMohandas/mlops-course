@@ -35,9 +35,9 @@ def download_data():
     """
     # Download data
     projects_url = (
-        "https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/projects.json"
+        "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/projects.json"
     )
-    tags_url = "https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/tags.json"
+    tags_url = "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/tags.json"
     projects = utils.load_json_from_url(url=projects_url)
     tags = utils.load_json_from_url(url=tags_url)
 

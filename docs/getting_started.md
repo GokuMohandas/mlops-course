@@ -37,16 +37,16 @@ dvc pull data/tags.json
 dvc pull data/projects.json
 ```
 
-3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json)
+3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json)
 ```bash
 tagifai optimize \
     --params-fp config/params.json \
     --study-name optimization \
     --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/mlops/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/MLOps/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
 
-4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/mlops/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json) and publish metrics to [metrics/performance.json](https://github.com/GokuMohandas/MLOps/blob/main/metrics/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
     --params-fp config/params.json \

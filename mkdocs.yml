@@ -1,12 +1,12 @@
 # Project information
-site_name: TagifAI
+site_name: TagIfAI
 site_url: https://madewithml.com/#mlops
 site_description: Tag suggestions for projects on Made With ML.
 site_author: Goku Mohandas
 
 # Repository
-repo_url: https://github.com/GokuMohandas/mlops
-repo_name: GokuMohandas/mlops
+repo_url: https://github.com/GokuMohandas/MLOps
+repo_name: GokuMohandas/MLOps
 edit_uri: "" #disables edit button
 
 # Copyright

@@ -15,13 +15,13 @@ repos:
     -   id: detect-aws-credentials
     -   id: detect-private-key
 -   repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 21.4b0
     hooks:
     -   id: black
         args: []
         files: .
 -   repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.9.0
+    rev: 3.9.1
     hooks:
     -   id: flake8
 -   repo: https://github.com/PyCQA/isort
@@ -31,7 +31,7 @@ repos:
         args: []
         files: .
 -   repo: https://github.com/asottile/pyupgrade  # update python syntax
-    rev: v2.11.0
+    rev: v2.13.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]

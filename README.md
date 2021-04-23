@@ -9,14 +9,14 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 <div align="center">
     <a target="_blank" href="https://newsletter.madewithml.com"><img src="https://img.shields.io/badge/Subscribe-20K-brightgreen"></a>&nbsp;
-    <a target="_blank" href="https://github.com/GokuMohandas/madewithml"><img src="https://img.shields.io/github/stars/GokuMohandas/madewithml.svg?style=social&label=Star"></a>&nbsp;
+    <a target="_blank" href="https://github.com/GokuMohandas/MadeWithML"><img src="https://img.shields.io/github/stars/GokuMohandas/MadeWithML.svg?style=social&label=Star"></a>&nbsp;
     <a target="_blank" href="https://www.linkedin.com/in/goku"><img src="https://img.shields.io/badge/style--5eba00.svg?label=LinkedIn&logo=linkedin&style=social"></a>&nbsp;
     <a target="_blank" href="https://twitter.com/GokuMohandas"><img src="https://img.shields.io/twitter/follow/GokuMohandas.svg?label=Follow&style=social"></a>
 </div>
 
 <br>
 
-> If you need refresh yourself on ML algorithms, check out our [ML Foundations](https://github.com/GokuMohandas/madewithml) repository (🔥&nbsp; Among the <a href="https://github.com/topics/deep-learning" target="_blank">top ML</a> repositories on GitHub)
+> If you need refresh yourself on ML algorithms, check out our [ML Foundations](https://github.com/GokuMohandas/MadeWithML) repository (🔥&nbsp; Among the <a href="https://github.com/topics/deep-learning" target="_blank">top ML</a> repositories on GitHub)
 
 <br>
 
@@ -88,13 +88,13 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
-        <td>CI/CD</td>
-        <td>Workflows</td>
+        <td><a href="https://madewithml.com/courses/mlops/cicd/">CI/CD</a></td>
+        <td>Deployment</td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
+        <td>Pipelines</td>
         <td>Monitoring</td>
-        <td></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/docker/">Docker</a></td>
@@ -165,16 +165,16 @@ source ${venv_name}/bin/activate
 dvc pull
 ```
 
-3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json)
+3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json)
 ```bash
 tagifai optimize \
     --params-fp config/params.json \
     --study-name optimization \
     --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/mlops/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
+> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/MLOps/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
 
-4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/mlops/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/mlops/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/MLOps/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
     --params-fp config/params.json \
@@ -247,7 +247,7 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager
 jupyter labextension install @jupyterlab/toc
 jupyter lab
 ```
-> You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/mlops/blob/main/notebooks/tagifai.ipynb).
+> You can also run all notebooks on [Google Colab](https://colab.research.google.com/github/GokuMohandas/MLOps/blob/main/notebooks/tagifai.ipynb).
 
 ## FAQ
 

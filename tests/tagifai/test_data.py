@@ -16,7 +16,7 @@ from tagifai import config, data, utils
 @pytest.fixture
 def tags():
     tags_list = utils.load_json_from_url(
-        url="https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/tags.json"
+        url="https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/tags.json"
     )
     tags = [item["tag"] for item in tags_list]
     return tags
@@ -25,7 +25,7 @@ def tags():
 @pytest.fixture
 def df():
     projects_dict = utils.load_json_from_url(
-        url="https://raw.githubusercontent.com/GokuMohandas/madewithml/main/datasets/projects.json"
+        url="https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/projects.json"
     )
     df = pd.DataFrame(projects_dict)
     return df
