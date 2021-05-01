@@ -16,7 +16,7 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 
 <br>
 
-> If you need refresh yourself on ML algorithms, check out our [ML Foundations](https://github.com/GokuMohandas/MadeWithML) repository (🔥&nbsp; Among the <a href="https://github.com/topics/deep-learning" target="_blank">top ML</a> repositories on GitHub)
+> If you need refresh yourself on ML algorithms, check out our [Made Wit ML](https://github.com/GokuMohandas/MadeWithML) repository (🔥&nbsp; Among the <a href="https://github.com/topics/deep-learning" target="_blank">top ML</a> repositories on GitHub)
 
 <br>
 
@@ -28,22 +28,27 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/objective/">Objective</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/annotation/">Annotation</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/labeling/">Labeling</a></td>
         <td><a href="https://madewithml.com/courses/mlops/baselines/">Baselines</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/solution/">Solution</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/preprocessing/">Preprocessing</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/iteration/">Iteration</a></td>
         <td><a href="https://madewithml.com/courses/mlops/exploratory-data-analysis/">Exploratory data analysis</a></td>
         <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
+        <td></td>
         <td><a href="https://madewithml.com/courses/mlops/splitting/">Splitting</a></td>
         <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/iteration/">Iteration</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/preprocessing/">Preprocessing</a></td>
+        <td></td>
+        <td><a href="https://madewithml.com/courses/mlops/augmentation/">Augmentation</a></td>
         <td></td>
     </tr>
 </table>
@@ -52,19 +57,19 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td align="center"><b>📝&nbsp; Scripting</b></td>
         <td align="center"><b>(cont.)</b></td>
-        <td align="center"><b>📦&nbsp; Application</b></td>
+        <td align="center"><b>📦&nbsp; Interfaces</b></td>
         <td align="center"><b>✅&nbsp; Testing</b></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/organization/">Organization</a></td>
         <td><a href="https://madewithml.com/courses/mlops/styling/">Styling</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/cli/">CLI</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/cli/">Command-line</a></td>
         <td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/packaging/">Packaging</a></td>
         <td><a href="https://madewithml.com/courses/mlops/makefile/">Makefile</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/api/">API</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/api/">RESTful API</a></td>
         <td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
     </tr>
     <tr>
@@ -84,17 +89,17 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
         <td><a href="https://madewithml.com/courses/mlops/dashboard/">Dashboard</a></td>
-        <td>Feature stores</td>
-    </tr>
-    <tr>
-        <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/cicd/">CI/CD</a></td>
         <td>Deployment</td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
-        <td>Pipelines</td>
+        <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/cicd/">CI/CD workflows</a></td>
         <td>Monitoring</td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
+        <td>Feature stores</td>
+        <td></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/docker/">Docker</a></td>

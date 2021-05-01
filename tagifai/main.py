@@ -44,7 +44,7 @@ def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
         df = df.sample(frac=1).reset_index(drop=True)
     df = df[: params.subset]  # None = all samples
 
-    # 4. Clean data
+    # 4. Prepare data (feature engineering, filter, clean)
     df, tags_above_freq, tags_below_freq = data.prepare(
         df=df,
         include=list(tags_dict.keys()),

@@ -25,7 +25,7 @@ class CNN(nn.Module):
         """A [convolutional neural network](https://madewithml.com/courses/ml-foundations/convolutional-neural-networks/){:target="_blank"} architecture
         created for natural language processing tasks where filters convolve across the given text inputs.
 
-        ![text CNN](https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/images/ml-foundations/embeddings/model.png)
+        ![text CNN](https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/images/basics/embeddings/model.png)
 
         Usage:
 
