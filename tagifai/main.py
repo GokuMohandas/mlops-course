@@ -18,112 +18,37 @@ from tagifai import config, data, eval, models, train, utils
 from tagifai.config import logger
 
 
-def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
-    """Operations for training.
+def load_artifacts(run_id: str, device: torch.device = torch.device("cpu")) -> Dict:
+    """Load artifacts for current model.
 
     Args:
-        params (Namespace): Input parameters for operations.
-        trial (optuna.trial._trial.Trail, optional): Optuna optimization trial. Defaults to None.
+        run_id (str): ID of the model run to load artifacts. Defaults to run ID in config.MODEL_DIR.
+        device (torch.device): Device to run model on. Defaults to CPU.
 
     Returns:
-        Artifacts to save and load for later.
+        Artifacts needed for inference.
     """
-    # 1. Set seed
-    utils.set_seed(seed=params.seed)
+    # Load artifacts
+    artifact_uri = mlflow.get_run(run_id=run_id).info.artifact_uri.split("file://")[-1]
+    params = Namespace(**utils.load_dict(filepath=Path(artifact_uri, "params.json")))
+    label_encoder = data.MultiLabelLabelEncoder.load(fp=Path(artifact_uri, "label_encoder.json"))
+    tokenizer = data.Tokenizer.load(fp=Path(artifact_uri, "tokenizer.json"))
+    model_state = torch.load(Path(artifact_uri, "model.pt"), map_location=device)
+    performance = utils.load_dict(filepath=Path(artifact_uri, "performance.json"))
 
-    # 2. Set device
-    device = utils.set_device(cuda=params.cuda)
-
-    # 3. Load data
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    projects = utils.load_dict(filepath=projects_fp)
-    tags_dict = utils.list_to_dict(utils.load_dict(filepath=tags_fp), key="tag")
-    df = pd.DataFrame(projects)
-    if params.shuffle:
-        df = df.sample(frac=1).reset_index(drop=True)
-    df = df[: params.subset]  # None = all samples
-
-    # 4. Prepare data (feature engineering, filter, clean)
-    df, tags_above_freq, tags_below_freq = data.prepare(
-        df=df,
-        include=list(tags_dict.keys()),
-        exclude=config.EXCLUDED_TAGS,
-        min_tag_freq=params.min_tag_freq,
-    )
-    params.num_samples = len(df)
-
-    # 5. Preprocess data
-    df.text = df.text.apply(data.preprocess, lower=params.lower, stem=params.stem)
-
-    # 6. Encode labels
-    labels = df.tags
-    label_encoder = data.MultiLabelLabelEncoder()
-    label_encoder.fit(labels)
-    y = label_encoder.encode(labels)
-
-    # Class weights
-    all_tags = list(itertools.chain.from_iterable(labels.values))
-    counts = np.bincount([label_encoder.class_to_index[class_] for class_ in all_tags])
-    class_weights = {i: 1.0 / count for i, count in enumerate(counts)}
-
-    # 7. Split data
-    utils.set_seed(seed=params.seed)  # needed for skmultilearn
-    X = df.text.to_numpy()
-    X_train, X_, y_train, y_ = data.iterative_train_test_split(
-        X=X, y=y, train_size=params.train_size
-    )
-    X_val, X_test, y_val, y_test = data.iterative_train_test_split(X=X_, y=y_, train_size=0.5)
-    test_df = pd.DataFrame({"text": X_test, "tags": label_encoder.decode(y_test)})
-
-    # 8. Tokenize inputs
-    tokenizer = data.Tokenizer(char_level=params.char_level)
-    tokenizer.fit_on_texts(texts=X_train)
-    X_train = np.array(tokenizer.texts_to_sequences(X_train), dtype=object)
-    X_val = np.array(tokenizer.texts_to_sequences(X_val), dtype=object)
-    X_test = np.array(tokenizer.texts_to_sequences(X_test), dtype=object)
-
-    # 9. Create dataloaders
-    train_dataset = data.CNNTextDataset(
-        X=X_train, y=y_train, max_filter_size=params.max_filter_size
-    )
-    val_dataset = data.CNNTextDataset(X=X_val, y=y_val, max_filter_size=params.max_filter_size)
-    train_dataloader = train_dataset.create_dataloader(batch_size=params.batch_size)
-    val_dataloader = val_dataset.create_dataloader(batch_size=params.batch_size)
-
-    # 10. Initialize model
+    # Initialize model
     model = models.initialize_model(
-        params=params,
-        vocab_size=len(tokenizer),
-        num_classes=len(label_encoder),
-        device=device,
+        params=params, vocab_size=len(tokenizer), num_classes=len(label_encoder)
     )
+    model.load_state_dict(model_state)
 
-    # 11. Train model
-    logger.info(f"Parameters: {json.dumps(params.__dict__, indent=2, cls=NumpyEncoder)}")
-    params, model, loss = train.train(
-        params=params,
-        train_dataloader=train_dataloader,
-        val_dataloader=val_dataloader,
-        model=model,
-        device=device,
-        class_weights=class_weights,
-        trial=trial,
-    )
-
-    # 12. Evaluate model
-    artifacts = {
+    return {
         "params": params,
         "label_encoder": label_encoder,
         "tokenizer": tokenizer,
         "model": model,
-        "loss": loss,
+        "performance": performance,
     }
-    device = torch.device("cpu")
-    y_true, y_pred, performance = eval.evaluate(df=test_df, artifacts=artifacts)
-    artifacts["performance"] = performance
-
-    return artifacts
 
 
 def objective(params: Namespace, trial: optuna.trial._trial.Trial) -> float:
@@ -160,34 +85,107 @@ def objective(params: Namespace, trial: optuna.trial._trial.Trial) -> float:
     return performance["overall"]["f1"]
 
 
-def load_artifacts(run_id: str, device: torch.device = torch.device("cpu")) -> Dict:
-    """Load artifacts for current model.
+def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
+    """Operations for training.
 
     Args:
-        run_id (str): ID of the model run to load artifacts. Defaults to run ID in config.MODEL_DIR.
-        device (torch.device): Device to run model on. Defaults to CPU.
+        params (Namespace): Input parameters for operations.
+        trial (optuna.trial._trial.Trail, optional): Optuna optimization trial. Defaults to None.
 
     Returns:
-        Artifacts needed for inference.
+        Artifacts to save and load for later.
     """
-    # Load artifacts
-    artifact_uri = mlflow.get_run(run_id=run_id).info.artifact_uri.split("file://")[-1]
-    params = Namespace(**utils.load_dict(filepath=Path(artifact_uri, "params.json")))
-    label_encoder = data.MultiLabelLabelEncoder.load(fp=Path(artifact_uri, "label_encoder.json"))
-    tokenizer = data.Tokenizer.load(fp=Path(artifact_uri, "tokenizer.json"))
-    model_state = torch.load(Path(artifact_uri, "model.pt"), map_location=device)
-    performance = utils.load_dict(filepath=Path(artifact_uri, "performance.json"))
+    # Set up
+    utils.set_seed(seed=params.seed)
+    device = utils.set_device(cuda=params.cuda)
+
+    # Load data
+    projects_fp = Path(config.DATA_DIR, "projects.json")
+    tags_fp = Path(config.DATA_DIR, "tags.json")
+    projects = utils.load_dict(filepath=projects_fp)
+    tags_dict = utils.list_to_dict(utils.load_dict(filepath=tags_fp), key="tag")
+    df = pd.DataFrame(projects)
+    if params.shuffle:
+        df = df.sample(frac=1).reset_index(drop=True)
+    df = df[: params.subset]  # None = all samples
+
+    # Prepare data (feature engineering, filter, clean)
+    df, tags_above_freq, tags_below_freq = data.prepare(
+        df=df,
+        include=list(tags_dict.keys()),
+        exclude=config.EXCLUDED_TAGS,
+        min_tag_freq=params.min_tag_freq,
+    )
+    params.num_samples = len(df)
+
+    # Preprocess data
+    df.text = df.text.apply(data.preprocess, lower=params.lower, stem=params.stem)
+
+    # Encode labels
+    labels = df.tags
+    label_encoder = data.MultiLabelLabelEncoder()
+    label_encoder.fit(labels)
+    y = label_encoder.encode(labels)
+
+    # Class weights
+    all_tags = list(itertools.chain.from_iterable(labels.values))
+    counts = np.bincount([label_encoder.class_to_index[class_] for class_ in all_tags])
+    class_weights = {i: 1.0 / count for i, count in enumerate(counts)}
+
+    # Split data
+    utils.set_seed(seed=params.seed)  # needed for skmultilearn
+    X = df.text.to_numpy()
+    X_train, X_, y_train, y_ = data.iterative_train_test_split(
+        X=X, y=y, train_size=params.train_size
+    )
+    X_val, X_test, y_val, y_test = data.iterative_train_test_split(X=X_, y=y_, train_size=0.5)
+    test_df = pd.DataFrame({"text": X_test, "tags": label_encoder.decode(y_test)})
+
+    # Tokenize inputs
+    tokenizer = data.Tokenizer(char_level=params.char_level)
+    tokenizer.fit_on_texts(texts=X_train)
+    X_train = np.array(tokenizer.texts_to_sequences(X_train), dtype=object)
+    X_val = np.array(tokenizer.texts_to_sequences(X_val), dtype=object)
+    X_test = np.array(tokenizer.texts_to_sequences(X_test), dtype=object)
+
+    # Create dataloaders
+    train_dataset = data.CNNTextDataset(
+        X=X_train, y=y_train, max_filter_size=params.max_filter_size
+    )
+    val_dataset = data.CNNTextDataset(X=X_val, y=y_val, max_filter_size=params.max_filter_size)
+    train_dataloader = train_dataset.create_dataloader(batch_size=params.batch_size)
+    val_dataloader = val_dataset.create_dataloader(batch_size=params.batch_size)
 
     # Initialize model
     model = models.initialize_model(
-        params=params, vocab_size=len(tokenizer), num_classes=len(label_encoder)
+        params=params,
+        vocab_size=len(tokenizer),
+        num_classes=len(label_encoder),
+        device=device,
     )
-    model.load_state_dict(model_state)
 
-    return {
+    # Train model
+    logger.info(f"Parameters: {json.dumps(params.__dict__, indent=2, cls=NumpyEncoder)}")
+    params, model, loss = train.train(
+        params=params,
+        train_dataloader=train_dataloader,
+        val_dataloader=val_dataloader,
+        model=model,
+        device=device,
+        class_weights=class_weights,
+        trial=trial,
+    )
+
+    # Evaluate model
+    artifacts = {
         "params": params,
         "label_encoder": label_encoder,
         "tokenizer": tokenizer,
         "model": model,
-        "performance": performance,
+        "loss": loss,
     }
+    device = torch.device("cpu")
+    y_true, y_pred, performance = eval.evaluate(df=test_df, artifacts=artifacts)
+    artifacts["performance"] = performance
+
+    return artifacts

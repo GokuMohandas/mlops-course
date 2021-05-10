@@ -23,88 +23,121 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
 <table>
     <tr>
         <td align="center"><b>📦&nbsp; Product</b></td>
-        <td align="center"><b>🔢&nbsp; Data</b></td>
-        <td align="center"><b>📈&nbsp; Modeling</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td align="center"><b>📝&nbsp; Scripting</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td align="center"><b>♻️&nbsp; Reproducibility</b></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/objective/">Objective</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/labeling/">Labeling</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/baselines/">Baselines</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/organization/">Organization</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/solution/">Solution</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/preprocessing/">Preprocessing</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/packaging/">Packaging</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/iteration/">Iteration</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/exploratory-data-analysis/">Exploratory data analysis</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><a href="https://madewithml.com/courses/mlops/splitting/">Splitting</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td><a href="https://madewithml.com/courses/mlops/augmentation/">Augmentation</a></td>
-        <td></td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <td align="center"><b>📝&nbsp; Scripting</b></td>
-        <td align="center"><b>(cont.)</b></td>
-        <td align="center"><b>📦&nbsp; Interfaces</b></td>
-        <td align="center"><b>✅&nbsp; Testing</b></td>
-    </tr>
-    <tr>
-        <td><a href="https://madewithml.com/courses/mlops/organization/">Organization</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/styling/">Styling</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/cli/">Command-line</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
-    </tr>
-    <tr>
-        <td><a href="https://madewithml.com/courses/mlops/packaging/">Packaging</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/makefile/">Makefile</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/api/">RESTful API</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
-    </tr>
-    <tr>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
         <td><a href="https://madewithml.com/courses/mlops/documentation/">Documentation</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
+    </tr>
+    <tr>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/styling/">Styling</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/docker/">Docker</a></td>
+    </tr>
+    <tr>
+        <td align="center"><b>🔢&nbsp; Data</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/makefile/">Makefile</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/labeling/">Labeling</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td><a href="https://madewithml.com/courses/mlops/logging/">Logging</a></td>
-        <td></td>
-        <td><a href="https://madewithml.com/courses/mlops/testing/#models">Models</a></td>
-    </tr>
-</table>
-
-<table>
-    <tr>
-        <td align="center"><b>♻️&nbsp; Reproducibility</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td align="center"><b>🚀&nbsp; Production</b></td>
-        <td align="center"><b>(cont.)</b></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/preprocessing/">Preprocessing</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td><a href="https://madewithml.com/courses/mlops/dashboard/">Dashboard</a></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/exploratory-data-analysis/">Exploratory data analysis</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td align="center"><b>📦&nbsp; Interfaces</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/cicd/">CI/CD workflows</a></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/splitting/">Splitting</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/cli/">Command-line</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td>Pipelines</td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/augmentation/">Augmentation</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/api/">RESTful API</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td>Feature stores</td>
+    </tr>
+    <tr>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td>Deployment</td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/cicd/">CI/CD workflows</a></td>
+        <td align="center"><b>📈&nbsp; Modeling</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td align="center"><b>✅&nbsp; Testing</b></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td>Monitoring</td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/versioning/">Versioning</a></td>
-        <td>Feature stores</td>
-        <td></td>
+        <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
     </tr>
     <tr>
-        <td><a href="https://madewithml.com/courses/mlops/docker/">Docker</a></td>
-        <td></td>
-        <td></td>
+        <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td><a href="https://madewithml.com/courses/mlops/testing/#models">Models</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+    </tr>
+    <tr>
+        <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
+        <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
     </tr>
 </table>
 
@@ -257,7 +290,7 @@ jupyter lab
 ## FAQ
 
 ### Why is this free?
-While this content is for everyone, it's especially targeted towards people who don't have as much opportunity to learn. I firmly believe that creativity and intelligence are randomly distributed but opportunity is siloed. I want to enable more people to create and contribute to innovation.
+While this content is for everyone, it's especially targeted towards people who don't have as much opportunity to learn. I believe that creativity and intelligence are randomly distributed while opportunities are siloed. I want to enable more people to create and contribute to innovation.
 
 ### Who is the author?
 - I've deployed large scale ML systems at Apple as well as smaller systems with constraints at startups and want to share the common principles I've learned along the way.
