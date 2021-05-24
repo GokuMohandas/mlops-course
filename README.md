@@ -89,28 +89,28 @@ Join 20K+ developers in learning how to responsibly <a href="https://madewithml.
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td><a href="https://madewithml.com/courses/mlops/cli/">Command-line</a></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
-        <td>Pipelines</td>
+        <td>Deployment</td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/augmentation/">Augmentation</a></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td><a href="https://madewithml.com/courses/mlops/api/">RESTful API</a></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
-        <td>Feature stores</td>
+        <td>Monitoring</td>
     </tr>
     <tr>
         <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important; border-right: 1px solid #fff !important;"></td>
         <td style="background-color: #fff; border-left: 1px solid #fff !important; border-right: 1px solid #fff !important; border-top: 1px solid #fff !important;"></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
-        <td>Deployment</td>
+        <td>Feature stores</td>
     </tr>
     <tr>
         <td align="center"><b>📈&nbsp; Modeling</b></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
         <td align="center"><b>✅&nbsp; Testing</b></td>
         <td style="background-color: #fff; border-top: 1px solid #fff !important; border-bottom: 1px solid #fff !important;"></td>
-        <td>Monitoring</td>
+        <td>Pipelines</td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
@@ -166,53 +166,37 @@ tagifai/
 
 ## Workflows
 
-### Use existing model
-
 1. Set up environment.
 ```bash
-export venv_name="venv"
-make venv name=${venv_name} env="dev"
-source ${venv_name}/bin/activate
+make venv
 ```
 
-2. Pull latest model.
+2. Get data
 ```bash
+# Download to data/
+tagifai download-data
+
+# or Pull from DVC
+dvc init
+dvc remote add -d storage stores/blob
 dvc pull
 ```
 
-3. Run Application
+3. Compute features
 ```bash
-make app env="dev"
-```
-You can interact with the API directly or explore via the generated documentation at [http://0.0.0.0:5000/docs](http://0.0.0.0:5000/docs).
-
-### Update model (CI/CD)
-Coming soon after CI/CD lesson where the entire application will be retrained and deployed when we push new data (or trigger manual reoptimization/training). The deployed model, with performance comparisons to previously deployed versions, will be ready on a PR to push to the main branch.
-
-### Update model (manual)
-
-1. Set up the development environment.
-```bash
-export venv_name="venv"
-make venv name=${venv_name} env="dev"
-source ${venv_name}/bin/activate
+tagifai computer-features
 ```
 
-2. Pull versioned data and model artifacts.
-```bash
-dvc pull
-```
-
-3. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json)
+4. Optimize using distributions specified in `tagifai.main.objective`. This also writes the best model's params to [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json)
 ```bash
 tagifai optimize \
     --params-fp config/params.json \
     --study-name optimization \
     --num-trials 100
 ```
-> We'll cover how to train using compute instances on the cloud from Amazon Web Services (AWS) or Google Cloud Platforms (GCP) in later lessons. But in the meantime, if you don't have access to GPUs, check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/MLOps/blob/main/notebooks/optimize.ipynb) notebook for how to train on Colab and transfer to local. We essentially run optimization, then train the best model to download and transfer it's artifacts.
+> You can use your own on-prem GPUs, infrastructure from cloud providers (AWS, GCP, Azure, etc.) or check out the [optimize.ipynb](https://colab.research.google.com/github/GokuMohandas/MLOps/blob/main/notebooks/optimize.ipynb) notebook for how to train on Google Colab and transfer trained artifacts to your local machine.
 
-4. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/MLOps/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
+5. Train a model (and save all it's artifacts) using params from [config/params.json](https://github.com/GokuMohandas/MLOps/blob/main/config/params.json) and publish metrics to [model/performance.json](https://github.com/GokuMohandas/MLOps/blob/main/model/performance.json). You can view the entire run's details inside `experiments/{experiment_id}/{run_id}` or via the API (`GET` /runs/{run_id}).
 ```bash
 tagifai train-model \
     --params-fp config/params.json \
@@ -221,19 +205,40 @@ tagifai train-model \
     --run-name model
 ```
 
-5. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
-```bash
-tagifai predict-tags --text "Transfer learning with BERT"  # test with CLI app
-make app env="dev"  # run API and test as well
-```
+6. Predict tags for an input sentence. It'll use the best model saved from `train-model` but you can also specify a `run-id` to choose a specific model.
 
-6. View improvements
+    - Command-line app
+        ```bash
+        tagifai predict-tags --text "Transfer learning with BERT"
+        ```
+
+    - FastAPI
+        ```bash
+        uvicorn app.api:app \
+            --host 0.0.0.0 \
+            --port 5000 \
+            --reload \
+            --reload-dir tagifai \
+            --reload-dir app
+        ```
+
+7. View improvements
 Once you're done training the best model using the current data version, best hyperparameters, etc., we can view performance difference.
 ```bash
 tagifai diff
 ```
 
-7. Commit to git
+8. Push versioned assets
+```
+# Push
+dvc add data/projects.json
+dvc add data/tags.json
+dvc add data/features.json
+dvc add data/projects.parquet
+dvc push
+```
+
+9. Commit to git
 This will clean and update versioned assets (data, experiments), run tests, styling, etc.
 ```bash
 git add .
@@ -244,41 +249,91 @@ git push origin <BRANCH_NAME>
 
 ## Commands
 
+### Environments
+```bash
+python -m pip install -e . --no-cache-dir  # prod
+python -m pip install -e ".[test]" --no-cache-dir  # test
+python -m pip install -e ".[docs]" --no-cache-dir  # docs
+python -m pip install -e ".[dev]" --no-cache-dir  # dev
+pre-commit install
+pre-commit autoupdate
+```
+
 ### Docker
 ```bash
-make docker  # docker build -t tagifai:latest -f Dockerfile .
-             # docker run -p 5000:5000 --name tagifai tagifai:latest
+docker build -t tagifai:latest -f Dockerfile .
+docker run -p 5000:5000 --name tagifai tagifai:latest
 ```
 
 ### Application
 ```bash
-make app  # uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app
-make app-prod  # gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app
+uvicorn app.api:app --host 0.0.0.0 --port 5000 --reload --reload-dir tagifai --reload-dir app  # dev
+gunicorn -c config/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app  # prod
 ```
 
-### Streamlit dashboard
+### Streamlit
 ```bash
-make streamlit  # streamlit run streamlit/app.py
+streamlit run streamlit/app.py
 ```
 
 ### MLFlow
 ```bash
-make mlflow  # mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri stores/model/
+mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri stores/model/
+```
+
+### Airflow
+```bash
+export AIRFLOW_HOME=${PWD}/airflow
+AIRFLOW_VERSION=2.0.1
+PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
+CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
+pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
+airflow db init
+airflow users create \
+    --username admin \
+    --firstname Goku \
+    --lastname Mohandas \
+    --role Admin \
+    --email hello@madewithml.com
+airflow webserver --port 8080
+
+# In new terminal
+airflow scheduler
+```
+
+### Feature store
+```bash
+feast init --minimal --template local features
+touch features/features.py
+cd features
+feast apply
+feast materialize ${START_TS} ${END_TS}
+feast materialize-incremental ${END_TS}
 ```
 
 ### Mkdocs
 ```bash
-make docs  # python -m mkdocs serve
+python -m mkdocs serve
 ```
 
 ### Testing
-```bash
-make great-expectations  # great_expectations checkpoint run [projects, tags]
-make test  # pytest --cov tagifai --cov app --cov-report html
-make test-non-training  # pytest -m "not training"
-```
+- Great expectation checkpoints (read more [here](https://madewithml.com/courses/mlops/testing/#data))
+    ```bash
+    great_expectations checkpoint run projects
+    great_expectations checkpoint run tags
+    ```
 
-### Start Jupyterlab
+- Full coverage testing
+    ```bash
+    pytest --cov tagifai --cov app --cov-report html
+    ```
+
+- Testing only the non-training components
+    ```bash
+    pytest -m "not training"
+    ```
+
+### Jupyterlab
 ```bash
 python -m ipykernel install --user --name=tagifai
 jupyter labextension install @jupyter-widgets/jupyterlab-manager

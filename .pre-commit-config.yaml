@@ -15,13 +15,13 @@ repos:
     -   id: detect-aws-credentials
     -   id: detect-private-key
 -   repo: https://github.com/psf/black
-    rev: 21.4b0
+    rev: 21.5b1
     hooks:
     -   id: black
         args: []
         files: .
 -   repo: https://gitlab.com/PyCQA/flake8
-    rev: 3.9.1
+    rev: 3.9.2
     hooks:
     -   id: flake8
 -   repo: https://github.com/PyCQA/isort
@@ -31,7 +31,7 @@ repos:
         args: []
         files: .
 -   repo: https://github.com/asottile/pyupgrade  # update python syntax
-    rev: v2.13.0
+    rev: v2.15.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
@@ -43,10 +43,10 @@ repos:
       args: ["dvc"]
       language: system
       pass_filenames: false
-    - id: test-non-training
-      name: test-non-training
+    - id: test
+      name: test
       entry: make
-      args: ["test-non-training"]
+      args: ["test"]
       language: system
       pass_filenames: false
     - id: clean

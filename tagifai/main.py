@@ -71,7 +71,7 @@ def objective(params: Namespace, trial: optuna.trial._trial.Trial) -> float:
     # Train (can move some of these outside for efficiency)
     logger.info(f"\nTrial {trial.number}:")
     logger.info(json.dumps(trial.params, indent=2))
-    artifacts = run(params=params, trial=trial)
+    artifacts = train_model(params=params, trial=trial)
 
     # Set additional attributes
     params = artifacts["params"]
@@ -85,7 +85,32 @@ def objective(params: Namespace, trial: optuna.trial._trial.Trial) -> float:
     return performance["overall"]["f1"]
 
 
-def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
+def compute_features(params: Namespace) -> None:
+    """Compute features to use for training.
+
+    Args:
+        params (Namespace): Input parameters for operations.
+    """
+    # Set up
+    utils.set_seed(seed=params.seed)
+
+    # Load data
+    projects_fp = Path(config.DATA_DIR, "projects.json")
+    projects = utils.load_dict(filepath=projects_fp)
+    df = pd.DataFrame(projects)
+
+    # Compute features
+    df["text"] = df.title + " " + df.description
+    df.drop(columns=["title", "description"], inplace=True)
+    df = df[["id", "created_on", "text", "tags"]]
+
+    # Save
+    df_dict = df.to_dict(orient="records")
+    df_dict_fp = Path(config.DATA_DIR, "features.json")
+    utils.save_dict(d=df_dict, filepath=df_dict_fp)
+
+
+def train_model(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     """Operations for training.
 
     Args:
@@ -99,17 +124,17 @@ def run(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:
     utils.set_seed(seed=params.seed)
     device = utils.set_device(cuda=params.cuda)
 
-    # Load data
-    projects_fp = Path(config.DATA_DIR, "projects.json")
+    # Load features
+    features_fp = Path(config.DATA_DIR, "features.json")
     tags_fp = Path(config.DATA_DIR, "tags.json")
-    projects = utils.load_dict(filepath=projects_fp)
+    features = utils.load_dict(filepath=features_fp)
     tags_dict = utils.list_to_dict(utils.load_dict(filepath=tags_fp), key="tag")
-    df = pd.DataFrame(projects)
+    df = pd.DataFrame(features)
     if params.shuffle:
         df = df.sample(frac=1).reset_index(drop=True)
     df = df[: params.subset]  # None = all samples
 
-    # Prepare data (feature engineering, filter, clean)
+    # Prepare data (filter, clean, etc.)
     df, tags_above_freq, tags_below_freq = data.prepare(
         df=df,
         include=list(tags_dict.keys()),

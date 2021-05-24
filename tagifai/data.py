@@ -57,9 +57,6 @@ def prepare(
     Returns:
         A cleaned dataframe and dictionary of tags and counts above the frequency threshold.
     """
-    # Combine features
-    df["text"] = df.title + " " + df.description
-
     # Filter tags for each project
     df.tags = df.tags.apply(filter_items, include=include, exclude=exclude)
     tags = Counter(itertools.chain.from_iterable(df.tags.values))

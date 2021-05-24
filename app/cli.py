@@ -27,12 +27,7 @@ app = typer.Typer()
 
 @app.command()
 def download_data():
-    """Download data from online to local drive.
-
-    Note:
-        We could've just copied files from `datasets` but
-        we'll use this later on with other data sources.
-    """
+    """Load data from URL and save to local drive."""
     # Download data
     projects_url = (
         "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/projects.json"
@@ -47,6 +42,24 @@ def download_data():
     utils.save_dict(d=projects, filepath=projects_fp)
     utils.save_dict(d=tags, filepath=tags_fp)
     logger.info("✅ Data downloaded!")
+
+
+@app.command()
+def compute_features(
+    params_fp: Path = Path(config.CONFIG_DIR, "params.json"),
+) -> None:
+    """Compute and save features for training.
+
+    Args:
+        params_fp (Path, optional): Location of parameters (just using num_samples,
+                                  num_epochs, etc.) to use for training.
+                                  Defaults to `config/params.json`.
+    """
+    # Parameters
+    params = Namespace(**utils.load_dict(filepath=params_fp))
+
+    # Compute features
+    main.compute_features(params=params)
 
 
 @app.command()
@@ -66,7 +79,7 @@ def optimize(
         study_name (str, optional): Name of the study to save trial runs under. Defaults to `optimization`.
         num_trials (int, optional): Number of trials to run. Defaults to 100.
     """
-    # Starting parameters (not actually used but needed for set up)
+    # Parameters
     params = Namespace(**utils.load_dict(filepath=params_fp))
 
     # Optimize
@@ -106,7 +119,7 @@ def train_model(
         experiment_name (str, optional): Name of the experiment to save the run to. Defaults to `best`.
         run_name (str, optional): Name of the run. Defaults to `model`.
     """
-    # Set experiment and start run
+    # Parameters
     params = Namespace(**utils.load_dict(filepath=params_fp))
 
     # Start run
@@ -115,7 +128,7 @@ def train_model(
         run_id = mlflow.active_run().info.run_id
 
         # Train
-        artifacts = main.run(params=params)
+        artifacts = main.train_model(params=params)
 
         # Set tags
         tags = {}

@@ -1,5 +1,8 @@
-dvc==2.0.6
+apache-airflow==2.0.1
+airflow-provider-great-expectations==0.0.6
+dvc==2.1.0
 fastapi==0.63.0
+feast==0.10.5
 matplotlib==3.2.2
 mlflow==1.13.1
 nltk==3.2.5

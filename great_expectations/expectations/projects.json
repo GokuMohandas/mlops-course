@@ -5,7 +5,7 @@
     {
       "expectation_type": "expect_table_column_count_to_equal",
       "kwargs": {
-        "value": 4
+        "value": 5
       },
       "meta": {}
     },
@@ -14,6 +14,7 @@
       "kwargs": {
         "column_list": [
           "id",
+          "created_on",
           "title",
           "description",
           "tags"
@@ -32,6 +33,21 @@
       "expectation_type": "expect_column_values_to_not_be_null",
       "kwargs": {
         "column": "id"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "created_on"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_strftime_format",
+      "kwargs": {
+        "column": "created_on",
+        "strftime_format": "%Y-%m-%d %H:%M:%S"
       },
       "meta": {}
     },
