@@ -100,3 +100,6 @@ venv.bak/
 
 # mkdocs
 site/
+
+# Airflow
+airflow/airflow.db
