@@ -5,13 +5,16 @@ import json
 import tempfile
 import warnings
 from argparse import Namespace
+from datetime import datetime
 from pathlib import Path
 from typing import Dict, Optional
 
 import mlflow
 import optuna
+import pandas as pd
 import torch
 import typer
+from feast import FeatureStore
 from numpyencoder import NumpyEncoder
 from optuna.integration.mlflow import MLflowCallback
 
@@ -60,6 +63,25 @@ def compute_features(
 
     # Compute features
     main.compute_features(params=params)
+
+
+@app.command()
+def get_historical_features():
+    # Entities to pull data for (should dynamically read this from somewhere)
+    project_ids = [1, 2, 3]
+    now = datetime.now()
+    timestamps = [datetime(now.year, now.month, now.day)] * len(project_ids)
+    entity_df = pd.DataFrame.from_dict({"id": project_ids, "event_timestamp": timestamps})
+
+    # Get historical features
+    store = FeatureStore(repo_path=Path(config.BASE_DIR, "features"))
+    training_df = store.get_historical_features(
+        entity_df=entity_df,
+        feature_refs=["project_details:text", "project_details:tags"],
+    ).to_df()
+
+    # Store in location for training task to pick up
+    print(training_df.head())
 
 
 @app.command()

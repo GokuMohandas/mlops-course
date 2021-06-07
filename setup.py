@@ -12,7 +12,7 @@ with open(Path(BASE_DIR, "requirements.txt")) as file:
     required_packages = [ln.strip() for ln in file.readlines()]
 
 test_packages = [
-    "great-expectations==0.13.7",
+    "great-expectations==0.13.14",
     "pytest==6.0.2",
     "pytest-cov==2.10.1",
 ]

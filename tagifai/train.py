@@ -108,7 +108,7 @@ class Trainer:
         self.model.eval()
         y_trues, y_probs = [], []
 
-        # Iterate over val batches
+        # Iterate over batches
         with torch.no_grad():
             for i, batch in enumerate(dataloader):
 

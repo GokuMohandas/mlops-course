@@ -16,8 +16,7 @@ venv:
 	python -m pip install --upgrade pip setuptools wheel && \
 	python -m pip install -e ".[dev]" --no-cache-dir && \
 	pre-commit install && \
-	pre-commit autoupdate && \
-	pip uninstall dataclasses -y
+	pre-commit autoupdate
 
 # Styling
 .PHONY: style
@@ -41,7 +40,7 @@ dvc:
 	dvc add data/projects.json
 	dvc add data/tags.json
 	dvc add data/features.json
-	dvc add data/projects.parquet
+	dvc add data/features.parquet
 	dvc push
 
 # Test

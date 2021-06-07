@@ -1,4 +1,4 @@
-# This is an example feature definition file
+# Feature definition
 
 from datetime import datetime
 from pathlib import Path
@@ -12,7 +12,7 @@ from tagifai import config
 # Read data
 START_TIME = "2020-02-17"
 project_details = FileSource(
-    path=str(Path(config.DATA_DIR, "projects.parquet")),
+    path=str(Path(config.DATA_DIR, "features.parquet")),
     event_timestamp_column="created_on",
 )
 
@@ -24,7 +24,7 @@ project = Entity(
 )
 
 # Define a Feature View for each project
-# Will be used for online serving
+# Can be used for fetching historical data and online serving
 project_details_view = FeatureView(
     name="project_details",
     entities=["id"],
@@ -32,8 +32,7 @@ project_details_view = FeatureView(
         seconds=(datetime.today() - datetime.strptime(START_TIME, "%Y-%m-%d")).days * 24 * 60 * 60
     ),
     features=[
-        Feature(name="title", dtype=ValueType.STRING),
-        Feature(name="description", dtype=ValueType.STRING),
+        Feature(name="text", dtype=ValueType.STRING),
         Feature(name="tags", dtype=ValueType.STRING_LIST),
     ],
     online=True,

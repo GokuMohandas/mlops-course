@@ -2,7 +2,7 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
     -   id: trailing-whitespace
     -   id: check-yaml
@@ -15,7 +15,7 @@ repos:
     -   id: detect-aws-credentials
     -   id: detect-private-key
 -   repo: https://github.com/psf/black
-    rev: 21.5b1
+    rev: 21.5b2
     hooks:
     -   id: black
         args: []
@@ -31,7 +31,7 @@ repos:
         args: []
         files: .
 -   repo: https://github.com/asottile/pyupgrade  # update python syntax
-    rev: v2.15.0
+    rev: v2.19.1
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
