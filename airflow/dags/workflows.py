@@ -31,7 +31,7 @@ def dataops():
     Workflows to validate data and create features.
     """
 
-    # Extract data from DWH, blog storage, etc.
+    # Extract data from DWH, blob storage, etc.
     extract_data = BashOperator(
         task_id="extract_data",
         bash_command=f"cd {config.BASE_DIR} && dvc pull",
@@ -59,9 +59,10 @@ def dataops():
     )
 
     # Feature store
+    END_TS = ""
     cache_to_feature_store = BashOperator(
         task_id="cache_to_feature_store",
-        bash_command=f"cd {config.BASE_DIR}/features && feast apply",
+        bash_command=f"cd {config.BASE_DIR}/features && feast materialize-incremental {END_TS}",
     )
 
     # Task relationships
@@ -86,9 +87,9 @@ def mlops():
     """
 
     # Extract features
-    extract_features = BashOperator(
+    extract_features = PythonOperator(
         task_id="extract_features",
-        bash_command="feast materialize-incremental ${date}",
+        python_callable=cli.get_historical_features,
     )
 
     # Optimization
