@@ -95,8 +95,10 @@ def compute_features(params: Namespace) -> None:
     utils.set_seed(seed=params.seed)
 
     # Load data
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    projects = utils.load_dict(filepath=projects_fp)
+    projects_url = (
+        "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/projects.json"
+    )
+    projects = utils.load_json_from_url(url=projects_url)
     df = pd.DataFrame(projects)
 
     # Compute features

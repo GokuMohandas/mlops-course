@@ -286,7 +286,8 @@ python -m mkdocs serve
 
 - Full coverage testing
     ```bash
-    pytest --cov tagifai --cov app --cov-report html
+    pytest tests --cov tagifai --cov app  # report in STDOUT
+    pytest tests --cov tagifai --cov app --cov-report html  # report in htmlcov/
     ```
 
 - Testing only the non-training components
