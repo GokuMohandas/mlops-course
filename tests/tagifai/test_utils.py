@@ -74,3 +74,14 @@ def test_set_seed():
 )
 def test_dict_diff(d_a, d_b, diff):
     assert utils.dict_diff(d_a=d_a, d_b=d_b) == diff
+
+
+@pytest.mark.parametrize(
+    "d_a, d_b, exception",
+    [
+        ({"v1": 1, "v2": 1}, {"v1": 1, "v3": 1}, Exception),
+    ],
+)
+def test_dict_diff_exception(d_a, d_b, exception):
+    with pytest.raises(exception):
+        utils.dict_diff(d_a=d_a, d_b=d_b)

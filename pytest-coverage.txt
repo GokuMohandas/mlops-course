@@ -1,0 +1,31 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.7.10, pytest-6.0.2, py-1.10.0, pluggy-0.13.1
+rootdir: /Users/goku/Documents/madewithml/mlops, configfile: pyproject.toml, testpaths: tests
+plugins: cov-2.10.1
+collected 76 items
+
+tests/app/test_api.py .........                                          [ 11%]
+tests/app/test_cli.py ........                                           [ 22%]
+tests/tagifai/test_config.py .                                           [ 23%]
+tests/tagifai/test_data.py ...........................................   [ 80%]
+tests/tagifai/test_eval.py .                                             [ 81%]
+tests/tagifai/test_models.py ...                                         [ 85%]
+tests/tagifai/test_train.py .                                            [ 86%]
+tests/tagifai/test_utils.py ..........                                   [100%]
+
+---------- coverage: platform darwin, python 3.7.10-final-0 ----------
+Name                 Stmts   Miss  Cover
+----------------------------------------
+tagifai/config.py       30      0   100%
+tagifai/data.py        196      0   100%
+tagifai/eval.py         82      0   100%
+tagifai/main.py         95      0   100%
+tagifai/models.py       38      0   100%
+tagifai/predict.py      21      0   100%
+tagifai/train.py        86      0   100%
+tagifai/utils.py        49      0   100%
+----------------------------------------
+TOTAL                  597      0   100%
+
+
+======================= 76 passed, 4 warnings in 22.53s ========================

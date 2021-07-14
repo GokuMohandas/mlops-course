@@ -3,21 +3,21 @@
 
 import itertools
 import tempfile
+from argparse import Namespace
 from collections import Counter
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 import pytest
 
-from tagifai import config, data, utils
+from tagifai import config, data, main, utils
 
 
 @pytest.fixture
 def tags():
     # Load tags
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    tags_dict = utils.load_dict(filepath=tags_fp)
+    tags_url = "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/tags.json"
+    tags_dict = utils.load_json_from_url(url=tags_url)
     tags = [tag["tag"] for tag in tags_dict]
     return tags
 
@@ -25,9 +25,9 @@ def tags():
 @pytest.fixture
 def df():
     # Load features
-    features_fp = Path(config.DATA_DIR, "features.json")
-    features = utils.load_dict(filepath=features_fp)
-    df = pd.DataFrame(features)
+    params_fp = Path(config.CONFIG_DIR, "params.json")
+    params = Namespace(**utils.load_dict(filepath=params_fp))
+    df, _ = main.compute_features(params=params)
     return df
 
 

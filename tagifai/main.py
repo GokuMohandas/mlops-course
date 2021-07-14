@@ -105,9 +105,11 @@ def compute_features(params: Namespace) -> None:
     df = df[["id", "created_on", "text", "tags"]]
 
     # Save
-    df_dict = df.to_dict(orient="records")
+    features = df.to_dict(orient="records")
     df_dict_fp = Path(config.DATA_DIR, "features.json")
-    utils.save_dict(d=df_dict, filepath=df_dict_fp)
+    utils.save_dict(d=features, filepath=df_dict_fp)
+
+    return df, features
 
 
 def train_model(params: Namespace, trial: optuna.trial._trial.Trial = None) -> Dict:

@@ -19,6 +19,16 @@ def test_download_data():
     assert "Data downloaded!" in result.stdout
 
 
+def test_compute_features():
+    result = runner.invoke(app, ["compute-features"])
+    assert result.exit_code == 0
+
+
+def test_get_historical_features():
+    result = runner.invoke(app, ["get-historical-features"])
+    assert result.exit_code == 0
+
+
 @pytest.mark.training
 def test_optimize():
     study_name = "test_optimization"

@@ -55,8 +55,8 @@ def compute_features(
 
     Args:
         params_fp (Path, optional): Location of parameters (just using num_samples,
-                                  num_epochs, etc.) to use for training.
-                                  Defaults to `config/params.json`.
+                                    num_epochs, etc.) to use for training.
+                                    Defaults to `config/params.json`.
     """
     # Parameters
     params = Namespace(**utils.load_dict(filepath=params_fp))
@@ -96,8 +96,8 @@ def optimize(
 
     Args:
         params_fp (Path, optional): Location of parameters (just using num_samples,
-                                  num_epochs, etc.) to use for training.
-                                  Defaults to `config/params.json`.
+                                    num_epochs, etc.) to use for training.
+                                    Defaults to `config/params.json`.
         study_name (str, optional): Name of the study to save trial runs under. Defaults to `optimization`.
         num_trials (int, optional): Number of trials to run. Defaults to 100.
     """
@@ -223,7 +223,7 @@ def params(
 ):
     if tag == "workspace":
         params = utils.load_dict(filepath=Path(config.MODEL_DIR, "params.json"))
-    else:
+    else:  # pragma: no cover, project specific condition
         url = f"https://raw.githubusercontent.com/{author}/{repo}/{tag}/model/params.json"
         params = utils.load_json_from_url(url=url)
     if verbose:
@@ -240,7 +240,7 @@ def performance(
 ):
     if tag == "workspace":
         performance = utils.load_dict(filepath=Path(config.MODEL_DIR, "performance.json"))
-    else:
+    else:  # pragma: no cover, project specific condition
         url = f"https://raw.githubusercontent.com/{author}/{repo}/{tag}/model/performance.json"
         performance = utils.load_json_from_url(url=url)
     if verbose:
