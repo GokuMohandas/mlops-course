@@ -20,6 +20,10 @@ Join 30K+ developers in learning how to responsibly <a href="https://madewithml.
 <br>
 <hr>
 
+A project-based course on machine learning & MLOps fundamentals with a focus on intuition and application that teaches you how to apply ML in industry. All the lessons below are **100% free** but we also offer a highly interactive [4-week course](https://madewithml.com/#features) where you'll learn how to master MLOps.
+
+> ⚡️ For more information on our interactive course offering → **[https://madewithml.com/](https://madewithml.com/)**
+
 ## MLOps
 Learn how to apply ML to build a production grade product to deliver value.
 
@@ -336,11 +340,11 @@ While this content is for everyone, it's especially targeted towards people who 
 <hr>
 To cite this course, please use:
 
-```bash
-@article{madewithml,
-    title  = "Applied ML - Made With ML",
-    author = "Goku Mohandas",
-    url    = "https://madewithml.com/courses/mlops/"
-    year   = "2021",
+```bibtex
+@misc{madewithml,
+    author       = {Goku Mohandas},
+    title        = {Made With ML MLOps Course},
+    howpublished = {\url{https://madewithml.com/}},
+    year         = {2021}
 }
 ```
