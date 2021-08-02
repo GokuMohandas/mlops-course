@@ -86,12 +86,12 @@ Learn how to apply ML to build a production grade product to deliver value.
     <tr>
         <td align="center"><b>📈&nbsp; Modeling</b></td>
         <td align="center"><b>✅&nbsp; Testing</b></td>
-        <td><a href="https://madewithml.com/courses/mlops/pipelines/">Pipelines</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/feature-store/">Feature store</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
         <td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
-        <td><a href="https://madewithml.com/courses/mlops/feature-store/">Feature store</a></td>
+        <td><a href="https://madewithml.com/courses/mlops/pipelines/">Pipelines</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
@@ -247,22 +247,30 @@ mlflow server -h 0.0.0.0 -p 5000 --backend-store-uri stores/model/
 ```
 
 ### Airflow
+1. Set up
 ```bash
-export AIRFLOW_HOME=${PWD}/airflow
 AIRFLOW_VERSION=2.0.1
 PYTHON_VERSION="$(python --version | cut -d " " -f 2 | cut -d "." -f 1-2)"
 CONSTRAINT_URL="https://raw.githubusercontent.com/apache/airflow/constraints-${AIRFLOW_VERSION}/constraints-${PYTHON_VERSION}.txt"
 pip install "apache-airflow==${AIRFLOW_VERSION}" --constraint "${CONSTRAINT_URL}"
-airflow db init
+airflow db init  # `airflow db reset` to reset everything
 airflow users create \
     --username admin \
     --firstname Goku \
     --lastname Mohandas \
     --role Admin \
     --email hello@madewithml.com
-airflow webserver --port 8080
+```
 
-# In new terminal
+2. Run webserver
+```bash
+export AIRFLOW_HOME=${PWD}/airflow
+airflow webserver --port 8080
+```
+
+Run scheduler (in separate terminal)
+```bash
+export AIRFLOW_HOME=${PWD}/airflow
 airflow scheduler
 ```
 

@@ -19,14 +19,14 @@ default_args = {
 
 
 @dag(
-    dag_id="dataops",
-    description="Data related operations.",
+    dag_id="data",
+    description="Feature creating operations.",
     default_args=default_args,
     schedule_interval=None,
     start_date=days_ago(2),
     tags=["dataops"],
 )
-def dataops():
+def data():
     """
     Workflows to validate data and create features.
     """
@@ -58,15 +58,15 @@ def dataops():
         op_kwargs={"params_fp": Path(config.CONFIG_DIR, "params.json")},
     )
 
-    # Feature store
+    # Cache (feature store, database, warehouse, etc.)
     END_TS = ""
-    cache_to_feature_store = BashOperator(
+    cache = BashOperator(
         task_id="cache_to_feature_store",
         bash_command=f"cd {config.BASE_DIR}/features && feast materialize-incremental {END_TS}",
     )
 
     # Task relationships
-    extract_data >> [validate_projects, validate_tags] >> compute_features >> cache_to_feature_store
+    extract_data >> [validate_projects, validate_tags] >> compute_features >> cache
 
 
 def _evaluate_model():
@@ -74,16 +74,16 @@ def _evaluate_model():
 
 
 @dag(
-    dag_id="mlops",
-    description="ML modeling related operations.",
+    dag_id="model",
+    description="Model creating operations.",
     default_args=default_args,
     schedule_interval=None,
     start_date=days_ago(2),
     tags=["mlops"],
 )
-def mlops():
+def model():
     """
-    Optimization, training and evaluation of models.
+    Model creating tasks such as optimization, training, evaluation and serving.
     """
 
     # Extract features
@@ -95,18 +95,18 @@ def mlops():
     # Optimization
     optimization = BashOperator(
         task_id="optimization",
-        bash_command="tagifai optimize",
+        bash_command="echo `tagifai optimize`",
     )
 
-    # Training
-    train_model = BashOperator(
-        task_id="train_model",
-        bash_command="tagifai train-model",
+    # Train model
+    train = BashOperator(
+        task_id="train",
+        bash_command="echo `tagifai train-model`",
     )
 
-    # Evaluate
-    evaluate_model = BranchPythonOperator(  # BranchPythonOperator returns a task_id or [task_ids]
-        task_id="evaluate_model",
+    # Evaluate model
+    evaluate = BranchPythonOperator(  # BranchPythonOperator returns a task_id or [task_ids]
+        task_id="evaluate",
         python_callable=_evaluate_model,
     )
 
@@ -120,28 +120,87 @@ def mlops():
         bash_command="echo REGRESSED",
     )
 
-    # Deploy
-    deploy_model = BashOperator(
-        task_id="deploy_model",
-        bash_command="echo 1",  # push to GitHub to kick off deployment workflows
-    )
-
-    # Reset references for monitoring
-    set_monitoring_references = BashOperator(
-        task_id="set_monitoring_references",
-        bash_command="echo 1",  # tagifai set-monitoring-references
+    # Serve model
+    serve = BashOperator(
+        task_id="serve",  # push to GitHub to kick off serving workflows
+        bash_command="echo served model",  # or to a purpose-built model server, etc.
     )
 
     # Notifications (use appropriate operators, ex. EmailOperator)
-    notify_teams = BashOperator(task_id="notify_teams", bash_command="echo 1")
-    file_report = BashOperator(task_id="file_report", bash_command="echo 1")
+    report = BashOperator(task_id="report", bash_command="echo filed report")
 
     # Task relationships
-    extract_features >> optimization >> train_model >> evaluate_model >> [improved, regressed]
-    improved >> [set_monitoring_references, deploy_model, notify_teams]
-    regressed >> [notify_teams, file_report]
+    extract_features >> optimization >> train >> evaluate >> [improved, regressed]
+    improved >> serve
+    regressed >> report
+
+
+def _update_policy_engine():
+    return "improve"
+
+
+@dag(
+    dag_id="update",
+    description="Model updating operations.",
+    default_args=default_args,
+    schedule_interval=None,
+    start_date=days_ago(2),
+    tags=["mlops"],
+)
+def update():
+    """
+    Model updating tasks such as monitoring, retraining, etc.
+    """
+    # Monitoring (inputs, predictions, etc.)
+    # Considers thresholds, windows, frequency, etc.
+    monitoring = BashOperator(
+        task_id="monitoring",
+        bash_command="echo monitoring",
+    )
+
+    # Update policy engine (continue, improve, rollback, etc.)
+    update_policy_engine = BranchPythonOperator(
+        task_id="update_policy_engine",
+        python_callable=_update_policy_engine,
+    )
+
+    # Policies
+    _continue = BashOperator(
+        task_id="continue",
+        bash_command="echo continue",
+    )
+    inspect = BashOperator(
+        task_id="inspect",
+        bash_command="echo inspect",
+    )
+    improve = BashOperator(
+        task_id="improve",
+        bash_command="echo improve",
+    )
+    rollback = BashOperator(
+        task_id="rollback",
+        bash_command="echo rollback",
+    )
+
+    # Compose retraining dataset
+    # Labeling, QA, augmentation, upsample poor slices, weight samples, etc.
+    compose_retraining_dataset = BashOperator(
+        task_id="compose_retraining_dataset",
+        bash_command="echo compose retraining dataset",
+    )
+
+    # Retrain (initiates model creation workflow)
+    retrain = BashOperator(
+        task_id="retrain",
+        bash_command="echo retrain",
+    )
+
+    # Task relationships
+    monitoring >> update_policy_engine >> [_continue, inspect, improve, rollback]
+    improve >> compose_retraining_dataset >> retrain
 
 
 # Define DAGs
-dataops_dag = dataops()
-mlops_dag = mlops()
+data_dag = data()
+model_dag = model()
+update_dag = update()
