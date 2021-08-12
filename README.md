@@ -20,17 +20,13 @@ Join 30K+ developers in learning how to responsibly <a href="https://madewithml.
 <br>
 <hr>
 
-A project-based course on machine learning & MLOps fundamentals with a focus on intuition and application that teaches you how to apply ML in industry. All the lessons below are **100% free** but we also offer a highly interactive [4-week course](https://madewithml.com/#features) where you'll learn how to master MLOps.
-
-> ⚡️ For more information on our interactive course offering → **[https://madewithml.com/](https://madewithml.com/)**
-
 ## MLOps
 Learn how to apply ML to build a production grade product to deliver value.
 
 - Lessons: https://madewithml.com/courses/mlops/
 - Code: [GokuMohandas/MLOps](https://github.com/GokuMohandas/MLOps)
 
-> If you need refresh yourself on ML algorithms, check out our [Made With ML](https://github.com/GokuMohandas/MadeWithML) repository.
+> If you need refresh yourself on the foundations of machine learning, check out our [Made With ML](https://github.com/GokuMohandas/MadeWithML) repository.
 
 <table>
     <tr>
@@ -96,7 +92,7 @@ Learn how to apply ML to build a production grade product to deliver value.
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
         <td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
-        <td></td>
+        <td><a href="https://madewithml.com/courses/mlops/continual-learning/">Continual learning</a></td>
     </tr>
     <tr>
         <td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
