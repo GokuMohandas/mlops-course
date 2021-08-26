@@ -3,7 +3,7 @@
 
 from pathlib import Path
 
-from setuptools import setup
+from setuptools import find_namespace_packages, setup
 
 BASE_DIR = Path(__file__).parent
 
@@ -53,6 +53,7 @@ setup(
         "Programming Language :: Python :: 3",
     ],
     python_requires=">=3.6",
+    packages=find_namespace_packages(),
     install_requires=[required_packages],
     extras_require={
         "test": test_packages,

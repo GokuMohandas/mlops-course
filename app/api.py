@@ -10,9 +10,10 @@ from typing import Dict, Optional
 
 from fastapi import FastAPI, Request
 
+from app import config
+from app.config import logger
 from app.schemas import PredictPayload
-from tagifai import config, main, predict
-from tagifai.config import logger
+from tagifai import main, predict
 
 # Define application
 app = FastAPI(
@@ -70,7 +71,7 @@ def _index(request: Request):
 @app.post("/predict", tags=["Prediction"])
 @construct_response
 def _predict(request: Request, payload: PredictPayload) -> Dict:
-    """Predict tags for a list of texts using the best run. """
+    """Predict tags for a list of texts using the best run."""
     # Predict
     texts = [item.text for item in payload.texts]
     predictions = predict.predict(texts=texts, artifacts=artifacts)

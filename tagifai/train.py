@@ -10,7 +10,7 @@ import torch
 import torch.nn as nn
 from sklearn.metrics import precision_recall_curve
 
-from tagifai.config import logger
+from app.config import logger
 
 
 class Trainer:

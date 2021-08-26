@@ -1,7 +1,7 @@
 # tests/tagifai/test_config.py
 # Test tagifai/config.py components.
 
-from tagifai import config
+from app import config
 
 
 def test_config():

@@ -12,8 +12,8 @@ import seaborn as sns
 from wordcloud import STOPWORDS, WordCloud
 
 import streamlit as st
-from app import cli
-from tagifai import config, data, eval, main, utils
+from app import cli, config
+from tagifai import data, eval, main, utils
 
 
 @st.cache

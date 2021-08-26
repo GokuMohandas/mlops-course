@@ -31,7 +31,7 @@ repos:
         args: []
         files: .
 -   repo: https://github.com/asottile/pyupgrade  # update python syntax
-    rev: v2.23.1
+    rev: v2.24.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]

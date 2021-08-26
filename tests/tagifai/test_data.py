@@ -10,7 +10,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from tagifai import config, data, main, utils
+from app import config
+from tagifai import data, main, utils
 
 
 @pytest.fixture

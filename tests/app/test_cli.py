@@ -7,8 +7,9 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
+from app import config
 from app.cli import app
-from tagifai import config, utils
+from tagifai import utils
 
 runner = CliRunner()
 

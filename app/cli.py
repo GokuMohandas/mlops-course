@@ -18,8 +18,9 @@ from feast import FeatureStore
 from numpyencoder import NumpyEncoder
 from optuna.integration.mlflow import MLflowCallback
 
-from tagifai import config, eval, main, predict, utils
-from tagifai.config import logger
+from app import config
+from app.config import logger
+from tagifai import eval, main, predict, utils
 
 # Ignore warning
 warnings.filterwarnings("ignore")
@@ -63,6 +64,7 @@ def compute_features(
 
     # Compute features
     main.compute_features(params=params)
+    logger.info("✅ Computed features!")
 
 
 @app.command()

@@ -23,7 +23,7 @@ Join 30K+ developers in learning how to responsibly <a href="https://madewithml.
 ## MLOps
 Learn how to apply ML to build a production grade product to deliver value.
 
-- Lessons: https://madewithml.com/courses/mlops/
+- Lessons: https://madewithml.com/#mlops
 - Code: [GokuMohandas/MLOps](https://github.com/GokuMohandas/MLOps)
 
 > If you need refresh yourself on the foundations of machine learning, check out our [Made With ML](https://github.com/GokuMohandas/MadeWithML) repository.
@@ -111,9 +111,9 @@ Learn how to apply ML to build a production grade product to deliver value.
 app/
 ├── api.py        - FastAPI app
 └── cli.py        - CLI app
+├── config.py     - configuration setup
 ├── schemas.py    - API model schemas
 tagifai/
-├── config.py     - configuration setup
 ├── data.py       - data processing components
 ├── eval.py       - evaluation components
 ├── main.py       - training/optimization pipelines

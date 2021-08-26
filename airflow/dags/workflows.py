@@ -8,8 +8,7 @@ from airflow.decorators import dag
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python import BranchPythonOperator, PythonOperator
 from airflow.utils.dates import days_ago
-from app import cli
-from tagifai import config
+from app import cli, config
 
 # Default DAG args
 default_args = {

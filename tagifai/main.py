@@ -14,8 +14,9 @@ import pandas as pd
 import torch
 from numpyencoder import NumpyEncoder
 
-from tagifai import config, data, eval, models, train, utils
-from tagifai.config import logger
+from app import config
+from app.config import logger
+from tagifai import data, eval, models, train, utils
 
 
 def load_artifacts(run_id: str, device: torch.device = torch.device("cpu")) -> Dict:

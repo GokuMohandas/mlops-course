@@ -7,7 +7,7 @@ from feast import Entity, Feature, FeatureView, ValueType
 from feast.data_source import FileSource
 from google.protobuf.duration_pb2 import Duration
 
-from tagifai import config
+from app import config
 
 # Read data
 START_TIME = "2020-02-17"

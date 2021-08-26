@@ -103,7 +103,7 @@ nav:
   - Reference:
     - API: app/api.md
     - CLI: app/cli.md
-    - Config: tagifai/config.md
+    - Config: app/config.md
     - Data: tagifai/data.md
     - Models: tagifai/models.md
     - Training: tagifai/train.md
