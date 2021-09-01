@@ -621,7 +621,7 @@ def pad_sequences(sequences: np.ndarray, max_seq_len: int = 0) -> np.ndarray:
 
     Note:
         Input `sequences` must be 2D.
-        Check out this [implemention](https://madewithml.com/courses/basics/convolutional-neural-networks/#padding){:target="_blank"} for a more generalized approach.
+        Check out this [implemention](https://madewithml.com/courses/foundations/convolutional-neural-networks/#padding){:target="_blank"} for a more generalized approach.
 
     Args:
         sequences (np.ndarray): 2D array of data to be padded.
