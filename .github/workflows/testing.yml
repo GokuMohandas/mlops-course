@@ -25,4 +25,4 @@ jobs:
         run: |
           python -m pip install -e ".[test]" --no-cache-dir
       - name: Execute tests
-        run: pytest tests/tagifai
+        run: pytest --cov tagifai --cov-report html
