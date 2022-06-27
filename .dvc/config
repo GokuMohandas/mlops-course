@@ -1,0 +1,4 @@
+[core]
+    remote = storage
+['remote "storage"']
+    url = ../stores/blob

@@ -1,0 +1,18 @@
+site_name: Made With ML
+site_url: https://madewithml.com/
+repo_url: https://github.com/GokuMohandas/MLOps/
+nav:
+  - Home: index.md
+  - workflows:
+    - main: tagifai/main.md
+  - tagifai:
+    - data: tagifai/data.md
+    - evaluate: tagifai/evaluate.md
+    - predict: tagifai/predict.md
+    - train: tagifai/train.md
+    - utils: tagifai/utils.md
+theme: readthedocs
+plugins:
+  - mkdocstrings
+watch:
+  - .  # reload docs for any file changes

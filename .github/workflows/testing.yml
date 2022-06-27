@@ -1,0 +1,30 @@
+name: testing
+on:
+  push:
+    branches:
+    - master
+    - main
+  pull_request:
+    branches:
+    - master
+    - main
+jobs:
+  test-code:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7.10
+      - name: Caching
+        uses: actions/cache@v2
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('setup.py') }}-${{ hashFiles('requirements.txt') }}
+      - name: Install dependencies
+        run: |
+          python -m pip install -e ".[test]" --no-cache-dir
+      - name: Execute tests
+        run: pytest tests/tagifai --ignore tests/tagifai/test_main.py --ignore tests/tagifai/test_data.py

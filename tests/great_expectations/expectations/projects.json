@@ -1,0 +1,112 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "projects",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_columns_to_match_ordered_list",
+      "kwargs": {
+        "column_list": [
+          "id",
+          "created_on",
+          "title",
+          "description",
+          "tag"
+        ]
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "id"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "created_on"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "title"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "description"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "tag"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "title",
+        "type_": "str"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "description",
+        "type_": "str"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "tag",
+        "type_": "str"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_match_strftime_format",
+      "kwargs": {
+        "column": "created_on",
+        "strftime_format": "%Y-%m-%d %H:%M:%S"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_compound_columns_to_be_unique",
+      "kwargs": {
+        "column_list": [
+          "title",
+          "description"
+        ]
+      },
+      "meta": {}
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "citations": [
+      {
+        "batch_request": {
+          "data_asset_name": "projects.json",
+          "data_connector_name": "default_inferred_data_connector_name",
+          "datasource_name": "data",
+          "limit": 1000
+        },
+        "citation_date": "2022-05-27T18:13:55.925057Z",
+        "comment": "Created suite added via CLI"
+      }
+    ],
+    "great_expectations_version": "0.15.7"
+  }
+}
