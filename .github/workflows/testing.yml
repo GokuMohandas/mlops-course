@@ -27,4 +27,4 @@ jobs:
         run: |
           python -m pip install -e ".[test]" --no-cache-dir
       - name: Execute tests
-        run: pytest tests/tagifai --ignore tests/tagifai/test_main.py --ignore tests/tagifai/test_data.py
+        run: pytest tests/code --ignore tests/code/test_main.py --ignore tests/code/test_data.py
