@@ -8,4 +8,4 @@
 Learn how to apply ML to build a production grade product to deliver value.
 
 - Lessons: [https://madewithml.com/](https://madewithml.com/#mlops)
-- Code: [GokuMohandas/MLOps](https://github.com/GokuMohandas/MLOps)
+- Code: [GokuMohandas/mlops-course](https://github.com/GokuMohandas/mlops-course)

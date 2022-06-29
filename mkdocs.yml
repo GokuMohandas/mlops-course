@@ -1,6 +1,6 @@
 site_name: Made With ML
 site_url: https://madewithml.com/
-repo_url: https://github.com/GokuMohandas/MLOps/
+repo_url: https://github.com/GokuMohandas/mlops-course/
 nav:
   - Home: index.md
   - workflows:
