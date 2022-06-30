@@ -29,7 +29,7 @@ def test_label_data():
         app,
         [
             "label-data",
-            f"{args_fp}",
+            f"--args-fp={args_fp}",
         ],
     )
     assert result.exit_code == 0
@@ -43,9 +43,9 @@ def test_train_model():
         app,
         [
             "train-model",
-            f"{args_fp}",
-            f"{experiment_name}",
-            f"{run_name}",
+            f"--args-fp={args_fp}",
+            f"--experiment-name={experiment_name}",
+            f"--run-name={run_name}",
             "--test-run",
         ],
     )
@@ -64,9 +64,9 @@ def test_optimize():
         app,
         [
             "optimize",
-            f"{args_fp}",
-            f"{study_name}",
-            f"{num_trials}",
+            f"--args-fp={args_fp}",
+            f"--study-name={study_name}",
+            f"--num-trials={num_trials}",
         ],
     )
     assert result.exit_code == 0
@@ -84,5 +84,5 @@ def test_load_artifacts():
 
 def test_predict_tag():
     text = "Transfer learning with transformers for text classification."
-    result = runner.invoke(app, ["predict-tag", text])
+    result = runner.invoke(app, ["predict-tag", f"--text={text}"])
     assert result.exit_code == 0

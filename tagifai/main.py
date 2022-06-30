@@ -40,7 +40,7 @@ def load_data():
 
 
 @app.command()
-def label_data(args_fp: str) -> None:
+def label_data(args_fp: str = "config/args.json") -> None:
     """Label data with constraints.
 
     Args:
@@ -73,7 +73,12 @@ def label_data(args_fp: str) -> None:
 
 
 @app.command()
-def train_model(args_fp: str, experiment_name: str, run_name: str, test_run: bool = False) -> None:
+def train_model(
+    args_fp: str = "config/args.json",
+    experiment_name: str = "baselines",
+    run_name: str = "sgd",
+    test_run: bool = False,
+) -> None:
     """Train a model given arguments.
 
     Args:
@@ -120,7 +125,9 @@ def train_model(args_fp: str, experiment_name: str, run_name: str, test_run: boo
 
 
 @app.command()
-def optimize(args_fp: str, study_name: str, num_trials: int) -> None:
+def optimize(
+    args_fp: str = "config/args.json", study_name: str = "optimization", num_trials: int = 20
+) -> None:
     """Optimize hyperparameters.
 
     Args:
@@ -153,7 +160,7 @@ def optimize(args_fp: str, study_name: str, num_trials: int) -> None:
     logger.info(f"Best hyperparameters: {json.dumps(study.best_trial.params, indent=2)}")
 
 
-def load_artifacts(run_id: str) -> Dict:
+def load_artifacts(run_id: str = None) -> Dict:
     """Load artifacts for a given run_id.
 
     Args:
@@ -162,6 +169,9 @@ def load_artifacts(run_id: str) -> Dict:
     Returns:
         Dict: run's artifacts.
     """
+    if not run_id:
+        run_id = open(Path(config.CONFIG_DIR, "run_id.txt")).read()
+
     # Locate specifics artifacts directory
     experiment_id = mlflow.get_run(run_id=run_id).info.experiment_id
     artifacts_dir = Path(config.MODEL_REGISTRY, experiment_id, run_id, "artifacts")
@@ -183,7 +193,7 @@ def load_artifacts(run_id: str) -> Dict:
 
 
 @app.command()
-def predict_tag(text: str, run_id: str = None) -> None:
+def predict_tag(text: str = "", run_id: str = None) -> None:
     """Predict tag for text.
 
     Args:

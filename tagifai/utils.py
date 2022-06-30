@@ -44,6 +44,7 @@ def save_dict(d: Dict, filepath: str, cls=None, sortkeys: bool = False) -> None:
     """
     with open(filepath, "w") as fp:
         json.dump(d, indent=2, fp=fp, cls=cls, sort_keys=sortkeys)
+        fp.write("\n")
 
 
 def set_seeds(seed: int = 42) -> None:

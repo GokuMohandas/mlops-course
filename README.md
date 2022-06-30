@@ -88,13 +88,19 @@ Learn how to apply ML to build a production grade product to deliver value.
 📆&nbsp; More content coming soon!<br>
 <a href="https://newsletter.madewithml.com" target="_blank">Subscribe</a> for our monthly updates on new content.
 
+### Instructions
+
+We highly recommend going through the [lessons](https://madewithml.com/#mlops) one at a time and building the code base as we progress. For every concept, we focus on the fundamentals and then dive into the code, at which point we can refer to this repository as a guide.
+
 ### Virtual environment
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install --upgrade pip setuptools wheel
-python3 -m pip install -e .
+python3 -m pip install -e ".[dev]"
 ```
+
+> If the commands above do not work, please refer to the [packaging](https://madewithml.com/courses/mlops/packaging/) lesson. We highly recommend using [Python version](https://madewithml.com/courses/mlops/packaging/#python) `3.7.10`.
 
 ### Directory
 ```bash
@@ -105,6 +111,15 @@ tagifai/
 ├── predict.py    - inference utilities
 ├── train.py      - training utilities
 └── utils.py      - supplementary utilities
+```
+
+### Workflow
+```bash
+python tagifai/main.py load-data
+python tagifai/main.py label-data --args-fp="config/args.json"
+python tagifai/main.py optimize --args-fp="config/args.json" --study-name="optimization" --num-trials=10
+python tagifai/main.py train-model --args-fp="config/args.json" --experiment-name="baselines" --run-name="sgd"
+python tagifai/main.py predict-tag --text="Transfer learning with transformers for text classification."
 ```
 
 ### API
