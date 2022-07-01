@@ -98,9 +98,11 @@ python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install --upgrade pip setuptools wheel
 python3 -m pip install -e ".[dev]"
+pre-commit install
+pre-commit autoupdate
 ```
 
-> If the commands above do not work, please refer to the [packaging](https://madewithml.com/courses/mlops/packaging/) lesson. We highly recommend using [Python version](https://madewithml.com/courses/mlops/packaging/#python) `3.7.10`.
+> If the commands above do not work, please refer to the [packaging](https://madewithml.com/courses/mlops/packaging/) lesson. We highly recommend using [Python version](https://madewithml.com/courses/mlops/packaging/#python) `3.7.13`.
 
 ### Directory
 ```bash
