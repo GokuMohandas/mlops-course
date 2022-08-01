@@ -7,7 +7,7 @@ from tagifai import utils
 
 
 def test_load_json_from_url():
-    tags_url = "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/tags.json"
+    tags_url = "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/tags.json"
     tags_dict = {}
     for item in utils.load_json_from_url(url=tags_url):
         key = item.pop("tag")

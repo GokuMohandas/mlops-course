@@ -2,6 +2,8 @@
 
 A free MLOps course to learn how to apply ML to build a production grade product to deliver value.
 
+> MLOps concepts are interweaved and cannot be run in isolation, so be sure to complement the code in this repository with the detailed [MLOps lessons](https://madewithml.com/#mlops).
+
 <div align="left">
     <a target="_blank" href="https://newsletter.madewithml.com"><img src="https://img.shields.io/badge/Subscribe-30K-brightgreen"></a>&nbsp;
     <a target="_blank" href="https://github.com/GokuMohandas/Made-With-ML"><img src="https://img.shields.io/github/stars/GokuMohandas/Made-With-ML.svg?style=social&label=Star"></a>&nbsp;
@@ -26,7 +28,7 @@ A free MLOps course to learn how to apply ML to build a production grade product
 			<td><a href="https://madewithml.com/courses/mlops/git/">Git</a></td>
 		</tr>
 		<tr>
-			<td><a href="https://madewithml.com/courses/mlops/product/#system-design">System design</a></td>
+			<td><a href="https://madewithml.com/courses/mlops/purpose/#design">Design</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/organization/">Organization</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/pre-commit/">Pre-commit</a></td>
 		</tr>

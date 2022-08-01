@@ -71,9 +71,9 @@ logger.handlers[0] = RichHandler(markup=True)
 
 # Assets
 PROJECTS_URL = (
-    "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/projects.json"
+    "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/projects.json"
 )
-TAGS_URL = "https://raw.githubusercontent.com/GokuMohandas/MadeWithML/main/datasets/tags.json"
+TAGS_URL = "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/tags.json"
 STOPWORDS = [
     "i",
     "me",
