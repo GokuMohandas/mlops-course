@@ -19,8 +19,8 @@ def delete_experiment(experiment_name):
     client.delete_experiment(experiment_id=experiment_id)
 
 
-def test_load_data():
-    result = runner.invoke(app, ["load-data"])
+def test_etl_data():
+    result = runner.invoke(app, ["etl-data"])
     assert result.exit_code == 0
 
 

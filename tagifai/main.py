@@ -24,19 +24,23 @@ app = typer.Typer()
 
 
 @app.command()
-def load_data():
-    """Load data from URLs and save to local drive."""
-    # Download data assets
+def etl_data():
+    """Extract, load and transform our data assets."""
+    # Extract
     projects = utils.load_json_from_url(url=config.PROJECTS_URL)
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    utils.save_dict(d=projects, filepath=projects_fp)
-
-    # Download auxiliary data
     tags = utils.load_json_from_url(url=config.TAGS_URL)
+
+    # Transform
+    df = pd.DataFrame(projects)
+    df = df[df.tag.notnull()]  # drop rows w/ no tag
+
+    # Load
+    projects_fp = Path(config.DATA_DIR, "projects.json")
+    utils.save_dict(d=df.to_dict(orient="records"), filepath=projects_fp)
     tags_fp = Path(config.DATA_DIR, "tags.json")
     utils.save_dict(d=tags, filepath=tags_fp)
 
-    logger.info("✅ Saved raw data!")
+    logger.info("✅ ETL on data is complete!")
 
 
 @app.command()

@@ -1,6 +1,14 @@
 # MLOps Course
 
-Learn how to apply ML to build a production grade product to deliver value.
+A free MLOps course to learn how to apply ML to build a production grade product to deliver value.
+
+<div align="left">
+    <a target="_blank" href="https://newsletter.madewithml.com"><img src="https://img.shields.io/badge/Subscribe-30K-brightgreen"></a>&nbsp;
+    <a target="_blank" href="https://github.com/GokuMohandas/Made-With-ML"><img src="https://img.shields.io/github/stars/GokuMohandas/Made-With-ML.svg?style=social&label=Star"></a>&nbsp;
+    <a target="_blank" href="https://www.linkedin.com/in/goku"><img src="https://img.shields.io/badge/style--5eba00.svg?label=LinkedIn&logo=linkedin&style=social"></a>&nbsp;
+    <a target="_blank" href="https://twitter.com/GokuMohandas"><img src="https://img.shields.io/twitter/follow/GokuMohandas.svg?label=Follow&style=social"></a>
+    <br>
+</div>
 
 - Lessons: https://madewithml.com/#mlops
 - Code: [GokuMohandas/mlops-course](https://github.com/GokuMohandas/mlops-course)
@@ -70,7 +78,7 @@ Learn how to apply ML to build a production grade product to deliver value.
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
-			<td><a>Orchestration</a>&nbsp;<small>(Aug 2022)</small></td>
+			<td><a href="https://madewithml.com/courses/mlops/orchestration/">Orchestration</a></td>
 		</tr>
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
@@ -117,7 +125,7 @@ tagifai/
 
 ### Workflow
 ```bash
-python tagifai/main.py load-data
+python tagifai/main.py etl-data
 python tagifai/main.py label-data --args-fp="config/args.json"
 python tagifai/main.py optimize --args-fp="config/args.json" --study-name="optimization" --num-trials=10
 python tagifai/main.py train-model --args-fp="config/args.json" --experiment-name="baselines" --run-name="sgd"
