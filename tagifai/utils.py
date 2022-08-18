@@ -1,22 +1,8 @@
 import json
 import random
 from typing import Dict
-from urllib.request import urlopen
 
 import numpy as np
-
-
-def load_json_from_url(url: str) -> Dict:
-    """Load JSON data from a URL.
-
-    Args:
-        url (str): URL of the data source.
-
-    Returns:
-        Dict: loaded JSON data.
-    """
-    data = json.loads(urlopen(url).read())
-    return data
 
 
 def load_dict(filepath: str) -> Dict:

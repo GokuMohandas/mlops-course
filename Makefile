@@ -33,6 +33,7 @@ clean: style
 	find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
 	find . | grep -E ".pytest_cache" | xargs rm -rf
 	find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
+	find . | grep -E ".trash" | xargs rm -rf
 	rm -f .coverage
 
 # Test
@@ -45,7 +46,7 @@ test:
 
 .PHONY: dvc
 dvc:
-	dvc add data/projects.json
-	dvc add data/tags.json
-	dvc add data/labeled_projects.json
+	dvc add data/projects.csv
+	dvc add data/tags.csv
+	dvc add data/labeled_projects.csv
 	dvc push

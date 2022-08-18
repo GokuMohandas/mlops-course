@@ -70,7 +70,7 @@ A free MLOps course to learn how to apply ML to build a production grade product
 		<tr>
 			<td><strong>📈&nbsp; Modeling</strong></td>
 			<td><strong>✅&nbsp; Testing</strong></td>
-			<td><a href="https://madewithml.com/courses/mlops/systems-design/">Systems design</a></td>
+            <td><a href="https://madewithml.com/courses/mlops/orchestration/">Orchestration</a></td>
 		</tr>
 		<tr>
 			<td>&nbsp;<a href="https://madewithml.com/courses/mlops/baselines/">Baselines</a></td>
@@ -80,7 +80,7 @@ A free MLOps course to learn how to apply ML to build a production grade product
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
-			<td><a href="https://madewithml.com/courses/mlops/orchestration/">Orchestration</a></td>
+			<td><a href="https://madewithml.com/courses/mlops/systems-design/">Systems design</a></td>
 		</tr>
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
@@ -128,7 +128,6 @@ tagifai/
 ### Workflow
 ```bash
 python tagifai/main.py etl-data
-python tagifai/main.py label-data --args-fp="config/args.json"
 python tagifai/main.py optimize --args-fp="config/args.json" --study-name="optimization" --num-trials=10
 python tagifai/main.py train-model --args-fp="config/args.json" --experiment-name="baselines" --run-name="sgd"
 python tagifai/main.py predict-tag --text="Transfer learning with transformers for text classification."

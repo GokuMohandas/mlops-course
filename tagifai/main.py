@@ -27,53 +27,19 @@ app = typer.Typer()
 def etl_data():
     """Extract, load and transform our data assets."""
     # Extract
-    projects = utils.load_json_from_url(url=config.PROJECTS_URL)
-    tags = utils.load_json_from_url(url=config.TAGS_URL)
+    projects = pd.read_csv(config.PROJECTS_URL)
+    tags = pd.read_csv(config.TAGS_URL)
 
     # Transform
-    df = pd.DataFrame(projects)
+    df = pd.merge(projects, tags, on="id")
     df = df[df.tag.notnull()]  # drop rows w/ no tag
 
     # Load
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    utils.save_dict(d=df.to_dict(orient="records"), filepath=projects_fp)
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    utils.save_dict(d=tags, filepath=tags_fp)
+    projects.to_csv(Path(config.DATA_DIR, "projects.csv"), index=False)
+    tags.to_csv(Path(config.DATA_DIR, "tags.csv"), index=False)
+    df.to_csv(Path(config.DATA_DIR, "labeled_projects.csv"), index=False)
 
-    logger.info("✅ ETL on data is complete!")
-
-
-@app.command()
-def label_data(args_fp: str = "config/args.json") -> None:
-    """Label data with constraints.
-
-    Args:
-        args_fp (str): location of args.
-    """
-    # Load projects
-    projects_fp = Path(config.DATA_DIR, "projects.json")
-    projects = utils.load_dict(filepath=projects_fp)
-    df = pd.DataFrame(projects)
-
-    # Load tags
-    tags_dict = {}
-    tags_fp = Path(config.DATA_DIR, "tags.json")
-    for item in utils.load_dict(filepath=tags_fp):
-        key = item.pop("tag")
-        tags_dict[key] = item
-
-    # Label with constrains
-    args = Namespace(**utils.load_dict(filepath=args_fp))
-    df = df[df.tag.notnull()]  # remove projects with no label
-    df = data.replace_oos_labels(df=df, labels=tags_dict.keys(), label_col="tag", oos_label="other")
-    df = data.replace_minority_labels(
-        df=df, label_col="tag", min_freq=args.min_freq, new_label="other"
-    )
-
-    # Save clean labeled data
-    labeled_projects_fp = Path(config.DATA_DIR, "labeled_projects.json")
-    utils.save_dict(d=df.to_dict(orient="records"), filepath=labeled_projects_fp)
-    logger.info("✅ Saved labeled data!")
+    logger.info("✅ Saved data!")
 
 
 @app.command()
@@ -92,9 +58,7 @@ def train_model(
         test_run (bool, optional): If True, artifacts will not be saved. Defaults to False.
     """
     # Load labeled data
-    projects_fp = Path(config.DATA_DIR, "labeled_projects.json")
-    projects = utils.load_dict(filepath=projects_fp)
-    df = pd.DataFrame(projects)
+    df = pd.read_csv(Path(config.DATA_DIR, "labeled_projects.csv"))
 
     # Train
     args = Namespace(**utils.load_dict(filepath=args_fp))
@@ -140,9 +104,7 @@ def optimize(
         num_trials (int): number of trials to run in study.
     """
     # Load labeled data
-    projects_fp = Path(config.DATA_DIR, "labeled_projects.json")
-    projects = utils.load_dict(filepath=projects_fp)
-    df = pd.DataFrame(projects)
+    df = pd.read_csv(Path(config.DATA_DIR, "labeled_projects.csv"))
 
     # Optimize
     args = Namespace(**utils.load_dict(filepath=args_fp))

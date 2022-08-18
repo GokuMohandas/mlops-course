@@ -80,7 +80,7 @@ def test_clean_text(text, lower, stem, stopwords, cleaned_text):
 
 def test_preprocess(df):
     assert "text" not in df.columns
-    df = data.preprocess(df=df, lower=True, stem=False)
+    df = data.preprocess(df=df, lower=True, stem=False, min_freq=0)
     assert "text" in df.columns
 
 
@@ -146,7 +146,7 @@ class TestLabelEncoder:
 
 def test_get_data_splits(df):
     df = df.sample(frac=1).reset_index(drop=True)
-    df = data.preprocess(df, lower=True, stem=False)
+    df = data.preprocess(df, lower=True, stem=False, min_freq=0)
     label_encoder = data.LabelEncoder().fit(df.tag)
     X_train, X_val, X_test, y_train, y_val, y_test = data.get_data_splits(
         X=df.text.to_numpy(), y=label_encoder.encode(df.tag)

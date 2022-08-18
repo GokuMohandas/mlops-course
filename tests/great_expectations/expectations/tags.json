@@ -6,8 +6,8 @@
       "expectation_type": "expect_table_columns_to_match_ordered_list",
       "kwargs": {
         "column_list": [
-          "tag",
-          "aliases"
+          "id",
+          "tag"
         ]
       },
       "meta": {}
@@ -15,7 +15,7 @@
     {
       "expectation_type": "expect_column_values_to_be_unique",
       "kwargs": {
-        "column": "tag"
+        "column": "id"
       },
       "meta": {}
     },
@@ -33,14 +33,6 @@
         "type_": "str"
       },
       "meta": {}
-    },
-    {
-      "expectation_type": "expect_column_values_to_be_of_type",
-      "kwargs": {
-        "column": "aliases",
-        "type_": "list"
-      },
-      "meta": {}
     }
   ],
   "ge_cloud_id": null,
@@ -48,15 +40,15 @@
     "citations": [
       {
         "batch_request": {
-          "data_asset_name": "tags.json",
+          "data_asset_name": "tags.csv",
           "data_connector_name": "default_inferred_data_connector_name",
-          "datasource_name": "data",
+          "datasource_name": "local_data",
           "limit": 1000
         },
-        "citation_date": "2022-05-27T19:09:02.322810Z",
+        "citation_date": "2022-08-18T22:12:54.917761Z",
         "comment": "Created suite added via CLI"
       }
     ],
-    "great_expectations_version": "0.15.7"
+    "great_expectations_version": "0.15.15"
   }
 }

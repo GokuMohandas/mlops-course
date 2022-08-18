@@ -1,6 +1,6 @@
 {
   "data_asset_type": null,
-  "expectation_suite_name": "projects",
+  "expectation_suite_name": "labeled_projects",
   "expectations": [
     {
       "expectation_type": "expect_table_columns_to_match_ordered_list",
@@ -9,7 +9,8 @@
           "id",
           "created_on",
           "title",
-          "description"
+          "description",
+          "tag"
         ]
       },
       "meta": {}
@@ -75,6 +76,21 @@
         "type_": "str"
       },
       "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "tag"
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_of_type",
+      "kwargs": {
+        "column": "tag",
+        "type_": "str"
+      },
+      "meta": {}
     }
   ],
   "ge_cloud_id": null,
@@ -82,12 +98,12 @@
     "citations": [
       {
         "batch_request": {
-          "data_asset_name": "projects.csv",
+          "data_asset_name": "labeled_projects.csv",
           "data_connector_name": "default_inferred_data_connector_name",
           "datasource_name": "local_data",
           "limit": 1000
         },
-        "citation_date": "2022-08-18T22:11:43.986573Z",
+        "citation_date": "2022-08-18T22:05:02.392766Z",
         "comment": "Created suite added via CLI"
       }
     ],

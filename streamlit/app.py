@@ -7,18 +7,12 @@ from config import config
 from tagifai import main, utils
 
 # Title
-st.title("TagIfAI · MLOps · Made With ML")
-
-# ToC
-st.markdown("🔢 [Data](#data)", unsafe_allow_html=True)
-st.markdown("📊 [Performance](#performance)", unsafe_allow_html=True)
-st.markdown("🚀 [Inference](#inference)", unsafe_allow_html=True)
+st.title("MLOps Course · Made With ML")
 
 # Sections
 st.header("🔢 Data")
-projects_fp = Path(config.DATA_DIR, "labeled_projects.json")
-projects = utils.load_dict(filepath=projects_fp)
-df = pd.DataFrame(projects)
+projects_fp = Path(config.DATA_DIR, "labeled_projects.csv")
+df = pd.read_csv(projects_fp)
 st.text(f"Projects (count: {len(df)})")
 st.write(df)
 

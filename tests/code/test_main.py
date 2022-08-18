@@ -1,4 +1,3 @@
-import shutil
 from pathlib import Path
 
 import mlflow
@@ -24,17 +23,6 @@ def test_etl_data():
     assert result.exit_code == 0
 
 
-def test_label_data():
-    result = runner.invoke(
-        app,
-        [
-            "label-data",
-            f"--args-fp={args_fp}",
-        ],
-    )
-    assert result.exit_code == 0
-
-
 @pytest.mark.training
 def test_train_model():
     experiment_name = "test_experiment"
@@ -51,9 +39,8 @@ def test_train_model():
     )
     assert result.exit_code == 0
 
-    # Delete experiment
+    # Clean up
     delete_experiment(experiment_name=experiment_name)
-    shutil.rmtree(Path(config.MODEL_REGISTRY, ".trash"))
 
 
 @pytest.mark.training
@@ -71,9 +58,8 @@ def test_optimize():
     )
     assert result.exit_code == 0
 
-    # Delete study
+    # Clean up
     delete_experiment(experiment_name=study_name)
-    shutil.rmtree(Path(config.MODEL_REGISTRY, ".trash"))
 
 
 def test_load_artifacts():

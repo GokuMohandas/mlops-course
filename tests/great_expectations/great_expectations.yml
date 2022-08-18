@@ -14,25 +14,29 @@ config_version: 3.0
 # You can use the CLI command `great_expectations datasource new` to help you
 # add a new datasource. Read more at https://docs.greatexpectations.io/docs/guides/connecting_to_your_data/connect_to_data_overview
 datasources:
-  data:
+  local_data:
+    class_name: Datasource
+    execution_engine:
+      class_name: PandasExecutionEngine
+      module_name: great_expectations.execution_engine
     data_connectors:
       default_inferred_data_connector_name:
-        class_name: InferredAssetFilesystemDataConnector
         default_regex:
           group_names:
             - data_asset_name
           pattern: (.*)
-        module_name: great_expectations.datasource.data_connector
+        class_name: InferredAssetFilesystemDataConnector
         base_directory: ../../data
+        module_name: great_expectations.datasource.data_connector
       default_runtime_data_connector_name:
         class_name: RuntimeDataConnector
-        batch_identifiers:
-          - default_identifier_name
+        assets:
+          my_runtime_asset_name:
+            class_name: Asset
+            batch_identifiers:
+              - runtime_batch_identifier_name
+            module_name: great_expectations.datasource.data_connector.asset
         module_name: great_expectations.datasource.data_connector
-    class_name: Datasource
-    execution_engine:
-      module_name: great_expectations.execution_engine
-      class_name: PandasExecutionEngine
     module_name: great_expectations.datasource
 
 # This config file supports variable substitution which enables: 1) keeping
@@ -119,6 +123,6 @@ data_docs_sites:
       class_name: DefaultSiteIndexBuilder
 
 anonymous_usage_statistics:
-  data_context_id: c9a8c732-43a3-46c5-beb3-0c9780d27fd2
   enabled: true
+  data_context_id: e6622aba-85c7-45c7-91b0-b5e0299e5829
 notebooks:

@@ -71,9 +71,10 @@ logger.handlers[0] = RichHandler(markup=True)
 
 # Assets
 PROJECTS_URL = (
-    "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/projects.json"
+    "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/projects.csv"
 )
-TAGS_URL = "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/tags.json"
+TAGS_URL = "https://raw.githubusercontent.com/GokuMohandas/Made-With-ML/main/datasets/tags.csv"
+ACCEPTED_TAGS = ["natural-language-processing", "computer-vision", "mlops", "graph-learning"]
 STOPWORDS = [
     "i",
     "me",

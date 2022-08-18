@@ -9,6 +9,9 @@ from airflow.decorators import dag
 from airflow.operators.bash_operator import BashOperator
 from airflow.operators.python import BranchPythonOperator
 from airflow.operators.python_operator import PythonOperator
+from airflow.providers.airbyte.operators.airbyte import (
+    AirbyteTriggerSyncOperator,
+)
 from airflow.utils.dates import days_ago
 from config import config
 from tagifai import main, utils
@@ -20,14 +23,42 @@ default_args = {
 }
 
 
+# Define DAG
+@dag(
+    dag_id="temp",
+    description="DataOps tasks.",
+    default_args=default_args,
+    schedule_interval=None,
+    start_date=days_ago(2),
+    tags=["dataops"],
+)
+def temp():
+    extract_projects = AirbyteTriggerSyncOperator(
+        task_id="extract_projects",
+        airbyte_conn_id="airbyte",
+        connection_id="0a402218-61e9-4f0f-a87e-8be310fd0b23",
+        asynchronous=False,
+        timeout=3600,
+        wait_seconds=3,
+    )
+    extract_tags = AirbyteTriggerSyncOperator(
+        task_id="extract_tags",
+        airbyte_conn_id="airbyte",
+        connection_id="2ac58ee0-dd5b-4feb-918c-cd649061a860",
+        asynchronous=False,
+        timeout=3600,
+        wait_seconds=3,
+    )
+
+    # Define DAG
+    [extract_projects, extract_tags]
+
+
 def _extract(ti):
     """Extract from source (ex. DB, API, etc.)
     Our simple ex: extract data from a URL
     """
-    projects = utils.load_json_from_url(url=config.PROJECTS_URL)
-    tags = utils.load_json_from_url(url=config.TAGS_URL)
-    ti.xcom_push(key="projects", value=projects)
-    ti.xcom_push(key="tags", value=tags)
+    pass
 
 
 def _load(ti):
@@ -36,8 +67,8 @@ def _load(ti):
     """
     projects = ti.xcom_pull(key="projects", task_ids=["extract"])[0]
     tags = ti.xcom_pull(key="tags", task_ids=["extract"])[0]
-    utils.save_dict(d=projects, filepath=Path(config.DATA_DIR, "projects.json"))
-    utils.save_dict(d=tags, filepath=Path(config.DATA_DIR, "tags.json"))
+    utils.save_dict(d=projects, filepath=Path(config.DATA_DIR, "projects.csv"))
+    utils.save_dict(d=tags, filepath=Path(config.DATA_DIR, "tags.csv"))
 
 
 def _transform(ti):
@@ -47,7 +78,7 @@ def _transform(ti):
     projects = ti.xcom_pull(key="projects", task_ids=["extract"])[0]
     df = pd.DataFrame(projects)
     df = df[df.tag.notnull()]  # drop rows w/ no tag
-    utils.save_dict(d=df.to_dict(orient="records"), filepath=Path(config.DATA_DIR, "projects.json"))
+    utils.save_dict(d=df.to_dict(orient="records"), filepath=Path(config.DATA_DIR, "projects.csv"))
 
 
 # Define DAG
@@ -57,7 +88,7 @@ def _transform(ti):
     default_args=default_args,
     schedule_interval=None,
     start_date=days_ago(2),
-    tags=["mlops"],
+    tags=["dataops"],
 )
 def dataops():
     extract = PythonOperator(task_id="extract", python_callable=_extract)
@@ -115,17 +146,6 @@ def _online_evaluation():
     tags=["mlops"],
 )
 def mlops():
-    prepare = PythonOperator(
-        task_id="prepare",
-        python_callable=main.label_data,
-        op_kwargs={"args_fp": Path(config.CONFIG_DIR, "args.json")},
-    )
-    validate_prepared_data = GreatExpectationsOperator(
-        task_id="validate_prepared_data",
-        checkpoint_name="labeled_projects",
-        data_context_root_dir="tests/great_expectations",
-        fail_task_on_validation_failure=True,
-    )
     optimize = PythonOperator(
         task_id="optimize",
         python_callable=main.optimize,
@@ -160,17 +180,10 @@ def mlops():
         task_id="inspect",
         bash_command="echo inspect why online experiment failed",
     )
-    (
-        prepare
-        >> validate_prepared_data
-        >> optimize
-        >> train
-        >> offline_evaluation
-        >> online_evaluation
-        >> [deploy, inspect]
-    )
+    (optimize >> train >> offline_evaluation >> online_evaluation >> [deploy, inspect])
 
 
 # Run DAGs
+temp_ops = temp()
 data_ops = dataops()
 ml_ops = mlops()
