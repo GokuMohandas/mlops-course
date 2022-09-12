@@ -4,11 +4,11 @@
   "min_freq": 75,
   "lower": true,
   "stem": false,
-  "analyzer": "word",
-  "ngram_max_range": 6,
+  "analyzer": "char",
+  "ngram_max_range": 3,
   "alpha": 0.0001,
-  "learning_rate": 0.026953189010926436,
-  "power_t": 0.4995382212979802,
-  "threshold": 0.5004804730410359,
+  "learning_rate": 0.08333489405491466,
+  "power_t": 0.1660657528079197,
+  "threshold": 0.56301702983795,
   "num_epochs": 10
 }

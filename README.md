@@ -1,11 +1,11 @@
 # MLOps Course
 
-A free MLOps course to learn how to apply ML to build a production grade product to deliver value.
+Learn how to combine machine learning with software engineering to build production-grade applications.
 
 > MLOps concepts are interweaved and cannot be run in isolation, so be sure to complement the code in this repository with the detailed [MLOps lessons](https://madewithml.com/#mlops).
 
 <div align="left">
-    <a target="_blank" href="https://newsletter.madewithml.com"><img src="https://img.shields.io/badge/Subscribe-30K-brightgreen"></a>&nbsp;
+    <a target="_blank" href="https://madewithml.com/"><img src="https://img.shields.io/badge/Subscribe-40K-brightgreen"></a>&nbsp;
     <a target="_blank" href="https://github.com/GokuMohandas/Made-With-ML"><img src="https://img.shields.io/github/stars/GokuMohandas/Made-With-ML.svg?style=social&label=Star"></a>&nbsp;
     <a target="_blank" href="https://www.linkedin.com/in/goku"><img src="https://img.shields.io/badge/style--5eba00.svg?label=LinkedIn&logo=linkedin&style=social"></a>&nbsp;
     <a target="_blank" href="https://twitter.com/GokuMohandas"><img src="https://img.shields.io/twitter/follow/GokuMohandas.svg?label=Follow&style=social"></a>
@@ -65,27 +65,27 @@ A free MLOps course to learn how to apply ML to build a production grade product
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/augmentation/">Augmentation</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/api/">RESTful API</a></td>
-			<td><a href="https://madewithml.com/courses/mlops/data-stack/">Data stack</a></td>
+            <td><a href="https://madewithml.com/courses/mlops/systems-design/">Systems design</a></td>
 		</tr>
 		<tr>
 			<td><strong>📈&nbsp; Modeling</strong></td>
 			<td><strong>✅&nbsp; Testing</strong></td>
-            <td><a href="https://madewithml.com/courses/mlops/orchestration/">Orchestration</a></td>
+            <td><strong>⎈&nbsp; Data engineering</strong></td>
 		</tr>
 		<tr>
 			<td>&nbsp;<a href="https://madewithml.com/courses/mlops/baselines/">Baselines</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/testing/">Code</a></td>
-			<td><a href="https://madewithml.com/courses/mlops/feature-store/">Feature store</a></td>
+			<td><a href="https://madewithml.com/courses/mlops/data-stack/">Data stack</a></td>
 		</tr>
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/evaluation/">Evaluation</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/testing/#data">Data</a></td>
-			<td><a href="https://madewithml.com/courses/mlops/systems-design/">Systems design</a></td>
+            <td><a href="https://madewithml.com/courses/mlops/orchestration/">Orchestration</a></td>
 		</tr>
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/experiment-tracking/">Experiment tracking</a></td>
 			<td><a href="https://madewithml.com/courses/mlops/testing/#models">Models</a></td>
-			<td>&nbsp;</td>
+			<td><a href="https://madewithml.com/courses/mlops/feature-store/">Feature store</a></td>
 		</tr>
 		<tr>
 			<td><a href="https://madewithml.com/courses/mlops/optimization/">Optimization</a></td>
@@ -95,8 +95,8 @@ A free MLOps course to learn how to apply ML to build a production grade product
 	</tbody>
 </table>
 
-📆&nbsp; More content coming soon!<br>
-<a href="https://newsletter.madewithml.com" target="_blank">Subscribe</a> for our monthly updates on new content.
+### Interactive MLOps course
+While all the lessons above are **100% free**, it's hard to learn everything on your own. That's why we're offering an interactive course with the structure and community to actually complete and master these lessons.  More details &nbsp;👉&nbsp; [here](https://madewithml.com/#interactive-course).
 
 ### Instructions
 
@@ -127,7 +127,7 @@ tagifai/
 
 ### Workflow
 ```bash
-python tagifai/main.py etl-data
+python tagifai/main.py elt-data
 python tagifai/main.py optimize --args-fp="config/args.json" --study-name="optimization" --num-trials=10
 python tagifai/main.py train-model --args-fp="config/args.json" --experiment-name="baselines" --run-name="sgd"
 python tagifai/main.py predict-tag --text="Transfer learning with transformers for text classification."
@@ -137,4 +137,17 @@ python tagifai/main.py predict-tag --text="Transfer learning with transformers f
 ```bash
 uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload --reload-dir tagifai --reload-dir app  # dev
 gunicorn -c app/gunicorn.py -k uvicorn.workers.UvicornWorker app.api:app  # prod
+```
+
+<hr>
+<!-- Citation -->
+To cite this content, please use:
+
+```bibtex
+@misc{madewithml,
+    author       = {Goku Mohandas},
+    title        = {MLOps Course - Made With ML},
+    howpublished = {\url{https://madewithml.com/}},
+    year         = {2022}
+}
 ```
