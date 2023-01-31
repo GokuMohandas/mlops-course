@@ -1,6 +1,6 @@
 # MLOps Course
 
-Learn how to combine machine learning with software engineering to build production-grade applications.
+Learn how to combine machine learning with software engineering to develop, deploy and maintain production ML applications.
 
 > MLOps concepts are interweaved and cannot be run in isolation, so be sure to complement the code in this repository with the detailed [MLOps lessons](https://madewithml.com/#mlops).
 
@@ -105,16 +105,16 @@ pre-commit install
 pre-commit autoupdate
 ```
 
-> If the commands above do not work, please refer to the [packaging](https://madewithml.com/courses/mlops/packaging/) lesson. We highly recommend using [Python version](https://madewithml.com/courses/mlops/packaging/#python) `3.7.13`.
+> If the commands above do not work, please refer to the [packaging](https://madewithml.com/courses/mlops/packaging/) lesson. We highly recommend using [Python version](https://madewithml.com/courses/mlops/packaging/#python) `3.9.1`.
 
 ### Directory
 ```bash
 tagifai/
-├── data.py       - data processing utilities
+├── data.py       - data processing components
 ├── evaluate.py   - evaluation components
 ├── main.py       - training/optimization operations
-├── predict.py    - inference utilities
-├── train.py      - training utilities
+├── predict.py    - inference components
+├── train.py      - training components
 └── utils.py      - supplementary utilities
 ```
 

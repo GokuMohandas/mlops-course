@@ -1,15 +1,15 @@
 {
   "overall": {
-    "precision": 0.8784040280050918,
-    "recall": 0.75,
-    "f1": 0.7778218694885362,
+    "precision": 0.9178004535147392,
+    "recall": 0.7986111111111112,
+    "f1": 0.8265063522446623,
     "num_samples": 144.0
   },
   "class": {
     "computer-vision": {
-      "precision": 0.9722222222222222,
-      "recall": 0.6481481481481481,
-      "f1": 0.7777777777777778,
+      "precision": 1.0,
+      "recall": 0.7037037037037037,
+      "f1": 0.8260869565217391,
       "num_samples": 54.0
     },
     "mlops": {
@@ -19,24 +19,30 @@
       "num_samples": 12.0
     },
     "natural-language-processing": {
-      "precision": 0.9361702127659575,
-      "recall": 0.7586206896551724,
-      "f1": 0.8380952380952381,
+      "precision": 1.0,
+      "recall": 0.8275862068965517,
+      "f1": 0.9056603773584906,
       "num_samples": 58.0
     },
     "other": {
-      "precision": 0.38461538461538464,
+      "precision": 0.40816326530612246,
       "recall": 1.0,
-      "f1": 0.5555555555555556,
+      "f1": 0.5797101449275363,
       "num_samples": 20.0
     }
   },
   "slices": {
+    "nlp_cnn": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "num_samples": 1
+    },
     "short_text": {
-      "precision": 0.7142857142857143,
-      "recall": 0.7142857142857143,
-      "f1": 0.7142857142857143,
-      "num_samples": 7
+      "precision": 0.8,
+      "recall": 0.8,
+      "f1": 0.8000000000000002,
+      "num_samples": 5
     }
   }
 }

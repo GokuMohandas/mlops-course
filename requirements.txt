@@ -1,4 +1,4 @@
-dvc==2.10.2
+dvc==2.43.1
 fastapi==0.78.0
 imbalanced-learn==0.8.1
 mlflow==1.23.1
