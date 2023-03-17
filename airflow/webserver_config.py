@@ -43,14 +43,14 @@ WTF_CSRF_ENABLED = True
 # AUTH_DB : Is for database
 # AUTH_LDAP : Is for LDAP
 # AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
-# AUTH_OAUTH : Is for OAuth
+# AUTH_OAUTH : Is for OAuth Authorization
 AUTH_TYPE = AUTH_DB
 
 # Uncomment to setup Full admin role name
 # AUTH_ROLE_ADMIN = 'Admin'
 
 # Uncomment and set to desired role to enable access without authentication
-# AUTH_ROLE_PUBLIC = 'Viewer'
+# AUTH_ROLE_PUBLIC = 'Viewers'
 
 # Will allow user self registration
 # AUTH_USER_REGISTRATION = True
